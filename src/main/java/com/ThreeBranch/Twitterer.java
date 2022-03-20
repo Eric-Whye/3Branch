@@ -1,35 +1,45 @@
 package com.ThreeBranch;
 
+
 import twitter4j.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Twitterer {
-    private Configuration config = new Configuration();
-    private Twitter twitter;
-    private List<Status> tweets = new ArrayList<>();
-    private int buffer;
+
+    private final Twitter twitter;
+    private final List<Status> tweets = new ArrayList<>();
 
     public Twitterer(){
         twitter = new TwitterFactory().getInstance();
     }
 
-    public List<Status> searchByHashtags(){
-        Query query = new Query(/*List from Config File*/);
-        query.setCount(config.getNumTweets());
-        try{
-            QueryResult result = twitter.search(query);
-            tweets.addAll(result.getTweets());
-        }catch (TwitterException te){ te.printStackTrace();}
+    public void searchByHashtags(OutputTweets outputTweets){
+        List<String> hashtagsList = Configuration.getHashtagsList();
 
-        for (Status tweet : tweets){
-            String user = tweet.getUser().getName();
-            String msg = tweet.getText();
+        int numWriteCalls = Configuration.getNumTweetsPerHashtag() / Configuration.getSearchBuffer();
 
-            System.out.println(user + " wrote " + msg);
+
+        for (String hashtag : hashtagsList) {
+            Query query = new Query(hashtag);
+
+            //The number of tweets gathered from each query/write cycle is at most the WriteBuffer
+            query.setCount(Math.min(Configuration.getSearchBuffer(), Configuration.getNumTweetsPerHashtag()));
+
+            for (int j = 0; j <= numWriteCalls; j++) {
+
+                try {
+                    QueryResult result = twitter.search(query);
+                    tweets.addAll(result.getTweets());
+                    outputTweets.writeTweetsToFile(tweets);
+                    tweets.clear();
+                } catch (TwitterException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
         }
-
-        return tweets;
     }
 }

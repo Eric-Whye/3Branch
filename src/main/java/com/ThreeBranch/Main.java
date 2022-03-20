@@ -1,17 +1,15 @@
 package com.ThreeBranch;
 
+import java.io.File;
+import java.io.IOException;
+
 public class Main {
 
-    public static void main(String[] args) {
-        /* {
-            Twitter twitter = TwitterFactory.getSingleton();
-            List<Status> statuses = twitter.getHomeTimeline();
-            System.out.println("Showing home timeline.");
-            for (Status status : statuses) {
-                System.out.println(status.getUser().getName() + ":" +
-                        status.getText());
-            }
-        }catch(Exception e){e.printStackTrace();}*/
-
+    public static void main(String[] args){
+        new File("VaxData").mkdirs();
+        Configuration.readAndSetConfig();
+        Twitterer twitterer = new Twitterer();
+        OutputTweets ot = new OutputTweets();
+        twitterer.searchByHashtags(ot);
     }
 }

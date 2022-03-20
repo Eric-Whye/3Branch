@@ -1,1 +1,27 @@
 # 3Branch
+
+Twitter Analytics Project
+
+Goal: Analysis of vaccine related tweets, primarily on identification of a pro or anti-vax stance.
+
+Using twitter4j libraries and developed using Maven.
+
+Currently in very early stages.
+
+<br>
+Functionality (Subject to Change):
+
+Loads config data from a configuration file (twitter4j.properties)
+
+Gathers tweets based on a given hashtag(s) in config file with other parameters in the file as well such as a number of tweets and rate limit etc.
+
+Stores tweets in a file (VaxData/vaxtweets.txt) and also stores account data associated with the tweets in VaxData/AccountsFromTweets.txt).
+
+Currently does not factor in tweet duplication or account data duplication in the output
+
+ 
+<br>
+Self Contained Jar with sources, class files and configuration file included.
+
+How to run:
+java -jar 3Branch-1.0-SNAPSHOT.jar
