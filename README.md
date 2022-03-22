@@ -6,7 +6,7 @@ Eric Whye, Amira Ayadi, Tessa Brewer
 
 Eric.Whye@ucdconnect.ie<br>
 Amira.Ayadi@ucdconnect.ie<br>
-Tessa.Brewer@ucdconnct.ie
+tjobs959@gmail.com
 
 Goal: Analysis of vaccine related tweets, primarily on identification of a pro or anti-vax stance.
 
