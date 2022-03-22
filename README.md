@@ -6,7 +6,7 @@ Eric Whye, Amira Ayadi, Tessa Brewer
 
 Eric.Whye@ucdconnect.ie<br>
 Amira.Ayadi@ucdconnect.ie<br>
-Tessa.Brewer@ucdconnct.ie
+tjobs959@gmail.com
 
 Goal: Analysis of vaccine related tweets, primarily on identification of a pro or anti-vax stance.
 
@@ -35,4 +35,3 @@ java -jar 3Branch-1.0-SNAPSHOT.jar
 
 Currently Main only runs the implemented functionalities without any persistence 
 so it will search for and write 10 tweets  and their associated accounts into the output files. 
-
