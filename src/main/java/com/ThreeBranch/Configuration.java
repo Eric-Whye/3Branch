@@ -1,6 +1,6 @@
 package com.ThreeBranch;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -13,9 +13,8 @@ public class Configuration {
 
     private static String tweetsOutput;
     private static String accountsOutput;
-    private static String tweetIDsResourceFile;
 
-    private static final List<String> hashtagsList = new ArrayList<>();
+    private static final List<String> searchTermsList = new ArrayList<>();
     private static int numTweetsPerHashtag;
 
 
@@ -23,8 +22,7 @@ public class Configuration {
     public static int getNumTweets() {return numTweets;}
     public static String getOutputFile() {return tweetsOutput;}
     public static String getAccountsOutputFile() {return accountsOutput;}
-    public static String getTweetIDsResourceFile() {return tweetIDsResourceFile;}
-    public static List<String> getHashtagsList() {return hashtagsList;}
+    public static List<String> getSearchTermsList() {return searchTermsList;}
     public static int getNumTweetsPerHashtag() {return numTweetsPerHashtag;}
 
     //Holds the configuration file in memory
@@ -43,7 +41,7 @@ public class Configuration {
     private static void readConfig(){
         try {
             properties.load(Configuration.class.getClassLoader().getResourceAsStream("twitter4j.properties"));
-        } catch (Exception e) {e.printStackTrace();}
+        } catch (IOException e) {e.printStackTrace();}
     }
 
     //Set up the class with the properties for global use
@@ -56,15 +54,13 @@ public class Configuration {
 
         accountsOutput = properties.getProperty("AccountsOutput");
 
-        tweetIDsResourceFile = properties.getProperty("TweetIDsResourceFile");
-
-        StringTokenizer tokens = new StringTokenizer(properties.getProperty("SearchByHashtagsList"));
+        StringTokenizer tokens = new StringTokenizer(properties.getProperty("SearchTerms"));
         while (tokens.hasMoreTokens()){
-            hashtagsList.add(tokens.nextToken());
+            searchTermsList.add(tokens.nextToken());
         }
 
         if (properties.getProperty("NumTweetsPerHashtag").equals("")){
-            numTweetsPerHashtag = numTweets / hashtagsList.size();
+            numTweetsPerHashtag = numTweets / searchTermsList.size();
         } else
             numTweetsPerHashtag = Integer.parseInt(properties.getProperty("NumTweetsPerHashtag"));
 

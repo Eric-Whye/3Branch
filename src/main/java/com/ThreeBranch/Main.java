@@ -11,5 +11,7 @@ public class Main {
         Twitterer twitterer = new Twitterer();
         OutputTweets ot = new OutputTweets();
         twitterer.searchByHashtags(ot);
+
+        System.out.println("done");
     }
 }

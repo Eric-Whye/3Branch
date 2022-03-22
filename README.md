@@ -2,6 +2,12 @@
 
 Twitter Analytics Project
 
+Eric Whye, Amira Ayadi, Tessa Brewer
+
+Eric.Whye@ucdconnect.ie<br>
+Amira.Ayadi@ucdconnect.ie<br>
+Tessa.Brewer@ucdconnct.ie
+
 Goal: Analysis of vaccine related tweets, primarily on identification of a pro or anti-vax stance.
 
 Using twitter4j libraries and developed using Maven.
@@ -19,9 +25,13 @@ Stores tweets in a file (VaxData/vaxtweets.txt) and also stores account data ass
 
 Currently does not factor in tweet duplication or account data duplication in the output
 
+Currently not very robust against things like api exceptions.
  
 <br>
 Self Contained Jar with sources, class files and configuration file included.
 
 How to run:
 java -jar 3Branch-1.0-SNAPSHOT.jar
+
+Currently Main only runs the implemented functionalities without any persistence 
+so it will search for and write 10 tweets  and their associated accounts into the output files. 
