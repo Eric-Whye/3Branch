@@ -35,3 +35,4 @@ java -jar 3Branch-1.0-SNAPSHOT.jar
 
 Currently Main only runs the implemented functionalities without any persistence 
 so it will search for and write 10 tweets  and their associated accounts into the output files. 
+

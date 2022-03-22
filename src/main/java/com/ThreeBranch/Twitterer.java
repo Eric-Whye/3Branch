@@ -16,7 +16,7 @@ public class Twitterer {
         twitter = new TwitterFactory().getInstance();
     }
 
-    public void searchByHashtags(OutputTweets outputTweets){
+    public void searchByHashtags(){
         List<String> searchTermsList = Configuration.getSearchTermsList();
 
         //Divides up the tweetsPerHashtag according to the searchBuffer so the data can be written and api can rest a little
@@ -25,16 +25,18 @@ public class Twitterer {
 
         for (String hashtag : searchTermsList) {
             Query query = new Query(hashtag);
-
             //The number of tweets gathered from each query/write cycle is at most the WriteBuffer
             query.setCount(Math.min(Configuration.getSearchBuffer(), Configuration.getNumTweetsPerHashtag()));
 
-            //
             for (int j = 0; j <= numWriteCalls; j++) {
+                /*
 
                 try {
                     QueryResult result = twitter.search(query);
                     tweets.addAll(result.getTweets());
+
+                    List<List<String>> tweetsList = new ArrayList<>();
+                    List<List<String>> accountsList = new ArrayList<>();
                     for (Status tweet: tweets){
 
                         long id = tweet.getId();
@@ -50,19 +52,20 @@ public class Twitterer {
                         bio = bio.replaceAll("\n", " ");
                         int numFollowers = tweet.getUser().getFollowersCount();
 
-                        List<String> line = new ArrayList<>();
+                        List<String> tweetLine = new ArrayList<>();
                         line.add(username);
                         line.add(text);
                         line.add(numRetweets);
                         line.add(time);
 
-
+                        tweetsList.add(line);
+                        accountsList.add)
                     }
                     outputTweets.writeTweetsToFile(tweets);
                     tweets.clear();
                 } catch (TwitterException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
 
 

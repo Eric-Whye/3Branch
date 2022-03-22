@@ -2,7 +2,7 @@ package com.ThreeBranch;
 
 import org.junit.jupiter.api.Test;
 
-class OutputTweetsTest {
+class TweetDataTest {
 
     @Test
     void testWriteTweetsToFile(){

@@ -30,9 +30,18 @@ public class Configuration {
 
 
     /**
+     * Returns String information on Config values for human reading
+     */
+    public static String getConfigInfo(){
+        StringBuilder string = new StringBuilder();
+
+        return string.toString();
+    }
+
+    /**
      * Reads from Configuration file and changes fields based on its values
      */
-    public static void readAndSetConfig() {
+    public static void initialise() {
         readConfig();
         setConfig();
     }
