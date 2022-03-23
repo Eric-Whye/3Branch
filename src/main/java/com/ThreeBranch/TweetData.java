@@ -20,18 +20,14 @@ public class TweetData {
      */
     public static void writeDataToFile(List<List<String>> list, char delim, char newLineDelim, File outputFile){
         Writer writer = null;
+        Formatter fm = new TweetFormatter(delim, newLineDelim);
+        
         try{
             writer = new BufferedWriter(new FileWriter(outputFile, true));
 
-            for (List<String> line : list){
-                StringBuilder string = new StringBuilder();
-                for (int i = 0; i < line.size(); i++)
-                    string.append(line.get(i)).append(delim);
-
-                string.deleteCharAt(string.length()-1);
-                string.append(newLineDelim);
-                writer.write(string.toString());
-            }
+            for (List<String> line : list)
+                writer.write(fm.format(line));
+              
         }catch(IOException e){e.printStackTrace();}
         finally{
             try{
