@@ -1,3 +1,3 @@
 interface Formatter {
-  public String format(String data);
+  public String format(List<String> data);
 }
