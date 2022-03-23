@@ -3,72 +3,71 @@ package com.ThreeBranch;
 
 import twitter4j.*;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 public class Twitterer {
-
-    private final Twitter twitter;
-    private final List<Status> tweets = new ArrayList<>();
+    private TwitterStream twitterStream;
 
     public Twitterer(){
-        twitter = new TwitterFactory().getInstance();
     }
 
-    public void searchByHashtags(){
-        List<String> searchTermsList = Configuration.getSearchTermsList();
+    public void streamStart(){
 
-        //Divides up the tweetsPerHashtag according to the searchBuffer so the data can be written and api can rest a little
-        int numWriteCalls = Configuration.getNumTweetsPerHashtag() / Configuration.getSearchBuffer();
+        twitterStream = new TwitterStreamFactory().getInstance().addListener(new StatusListener() {
+            //Vector is thread-safe
+            private Vector<Status> tweets = new Vector<>();
+            private int counter = 0;
 
+            @Override
+            public void onStatus(Status status) {
+                tweets.add(status);
 
-        for (String hashtag : searchTermsList) {
-            Query query = new Query(hashtag);
-            //The number of tweets gathered from each query/write cycle is at most the WriteBuffer
-            query.setCount(Math.min(Configuration.getSearchBuffer(), Configuration.getNumTweetsPerHashtag()));
-
-            for (int j = 0; j <= numWriteCalls; j++) {
-                /*
-
-                try {
-                    QueryResult result = twitter.search(query);
-                    tweets.addAll(result.getTweets());
-
-                    List<List<String>> tweetsList = new ArrayList<>();
-                    List<List<String>> accountsList = new ArrayList<>();
-                    for (Status tweet: tweets){
-
-                        long id = tweet.getId();
-                        if (outputTweets.checkDupID(id))
-                            continue;
-                        String username = tweet.getUser().getScreenName();
-                        String text = tweet.getText().replaceAll("\n", " ");
-                        String numRetweets = Integer.parseInt(tweet.getRetweetCount();
-                        String time = tweet.getCreatedAt().toString();
-
-                        String location = tweet.getUser().getLocation();
-                        String bio = tweet.getUser().getDescription();
-                        bio = bio.replaceAll("\n", " ");
-                        int numFollowers = tweet.getUser().getFollowersCount();
-
-                        List<String> tweetLine = new ArrayList<>();
-                        line.add(username);
-                        line.add(text);
-                        line.add(numRetweets);
-                        line.add(time);
-
-                        tweetsList.add(line);
-                        accountsList.add)
-                    }
-                    outputTweets.writeTweetsToFile(tweets);
+                //After vector buffer is filled, write tweet and account data to file according to correct config format
+                if (counter % Configuration.getSearchBuffer() == 0){
+                    TweetData.writeDataToFile(convertToListOfStringLists(tweets), ' ', ' ', new File(Configuration.getOutputFile()));
                     tweets.clear();
-                } catch (TwitterException e) {
-                    e.printStackTrace();
-                }*/
+                }
+                counter++;
             }
-
-
-        }
+            @Override
+            public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+                //Delete the corresponding tweet in file
+            }
+            @Override
+            public void onTrackLimitationNotice(int i) {
+            }
+            @Override
+            public void onScrubGeo(long l, long l1) {
+            }
+            @Override
+            public void onStallWarning(StallWarning stallWarning) {
+            }
+            @Override
+            public void onException(Exception e) {
+                e.printStackTrace();
+                streamShutdown();
+                System.exit(-1);
+            }
+        });
+        //StatusListener filter
+        String str = Configuration.getSearchTermsList().toString();
+        str = str.replace("[", "").replace("]", "");
+        twitterStream.filter(new FilterQuery(str));
     }
+    private List<List<String>> convertToListOfStringLists(Vector tweets){
+        List<List<String>> tweetList = new ArrayList<>();
+        List<String> line = new ArrayList<>();
+
+
+
+        return tweetList;
+    }
+
+    public void streamShutdown(){
+        twitterStream.shutdown();
+    }
+
 }

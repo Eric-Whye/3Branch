@@ -12,13 +12,14 @@ public class TweetData {
     private static final HashSet<Long> tweetIDs = new HashSet<>();
 
     /**
-     * Writes list.size() line entries to output where each entry consists of tokens with a delimiter
+     * Writes list.size() line entries to output where each entry consists of tokens with a delimiter<br>
+     * Synchronized
      * @param list of lists where each inner list has tokens to form a line
      * @param delim between each token
      * @param newLineDelim between each line
-     * @param outputFile
+     * @param outputFile a File object
      */
-    public static void writeDataToFile(List<List<String>> list, char delim, char newLineDelim, File outputFile){
+    public static synchronized void writeDataToFile(List<List<String>> list, char delim, char newLineDelim, File outputFile){
         Writer writer = null;
         try{
             writer = new BufferedWriter(new FileWriter(outputFile, true));
@@ -41,6 +42,10 @@ public class TweetData {
         }
     }
 
+    public static void initialise(){
+        readTweetIDs();
+    }
+
     /**
      * Twitter Status duplication checking
      * @param tweetID Twitter.Status id
@@ -52,6 +57,7 @@ public class TweetData {
     public static void addTweetID(Long tweetID){
         tweetIDs.add(tweetID);
     }
+    public static int getNumTweetsInData(){return tweetIDs.size();}
 
     /**
      * Reads tweetIDs into HashSet field for easier duplication checking
@@ -59,7 +65,10 @@ public class TweetData {
     public static void readTweetIDs(){
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(Configuration.getOutputFile()));
+            try {
+                reader = new BufferedReader(new FileReader(Configuration.getOutputFile()));
+            }catch(FileNotFoundException ex){ return; }
+
             while (reader.ready()){
                 reader.lines().map(line -> line.split("\\s+")[1]).forEach(t -> tweetIDs.add(Long.parseLong(t)));
             }
