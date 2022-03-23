@@ -2,11 +2,14 @@ package com.ThreeBranch;
 
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Properties;
 
 
 public class Main {
 
     public static void main(String[] args){
+
         new File("VaxData").mkdirs();
         Configuration.initialise();//read from config file
         TweetData.readTweetIDs();
@@ -14,11 +17,10 @@ public class Main {
 
         Twitterer twitterer = new Twitterer();
         twitterer.streamStart();
-
+/*
         //Shell to receive commands
         StreamShell shell = new StreamShell();
-        Thread threadShell = new Thread(shell);
-        
+        Thread threadShell = new Thread(shell);*/
         System.out.println("done");
     }
 }

@@ -19,15 +19,20 @@ public class Twitterer {
         twitterStream = new TwitterStreamFactory().getInstance().addListener(new StatusListener() {
             //Vector is thread-safe
             private Vector<Status> tweets = new Vector<>();
-            private int counter = 0;
+            private int counter = 1;
 
             @Override
             public void onStatus(Status status) {
+                System.out.println(counter);
                 tweets.add(status);
 
                 //After vector buffer is filled, write tweet and account data to file according to correct config format
                 if (counter % Configuration.getSearchBuffer() == 0){
-                    TweetData.writeDataToFile(convertToListOfStringLists(tweets), ' ', ' ', new File(Configuration.getOutputFile()));
+                    TweetData.writeDataToFile(convertToListOfStringLists(tweets),
+                            Configuration.getDelim(),
+                            Configuration.getNewLineDelim(),
+                            new File(Configuration.getOutputFile())
+                    );
                     tweets.clear();
                 }
                 counter++;
@@ -54,14 +59,21 @@ public class Twitterer {
         });
         //StatusListener filter
         String str = Configuration.getSearchTermsList().toString();
-        str = str.replace("[", "").replace("]", "");
+        str = str.replace("[", "").replace("]", "").replace(" ", "");
         twitterStream.filter(new FilterQuery(str));
     }
-    private List<List<String>> convertToListOfStringLists(Vector tweets){
+    private List<List<String>> convertToListOfStringLists(Vector<Status> tweets){
         List<List<String>> tweetList = new ArrayList<>();
-        List<String> line = new ArrayList<>();
 
+        for (Status tweet : tweets){
+            List<String> line = new ArrayList<>();
+            line.add(String.valueOf(tweet.getId()));
+            line.add(tweet.getUser().getScreenName());
+            line.add(tweet.getText().replaceAll("\n", ""));
+            line.add(tweet.getCreatedAt().toString());
 
+            tweetList.add(line);
+        }
 
         return tweetList;
     }

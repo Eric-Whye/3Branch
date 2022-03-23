@@ -1,5 +1,8 @@
+package com.ThreeBranch;
+
 import java.lang.StringBuilder;
 import java.util.Iterator;
+import java.util.List;
 
 public class TweetFormatter implements Formatter {
   //List<List<String>> list, char delim, char newLineDelim, File outputFile
