@@ -6,6 +6,5 @@ class ConfigurationTest {
 
     @Test
     void testReadAndSetConfig() {
-        Configuration
     }
 }

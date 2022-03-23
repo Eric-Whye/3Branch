@@ -7,27 +7,29 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 public class Configuration {
-    private static int searchBuffer;
-
-    private static int numTweets;
-
-    private static String tweetsOutput;
-    private static String accountsOutput;
-
-    //A list to hold search terms and have a useful toString
-    private static final List<String> searchTermsList = new ArrayList<String>();
-    private static int numTweetsPerHashtag;
-
-
-    public static int getSearchBuffer() {return searchBuffer;}
-    public static int getNumTweets() {return numTweets;}
-    public static String getOutputFile() {return tweetsOutput;}
-    public static String getAccountsOutputFile() {return accountsOutput;}
-    public static List<String> getSearchTermsList() {return searchTermsList;}
-    public static int getNumTweetsPerHashtag() {return numTweetsPerHashtag;}
-
     //Holds the configuration file in memory
     private static final Properties properties = new Properties();
+
+    //SearchTerms
+    private static final List<String> searchTermsList = new ArrayList<>();
+
+
+    //How many tweets to hold in memory before writing
+    public static int getSearchBuffer() {return Integer.parseInt(properties.getProperty("SearchBuffer"));}
+
+    //Total Number of tweets to collect
+    public static int getNumTweets() {return Integer.parseInt(properties.getProperty("NumTweets"));}
+
+    //Output Files
+    public static String getOutputFile() {return properties.getProperty("TweetsOutput");}
+    public static String getAccountsOutputFile() {return properties.getProperty("AccountsOutput");}
+
+    //List of Search Terms
+    public static List<String> getSearchTermsList() {return searchTermsList;}
+
+    //Formatting Config
+    public static char getDelim() {return properties.getProperty("Delim").charAt(0);}
+    public static char getNewLineDelim() {return properties.getProperty("NewLineDelim").charAt(0);}
 
 
     /**
@@ -56,25 +58,10 @@ public class Configuration {
 
     //Set up the class with the properties for global use
     private static void setConfig(){
-        searchBuffer = Integer.parseInt(properties.getProperty("SearchBuffer"));
-
-        numTweets = Integer.parseInt(properties.getProperty("NumTweets"));
-
-        tweetsOutput = properties.getProperty("TweetsOutput");
-
-        accountsOutput = properties.getProperty("AccountsOutput");
-
         StringTokenizer tokens = new StringTokenizer(properties.getProperty("SearchTerms"));
         while (tokens.hasMoreTokens()){
             searchTermsList.add(tokens.nextToken());
         }
-
-        if (properties.getProperty("NumTweetsPerHashtag").equals("")){
-            numTweetsPerHashtag = numTweets / searchTermsList.size();
-        } else
-            numTweetsPerHashtag = Integer.parseInt(properties.getProperty("NumTweetsPerHashtag"));
-
-
     }
 
     private Configuration(){

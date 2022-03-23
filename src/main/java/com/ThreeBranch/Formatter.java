@@ -1,3 +1,7 @@
+package com.ThreeBranch;
+
+import java.util.List;
+
 interface Formatter {
-  public String format(String data);
+  public String format(List<String> data);
 }

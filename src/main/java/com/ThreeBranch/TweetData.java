@@ -3,6 +3,7 @@ package com.ThreeBranch;
 import java.io.*;
 import java.util.HashSet;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /*
 The Code that is commented out is my attempt to prevent tweet duplication, but I have no time to finish it at the moment
@@ -10,6 +11,9 @@ The Code that is commented out is my attempt to prevent tweet duplication, but I
 public class TweetData {
     //Holds the Ids of gathered tweets for duplication checking purposes
     private static final HashSet<Long> tweetIDs = new HashSet<>();
+
+    //Holds the userhandles of all the accounts
+    private static final HashSet<String> userhandles = new HashSet<>();
 
     /**
      * Writes list.size() line entries to output where each entry consists of tokens with a delimiter<br>
@@ -26,8 +30,11 @@ public class TweetData {
         try{
             writer = new BufferedWriter(new FileWriter(outputFile, true));
 
-            for (List<String> line : list)
-                writer.write(fm.format(line));
+            for (List<String> line : list) {
+                String temp = fm.format(line);
+                System.out.println(temp);
+                writer.write(temp);
+            }
               
         }catch(IOException e){e.printStackTrace();}
         finally{
@@ -66,7 +73,9 @@ public class TweetData {
             }catch(FileNotFoundException ex){ return; }
 
             while (reader.ready()){
-                reader.lines().map(line -> line.split("\\s+")[1]).forEach(t -> tweetIDs.add(Long.parseLong(t)));
+                StringTokenizer tokens = new StringTokenizer(reader.readLine());
+                if (tokens.hasMoreTokens())
+                    tweetIDs.add(Long.valueOf(tokens.nextToken()));//HardCoded to read IDs
             }
         }catch(IOException e){e.printStackTrace();}
         finally{
