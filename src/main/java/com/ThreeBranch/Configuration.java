@@ -14,7 +14,8 @@ public class Configuration {
     private static String tweetsOutput;
     private static String accountsOutput;
 
-    private static final List<String> searchTermsList = new ArrayList<>();
+    //A list to hold search terms and have a useful toString
+    private static final List<String> searchTermsList = new ArrayList<String>();
     private static int numTweetsPerHashtag;
 
 
@@ -32,10 +33,10 @@ public class Configuration {
     /**
      * Returns String information on Config values for human reading
      */
-    public static String getConfigInfo(){
-        StringBuilder string = new StringBuilder();
+    public static String[] getConfigInfo() {
+        StringBuilder str = new StringBuilder();
 
-        return string.toString();
+        return null;
     }
 
     /**

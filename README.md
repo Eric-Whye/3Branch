@@ -17,15 +17,15 @@ Currently in very early stages.
 <br>
 Functionality (Subject to Change):
 
-Loads config data from a configuration file (twitter4j.properties)
+-Loads config data from a configuration file (twitter4j.properties)
 
-Gathers tweets based on a given hashtag(s) in config file with other parameters in the file as well such as a number of tweets and rate limit etc.
+-Gathers tweets based on a given hashtag(s) in config file with other parameters in the file as well such as a number of tweets and rate limit etc.
 
-Stores tweets in a file (VaxData/vaxtweets.txt) and also stores account data associated with the tweets in VaxData/AccountsFromTweets.txt).
+-Stores tweets in a file (VaxData/vaxtweets.txt) and also stores account data associated with the tweets in VaxData/AccountsFromTweets.txt).
 
-Currently does not factor in tweet duplication or account data duplication in the output
+-Currently does not factor in tweet duplication or account data duplication in the output
 
-Currently not very robust against things like api exceptions.
+-Currently not very robust against things like api exceptions.
  
 <br>
 Self Contained Jar with sources, class files and configuration file included.
@@ -35,3 +35,8 @@ java -jar 3Branch-1.0-SNAPSHOT.jar
 
 Currently Main only runs the implemented functionalities without any persistence 
 so it will search for and write 10 tweets  and their associated accounts into the output files. 
+
+
+<br><br><br>
+TweetData.readTweetIDs needs to be less hardcoded.
+Twitterer needs to be implemented with formatting.
