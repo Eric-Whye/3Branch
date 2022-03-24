@@ -1,5 +1,6 @@
 package com.ThreeBranch;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,8 @@ public class Configuration {
 
     //SearchTerms
     private static final List<String> searchTermsList = new ArrayList<>();
+    //Languages
+    private static final List<String> languagesList = new ArrayList<>();
 
 
     //How many tweets to hold in memory before writing
@@ -21,11 +24,14 @@ public class Configuration {
     public static int getNumTweets() {return Integer.parseInt(properties.getProperty("NumTweets"));}
 
     //Output Files
+    public static String getOutputDir() {return properties.getProperty("OutputDir");}
     public static String getOutputFile() {return properties.getProperty("TweetsOutput");}
     public static String getAccountsOutputFile() {return properties.getProperty("AccountsOutput");}
 
     //List of Search Terms
     public static List<String> getSearchTermsList() {return searchTermsList;}
+    //List of Languages
+    public static List<String> getLanguages(){return languagesList;}
 
     //Formatting Config
     public static char getDelim() {return properties.getProperty("Delim").charAt(0);}
@@ -47,6 +53,8 @@ public class Configuration {
     public static void initialise() {
         readConfig();
         setConfig();
+
+        new File(getOutputDir()).mkdirs();
     }
 
     //Read from Configuration file
@@ -61,6 +69,11 @@ public class Configuration {
         StringTokenizer tokens = new StringTokenizer(properties.getProperty("SearchTerms"));
         while (tokens.hasMoreTokens()){
             searchTermsList.add(tokens.nextToken());
+        }
+
+        tokens = new StringTokenizer(properties.getProperty("Languages"));
+        while (tokens.hasMoreTokens()){
+            languagesList.add(tokens.nextToken());
         }
     }
 

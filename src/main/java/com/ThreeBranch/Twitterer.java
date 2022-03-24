@@ -58,9 +58,13 @@ public class Twitterer {
             }
         });
         //StatusListener filter
-        String str = Configuration.getSearchTermsList().toString();
-        str = str.replace("[", "").replace("]", "").replace(" ", "");
-        twitterStream.filter(new FilterQuery(str));
+        String query = "";
+
+        String sTerms = removeSpecialCharacters(Configuration.getSearchTermsList().toString());
+        String langs = removeSpecialCharacters(Configuration.getLanguages().toString());
+
+        query = query + sTerms + " " + langs;
+        twitterStream.filter(new FilterQuery(query));
     }
     private List<List<String>> convertToListOfStringLists(Vector<Status> tweets){
         List<List<String>> tweetList = new ArrayList<>();
@@ -76,6 +80,10 @@ public class Twitterer {
         }
 
         return tweetList;
+    }
+
+    private String removeSpecialCharacters(String str){
+        return str.replace("[", "").replace("]", "").replace(" ", "");
     }
 
     public void streamShutdown(){

@@ -82,7 +82,8 @@ public class TweetData {
             try {
                 assert reader != null;
                 reader.close();
-            }catch(IOException e){e.printStackTrace();}
+            }catch(NullPointerException e){System.out.println("Output File does not exist");}
+            catch (IOException e) {e.printStackTrace();}
         }
     }
 

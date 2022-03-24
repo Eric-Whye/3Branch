@@ -10,7 +10,6 @@ public class Main {
 
     public static void main(String[] args){
 
-        new File("VaxData").mkdirs();
         Configuration.initialise();//read from config file
         TweetData.readTweetIDs();
         System.out.println(/*Configuration.getConfigInfo()*/);
