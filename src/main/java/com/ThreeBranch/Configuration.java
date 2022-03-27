@@ -41,10 +41,15 @@ public class Configuration {
     /**
      * Returns String information on Config values for human reading
      */
-    public static String[] getConfigInfo() {
-        StringBuilder str = new StringBuilder();
-
-        return null;
+    public static String getConfigInfo() {
+        return "\nSearch Terms:\n" +
+                getSearchTermsList().toString() + "\n" +
+                "\nLanguages:\n" +
+                getLanguages().toString() + "\n" +
+                "\nSearch and Write Buffer: " + getSearchBuffer() + "\n" +
+                "\nMax Tweets: " + getNumTweets() + "\n" +
+                "\nOutput Directory: " + getOutputDir() +
+                "\nAccount Output File" + getAccountsOutputFile() + "\n";
     }
 
     /**

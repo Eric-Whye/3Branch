@@ -32,7 +32,6 @@ public class TweetData {
 
             for (List<String> line : list) {
                 String temp = fm.format(line);
-                System.out.println(temp);
                 writer.write(temp);
             }
               
@@ -47,6 +46,7 @@ public class TweetData {
 
     public static void initialise(){
         readTweetIDs();
+        readUserhandles();
     }
 
     /**
@@ -62,10 +62,13 @@ public class TweetData {
     }
     public static int getNumTweetsInData(){return tweetIDs.size();}
 
+    public static boolean checkDupAccount(String userhandle) { return userhandles.contains(userhandle.trim().toLowerCase());}
+    public static void addUserhandle(String userhandle) { userhandles.add(userhandle.trim().toLowerCase());}
+
     /**
      * Reads tweetIDs into HashSet field for easier duplication checking
      */
-    public static void readTweetIDs(){
+    private static void readTweetIDs(){
         BufferedReader reader = null;
         try {
             try {
@@ -76,6 +79,28 @@ public class TweetData {
                 StringTokenizer tokens = new StringTokenizer(reader.readLine());
                 if (tokens.hasMoreTokens())
                     tweetIDs.add(Long.valueOf(tokens.nextToken()));//HardCoded to read IDs
+            }
+        }catch(IOException e){e.printStackTrace();}
+        finally{
+            try {
+                assert reader != null;
+                reader.close();
+            }catch(NullPointerException e){System.out.println("Output File does not exist");}
+            catch (IOException e) {e.printStackTrace();}
+        }
+    }
+
+    private static void readUserhandles(){
+        BufferedReader reader = null;
+        try {
+            try {
+                reader = new BufferedReader(new FileReader(Configuration.getAccountsOutputFile()));
+            }catch(FileNotFoundException ex){ return; }
+
+            while (reader.ready()){
+                StringTokenizer tokens = new StringTokenizer(reader.readLine());
+                if (tokens.hasMoreTokens())
+                    userhandles.add(tokens.nextToken());//HardCoded to read Userhandles
             }
         }catch(IOException e){e.printStackTrace();}
         finally{

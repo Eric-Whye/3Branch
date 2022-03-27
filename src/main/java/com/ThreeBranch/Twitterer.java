@@ -12,6 +12,7 @@ public class Twitterer {
     private TwitterStream twitterStream;
 
     public Twitterer(){
+        System.out.println(removeSpecialCharacters(Configuration.getSearchTermsList().toString()));
     }
 
     public void streamStart(){
@@ -23,16 +24,28 @@ public class Twitterer {
 
             @Override
             public void onStatus(Status status) {
-                System.out.println(counter);
+                System.out.print(counter + " tweets gathered" + "\r");
+                System.out.flush();
                 tweets.add(status);
 
                 //After vector buffer is filled, write tweet and account data to file according to correct config format
                 if (counter % Configuration.getSearchBuffer() == 0){
-                    TweetData.writeDataToFile(convertToListOfStringLists(tweets),
+
+                    //Writing Tweet Data to File
+                    TweetData.writeDataToFile(convertTweetsToListOfStringLists(tweets),
                             Configuration.getDelim(),
                             Configuration.getNewLineDelim(),
                             new File(Configuration.getOutputFile())
                     );
+
+                    //Writing Account Data to file
+                    TweetData.writeDataToFile(convertAccountsToListOfStringList(tweets),
+                            Configuration.getDelim(),
+                            Configuration.getNewLineDelim(),
+                            new File(Configuration.getAccountsOutputFile())
+                    );
+
+                    //Resetting Buffer
                     tweets.clear();
                 }
                 counter++;
@@ -58,22 +71,39 @@ public class Twitterer {
             }
         });
         //StatusListener filter
-        String query = "";
 
-        String sTerms = removeSpecialCharacters(Configuration.getSearchTermsList().toString());
-        String langs = removeSpecialCharacters(Configuration.getLanguages().toString());
+        FilterQuery query = new FilterQuery();
 
-        query = query + sTerms + " " + langs;
-        twitterStream.filter(new FilterQuery(query));
+        query.track(removeSpecialCharacters(Configuration.getSearchTermsList().toString()));
+        query.language(removeSpecialCharacters(String.valueOf(Configuration.getLanguages())));
+        twitterStream.filter(query);
     }
-    private List<List<String>> convertToListOfStringLists(Vector<Status> tweets){
+
+    private List<List<String>> convertTweetsToListOfStringLists(Vector<Status> tweets){
         List<List<String>> tweetList = new ArrayList<>();
 
         for (Status tweet : tweets){
             List<String> line = new ArrayList<>();
+
+            //Checking for duplicated Tweet
+            if (TweetData.checkDupID(tweet.getId()))
+                continue;
+            //Adding id as attained tweet
+            TweetData.addTweetID(tweet.getId());
+
             line.add(String.valueOf(tweet.getId()));
-            line.add(tweet.getUser().getScreenName());
-            line.add(tweet.getText().replaceAll("\n", ""));
+            line.add("@" + tweet.getUser().getScreenName());
+
+            //To get the full text of the tweet
+            if (tweet.getRetweetedStatus() == null) {
+                line.add(tweet.getText().replaceAll("\n", " "));
+                line.add(String.valueOf(tweet.getRetweetCount()));
+            }
+            else {
+                line.add(tweet.getRetweetedStatus().getText().replaceAll("\n", " "));
+                line.add(String.valueOf(tweet.getRetweetedStatus().getRetweetCount()));
+            }
+
             line.add(tweet.getCreatedAt().toString());
 
             tweetList.add(line);
@@ -82,6 +112,32 @@ public class Twitterer {
         return tweetList;
     }
 
+    private List<List<String>> convertAccountsToListOfStringList(Vector<Status> tweets){
+        List<List<String>> tweetList = new ArrayList<>();
+
+        for (Status tweet : tweets) {
+            List<String> line = new ArrayList<>();
+
+            //Checking for duplicate account
+            if (TweetData.checkDupAccount("@" + tweet.getUser().getScreenName()))
+                continue;
+            //Adding account as registered tweeter
+            TweetData.addUserhandle("@" + tweet.getUser().getScreenName());
+
+            line.add("@" + tweet.getUser().getScreenName());
+            line.add(tweet.getUser().getLocation());
+            if (tweet.getUser().getDescription() != null)
+                line.add(tweet.getUser().getDescription().replaceAll("\n", " "));
+            else
+                line.add((tweet.getUser().getDescription()));
+            line.add(String.valueOf(tweet.getUser().getFollowersCount()));
+
+            tweetList.add(line);
+        }
+
+        return tweetList;
+    }
+    //Removes '[' and ']' and ' '
     private String removeSpecialCharacters(String str){
         return str.replace("[", "").replace("]", "").replace(" ", "");
     }
