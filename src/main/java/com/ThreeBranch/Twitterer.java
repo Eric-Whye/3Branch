@@ -11,7 +11,7 @@ import java.util.Vector;
 public class Twitterer {
     private TwitterStream twitterStream;
 
-    public Twitterer(){
+    protected Twitterer(){
     }
 
     public void streamStart(){

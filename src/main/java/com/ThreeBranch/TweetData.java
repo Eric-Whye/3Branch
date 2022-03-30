@@ -57,13 +57,13 @@ public class TweetData {
     public static boolean checkDupID(Long tweetID){
         return tweetIDs.contains(tweetID);
     }
-    public static void addTweetID(Long tweetID){
+    protected static void addTweetID(Long tweetID){
         tweetIDs.add(tweetID);
     }
     public static int getNumTweetsInData(){return tweetIDs.size();}
 
     public static boolean checkDupAccount(String userhandle) { return userhandles.contains(userhandle);}
-    public static void addUserhandle(String userhandle) { userhandles.add(userhandle);}
+    protected static void addUserhandle(String userhandle) { userhandles.add(userhandle);}
 
     /**
      * Reads tweetIDs into HashSet field for easier duplication checking
