@@ -49,7 +49,8 @@ public class Configuration {
                 "\nSearch and Write Buffer: " + getSearchBuffer() + "\n" +
                 "\nMax Tweets: " + getNumTweets() + "\n" +
                 "\nOutput Directory: " + getOutputDir() +
-                "\nAccount Output File" + getAccountsOutputFile() + "\n";
+                "\nTweet Output File: " + getOutputFile() +
+                "\nAccount Output File: " + getAccountsOutputFile() + "\n";
     }
 
     /**

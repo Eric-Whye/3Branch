@@ -62,8 +62,8 @@ public class TweetData {
     }
     public static int getNumTweetsInData(){return tweetIDs.size();}
 
-    public static boolean checkDupAccount(String userhandle) { return userhandles.contains(userhandle.trim().toLowerCase());}
-    public static void addUserhandle(String userhandle) { userhandles.add(userhandle.trim().toLowerCase());}
+    public static boolean checkDupAccount(String userhandle) { return userhandles.contains(userhandle);}
+    public static void addUserhandle(String userhandle) { userhandles.add(userhandle);}
 
     /**
      * Reads tweetIDs into HashSet field for easier duplication checking
@@ -99,8 +99,9 @@ public class TweetData {
 
             while (reader.ready()){
                 StringTokenizer tokens = new StringTokenizer(reader.readLine());
-                if (tokens.hasMoreTokens())
+                if (tokens.hasMoreTokens()) {
                     userhandles.add(tokens.nextToken());//HardCoded to read Userhandles
+                }
             }
         }catch(IOException e){e.printStackTrace();}
         finally{

@@ -40,3 +40,6 @@ java -jar 3Branch-1.0-SNAPSHOT-shaded.jar
 
 Currently, 5190 english tweets and 3923 accounts associated with those tweets have been gathered according to these search terms: <br>
 "#vaccinate,#immunization,#immunisation,#immunize,#vaccineswork,#keepsusafe,#omicron,#maskup,#vaccinerollout,#ventilation,#antivaccine,#vaccineskill,#vaxxed,#forcedinjections,#antivaccine,#medicalfreedom,#knowtherisk,#antivaxx,#vaccinsanity,#pharma,#bewaretheneedle,#vaccineinjury,#byebyebigpharma,#pharmthesheep,#vaccineeducation"
+
+From 5300 onwards, search terms are:
+"#vaccine #vaccination #vaccines #vaccinate #vaccinated #vaxxed #vaccineswork #VaccinesSaveLives #getvaccinated #GetVaxxed #vaccinerollout #vaccinatetheworld #PhizerGang #TeamModerna #immunization #immunisation #immunizeunder5s #immunize #keepsusafe #omicron #maskup #ventilation #covidisnotover #CancelCovid #vaccinechoice #noflushot #omicron #covid19 #pfizer #mask #antivaccine #antivaxxers #antivax #learntherisk #vaccineskill #vaxxed #vaccinescauseAIDS #researchdontregret #idonotconsent #stoppoisoningyourkids #forcedinjections #antivaccine #medicalfreedom #knowtherisk #antivaxx #vaccinsanity #pharma #bewaretheneedle #vaccineinjury #byebyebigpharma #pharmthesheep #vaccineeducation"

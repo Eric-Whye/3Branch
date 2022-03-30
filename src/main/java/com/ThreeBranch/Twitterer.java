@@ -12,20 +12,28 @@ public class Twitterer {
     private TwitterStream twitterStream;
 
     public Twitterer(){
-        System.out.println(removeSpecialCharacters(Configuration.getSearchTermsList().toString()));
     }
 
     public void streamStart(){
 
         twitterStream = new TwitterStreamFactory().getInstance().addListener(new StatusListener() {
             //Vector is thread-safe
-            private Vector<Status> tweets = new Vector<>();
+            private final Vector<Status> tweets = new Vector<>();
             private int counter = 1;
 
             @Override
             public void onStatus(Status status) {
                 System.out.print(counter + " tweets gathered" + "\r");
                 System.out.flush();
+
+                if (TweetData.checkDupID(status.getId()))
+                    return;
+                if (TweetData.checkDupAccount("@" + status.getUser().getScreenName()))
+                    return;
+
+                TweetData.addTweetID(status.getId());
+                TweetData.addUserhandle("@" + status.getUser().getScreenName());
+
                 tweets.add(status);
 
                 //After vector buffer is filled, write tweet and account data to file according to correct config format
@@ -66,8 +74,6 @@ public class Twitterer {
             @Override
             public void onException(Exception e) {
                 e.printStackTrace();
-                streamShutdown();
-                System.exit(-1);
             }
         });
         //StatusListener filter
@@ -85,22 +91,16 @@ public class Twitterer {
         for (Status tweet : tweets){
             List<String> line = new ArrayList<>();
 
-            //Checking for duplicated Tweet
-            if (TweetData.checkDupID(tweet.getId()))
-                continue;
-            //Adding id as attained tweet
-            TweetData.addTweetID(tweet.getId());
-
             line.add(String.valueOf(tweet.getId()));
             line.add("@" + tweet.getUser().getScreenName());
 
             //To get the full text of the tweet
             if (tweet.getRetweetedStatus() == null) {
-                line.add(tweet.getText().replaceAll("\n", " "));
+                line.add(tweet.getText().replaceAll("\\p{C}", " "));
                 line.add(String.valueOf(tweet.getRetweetCount()));
             }
             else {
-                line.add(tweet.getRetweetedStatus().getText().replaceAll("\n", " "));
+                line.add(tweet.getRetweetedStatus().getText().replaceAll("\\p{C}", " "));
                 line.add(String.valueOf(tweet.getRetweetedStatus().getRetweetCount()));
             }
 
@@ -118,16 +118,11 @@ public class Twitterer {
         for (Status tweet : tweets) {
             List<String> line = new ArrayList<>();
 
-            //Checking for duplicate account
-            if (TweetData.checkDupAccount("@" + tweet.getUser().getScreenName()))
-                continue;
-            //Adding account as registered tweeter
-            TweetData.addUserhandle("@" + tweet.getUser().getScreenName());
-
             line.add("@" + tweet.getUser().getScreenName());
             line.add(tweet.getUser().getLocation());
+
             if (tweet.getUser().getDescription() != null)
-                line.add(tweet.getUser().getDescription().replaceAll("\n", " "));
+                line.add(tweet.getUser().getDescription().replaceAll("\\p{C}", " "));
             else
                 line.add((tweet.getUser().getDescription()));
             line.add(String.valueOf(tweet.getUser().getFollowersCount()));
