@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 /*
 The Code that is commented out is my attempt to prevent tweet duplication, but I have no time to finish it at the moment
  */
-public class TweetData {
+abstract class TweetData {
     //Holds the Ids of gathered tweets for duplication checking purposes
     private static final HashSet<Long> tweetIDs = new HashSet<>();
 
@@ -15,7 +15,7 @@ public class TweetData {
 
     /**
      * Reads TweetIDs and userhandles from output files for duplication checking procedures
-     * @throws NumberFormatException
+     * @throws NumberFormatException upon unexpected type parsing
      */
     public static void initialise() throws NumberFormatException {
         FileEntryIO.streamFromFile(Configuration.getOutputFile(), new readTweetIDs());
@@ -56,8 +56,5 @@ public class TweetData {
             if (tokens.hasMoreTokens())
                 addUserhandle(tokens.nextToken());
         }
-    }
-
-    private TweetData() {
     }
 }

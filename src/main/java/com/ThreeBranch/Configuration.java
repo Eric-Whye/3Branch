@@ -1,13 +1,14 @@
 package com.ThreeBranch;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-public class Configuration {
+public abstract class Configuration {
     //Holds the configuration file in memory
     private static final Properties properties = new Properties();
 
@@ -27,6 +28,11 @@ public class Configuration {
     public static String getOutputDir() {return properties.getProperty("OutputDir");}
     public static String getOutputFile() {return properties.getProperty("TweetsOutput");}
     public static String getAccountsOutputFile() {return properties.getProperty("AccountsOutput");}
+
+    //Graph Input Files
+    public static String getGraphDir(){ return properties.getProperty("GraphInputDir"); }
+    public static String getGraphInputFile(){ return properties.getProperty("GraphTweetsInput");}
+    public static String getGraphAccountsFile(){ return properties.getProperty("GraphAccountsInput"); }
 
     //List of Search Terms
     public static List<String> getSearchTermsList() {return searchTermsList;}
@@ -66,7 +72,7 @@ public class Configuration {
     //Read from Configuration file
     private static void readConfig(){
         try {
-            properties.load(Configuration.class.getClassLoader().getResourceAsStream("twitter4j.properties"));
+            properties.load(new FileReader("twitter4j.properties"));
         } catch (IOException e) {e.printStackTrace();}
     }
 
@@ -82,8 +88,4 @@ public class Configuration {
             languagesList.add(tokens.nextToken());
         }
     }
-
-    private Configuration(){
-    }
-
 }

@@ -1,38 +1,33 @@
 package com.ThreeBranch.Week3;
 
-public class Arc implements Edge {
-    //Normally we'd hold Vertex objects, but because Vertex equality is determined by their String name, and we don't want weird null pointers we just store the Vertex names
-    private String source;
-    private String destination;
-    private int weight;
-  
-    public Arc(String source, String destination, int weight) {
-      this.source = source;
-      this.destination = destination;
-      this.weight = weight;
+import java.util.Objects;
+
+public class Arc{
+    private final Vertex startVertex;
+    private final Vertex endVertex;
+    private int value = 1;
+
+    public Vertex getStartVertex() {return startVertex;}
+
+    protected Arc(Vertex startVertex, Vertex endVertex){
+        this.startVertex = startVertex;
+        this.endVertex = endVertex;
     }
-    
-    public Arc(String source, String destination) {
-      this(source, destination, 0);
+
+    public void incrementValue(){
+        this.value++;
     }
-  
-    public String toString() {
-      return "@" + destination + "(" + weight + ")";
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Arc arc = (Arc) o;
+        return value == arc.value && startVertex.equals(arc.startVertex) && endVertex.equals(arc.endVertex);
     }
-    
-    public String getSource() {
-      return source;
-    }
-    
-    public String getDestination() {
-      return destination;
-    }
-    
-    public int getWeight() {
-      return weight;
-    }
-    
-    public void inc() {
-      weight++;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startVertex, endVertex);
     }
 }
