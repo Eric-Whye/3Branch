@@ -14,6 +14,7 @@ public class Twitterer {
     protected Twitterer(){
     }
 
+
     public void streamStart(){
 
         twitterStream = new TwitterStreamFactory().getInstance().addListener(new StatusListener() {
@@ -26,33 +27,22 @@ public class Twitterer {
                 System.out.print(counter + " tweets gathered" + "\r");
                 System.out.flush();
 
+                //Checking for Duplication
                 if (TweetData.checkDupID(status.getId()))
                     return;
                 if (TweetData.checkDupAccount("@" + status.getUser().getScreenName()))
                     return;
 
+                //Adding new Tweets and Account data
                 TweetData.addTweetID(status.getId());
                 TweetData.addUserhandle("@" + status.getUser().getScreenName());
 
+                //Adding tweets to buffer
                 tweets.add(status);
 
                 //After vector buffer is filled, write tweet and account data to file according to correct config format
                 if (counter % Configuration.getSearchBuffer() == 0){
-
-                    //Writing Tweet Data to File
-                    FileEntryIO.appendToFile(convertTweetsToListOfStringLists(tweets),
-                            Configuration.getDelim(),
-                            Configuration.getNewLineDelim(),
-                            Configuration.getOutputFile()
-                    );
-
-                    //Writing Account Data to file
-                    FileEntryIO.appendToFile(convertAccountsToListOfStringList(tweets),
-                            Configuration.getDelim(),
-                            Configuration.getNewLineDelim(),
-                            Configuration.getAccountsOutputFile()
-                    );
-
+                    writeDataToFile(tweets);
                     //Resetting Buffer
                     tweets.clear();
                 }
@@ -73,7 +63,12 @@ public class Twitterer {
             }
             @Override
             public void onException(Exception e) {
+                writeDataToFile(tweets);
                 e.printStackTrace();
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException ex) {ex.printStackTrace();}
+
             }
         });
         //StatusListener filter
@@ -85,26 +80,22 @@ public class Twitterer {
         twitterStream.filter(query);
     }
 
-    private List<List<String>> convertTweetsToListOfStringLists(Vector<Status> tweets){
+    private List<List<String>> convertTweetsToListOfStringLists(List<Status> tweets){
         List<List<String>> tweetList = new ArrayList<>();
 
         for (Status tweet : tweets){
             List<String> line = new ArrayList<>();
 
-            line.add(String.valueOf(tweet.getId()));
-            line.add("@" + tweet.getUser().getScreenName());
+            line.add(String.valueOf(tweet.getId()));//id
+            line.add("@" + tweet.getUser().getScreenName());//userhandle
+            line.add(tweet.getText().replaceAll("\\p{C}", " "));//Text
 
-            //To get the full text of the tweet
-            if (tweet.getRetweetedStatus() == null) {
-                line.add(tweet.getText().replaceAll("\\p{C}", " "));
+            if (tweet.getRetweetedStatus() != null)
+                line.add(String.valueOf(tweet.getRetweetedStatus().getRetweetCount()));//RetweetCount of original tweet
+            else
                 line.add(String.valueOf(tweet.getRetweetCount()));
-            }
-            else {
-                line.add(tweet.getRetweetedStatus().getText().replaceAll("\\p{C}", " "));
-                line.add(String.valueOf(tweet.getRetweetedStatus().getRetweetCount()));
-            }
 
-            line.add(tweet.getCreatedAt().toString());
+            line.add(tweet.getCreatedAt().toString());//Date
 
             tweetList.add(line);
         }
@@ -112,7 +103,7 @@ public class Twitterer {
         return tweetList;
     }
 
-    private List<List<String>> convertAccountsToListOfStringList(Vector<Status> tweets){
+    private List<List<String>> convertAccountsToListOfStringList(List<Status> tweets){
         List<List<String>> tweetList = new ArrayList<>();
 
         for (Status tweet : tweets) {
@@ -135,6 +126,26 @@ public class Twitterer {
     //Removes '[' and ']' and ' '
     private String removeSpecialCharacters(String str){
         return str.replace("[", "").replace("]", "").replace(" ", "");
+    }
+
+    /**
+     * Write Data to File using FileEntryIO
+     * @param tweets List of twiter4j.Status
+     */
+    private void writeDataToFile(List<Status> tweets){
+        //Writing Tweet Data to File
+        FileEntryIO.appendToFile(convertTweetsToListOfStringLists(tweets),
+                Configuration.getDelim(),
+                Configuration.getNewLineDelim(),
+                Configuration.getOutputFile()
+        );
+
+        //Writing Account Data to file
+        FileEntryIO.appendToFile(convertAccountsToListOfStringList(tweets),
+                Configuration.getDelim(),
+                Configuration.getNewLineDelim(),
+                Configuration.getAccountsOutputFile()
+        );
     }
 
     public void streamShutdown(){
