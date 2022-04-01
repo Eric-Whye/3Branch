@@ -1,33 +1,31 @@
 package com.ThreeBranch.Week3;
 
-import java.io.File;
+import com.ThreeBranch.Callable;
+import com.ThreeBranch.Configuration;
+import com.ThreeBranch.FileEntryIO;
+
+import java.util.Hashtable;
+
 
 public class FileProcessor {
 
-    public void writeToFile(char delim, char newLineDelim, File file){
+    private Hashtable<String, Integer> table = new Hashtable<>();
 
+
+
+    public FileProcessor() {
+        FileEntryIO.streamFromFile(Configuration.getOutputFile(), new readUserHandles());
     }
 
 
 
 
 
-    public void readFromFile(File file){
 
-    }
+    private static class readUserHandles implements Callable {
+        @Override
+        public void call(String line) {
 
-
-
-
-
-
-
-
-
-
-
-
-    private static class FileParser{
-
+        }
     }
 }

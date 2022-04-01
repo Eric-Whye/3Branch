@@ -43,6 +43,3 @@ Currently, 5190 english tweets and 3923 accounts associated with those tweets ha
 
 From 5300 onwards, search terms are:
 "#vaccine #vaccination #vaccines #vaccinate #vaccinated #vaxxed #vaccineswork #VaccinesSaveLives #getvaccinated #GetVaxxed #vaccinerollout #vaccinatetheworld #PhizerGang #TeamModerna #immunization #immunisation #immunizeunder5s #immunize #keepsusafe #omicron #maskup #ventilation #covidisnotover #CancelCovid #vaccinechoice #noflushot #omicron #covid19 #pfizer #mask #antivaccine #antivaxxers #antivax #learntherisk #vaccineskill #vaxxed #vaccinescauseAIDS #researchdontregret #idonotconsent #stoppoisoningyourkids #forcedinjections #antivaccine #medicalfreedom #knowtherisk #antivaxx #vaccinsanity #pharma #bewaretheneedle #vaccineinjury #byebyebigpharma #pharmthesheep #vaccineeducation"
-
-Remove duplicate script:
-awk '!seen[$1]++' AccountsFromTweets.txt  > thing.txt

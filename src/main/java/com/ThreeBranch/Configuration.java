@@ -56,7 +56,7 @@ public class Configuration {
     /**
      * Reads from Configuration file and changes fields based on its values
      */
-    public static void initialise() {
+    public static void initialise() throws Exception{
         readConfig();
         setConfig();
 

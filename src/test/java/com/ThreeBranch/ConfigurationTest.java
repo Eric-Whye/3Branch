@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 class ConfigurationTest {
 
     @Test
-    void testReadAndSetConfig() {
+    void testReadAndSetConfig() throws Exception {
         Configuration.initialise();
 
         assertEquals(Configuration.getConfigInfo(),

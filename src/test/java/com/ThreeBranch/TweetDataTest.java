@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 class TweetDataTest {
 
     @Test
-    void testInitialise(){
+    void testInitialise() throws Exception {
         Configuration.initialise();
         TweetData.initialise();
 

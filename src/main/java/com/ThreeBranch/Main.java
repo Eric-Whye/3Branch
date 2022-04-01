@@ -11,8 +11,10 @@ public class Main {
 
                 case "-G":
                 default:
-                    Configuration.initialise();//read from config file
-                    TweetData.initialise();
+                    try {
+                        Configuration.initialise();//read from config file
+                        TweetData.initialise();//Read TweetIDs and userhandles for duplication checking
+                    }catch(Exception e){e.printStackTrace();}
                     System.out.println(Configuration.getConfigInfo());
 
                     Twitterer twitterer = new Twitterer();

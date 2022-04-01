@@ -1,8 +1,6 @@
 package com.ThreeBranch;
 
-import java.io.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.StringTokenizer;
 
 /*
@@ -16,37 +14,12 @@ public class TweetData {
     private static final HashSet<String> userhandles = new HashSet<>();
 
     /**
-     * Writes list.size() line entries to output where each entry consists of tokens with a delimiter<br>
-     * Synchronized
-     * @param list of lists where each inner list has tokens to form a line
-     * @param delim between each token
-     * @param newLineDelim between each line
-     * @param outputFile a File object
+     * Reads TweetIDs and userhandles from output files for duplication checking procedures
+     * @throws NumberFormatException
      */
-    public static synchronized void writeDataToFile(List<List<String>> list, char delim, char newLineDelim, File outputFile){
-        Writer writer = null;
-        Formatter fm = new TweetFormatter(delim, newLineDelim);
-        
-        try{
-            writer = new BufferedWriter(new FileWriter(outputFile, true));
-
-            for (List<String> line : list) {
-                String temp = fm.format(line);
-                writer.write(temp);
-            }
-              
-        }catch(IOException e){e.printStackTrace();}
-        finally{
-            try{
-                assert writer != null;
-                writer.close();
-            }catch(IOException e){e.printStackTrace();}
-        }
-    }
-
-    public static void initialise(){
-        readTweetIDs();
-        readUserhandles();
+    public static void initialise() throws NumberFormatException {
+        FileEntryIO.streamFromFile(Configuration.getOutputFile(), new readTweetIDs());
+        FileEntryIO.streamFromFile(Configuration.getAccountsOutputFile(), new readUserhandles());
     }
 
     /**
@@ -65,51 +38,23 @@ public class TweetData {
     public static boolean checkDupAccount(String userhandle) { return userhandles.contains(userhandle);}
     protected static void addUserhandle(String userhandle) { userhandles.add(userhandle);}
 
-    /**
-     * Reads tweetIDs into HashSet field for easier duplication checking
-     */
-    private static void readTweetIDs(){
-        BufferedReader reader = null;
-        try {
-            try {
-                reader = new BufferedReader(new FileReader(Configuration.getOutputFile()));
-            }catch(FileNotFoundException ex){ return; }
 
-            while (reader.ready()){
-                StringTokenizer tokens = new StringTokenizer(reader.readLine());
-                if (tokens.hasMoreTokens())
-                    tweetIDs.add(Long.valueOf(tokens.nextToken()));//HardCoded to read IDs
-            }
-        }catch(IOException e){e.printStackTrace();}
-        finally{
-            try {
-                assert reader != null;
-                reader.close();
-            }catch(NullPointerException e){System.out.println("Output File does not exist");}
-            catch (IOException e) {e.printStackTrace();}
+    //Class that can be called to add the first token of a line to tweetID
+    private static class readTweetIDs implements Callable{
+        @Override
+        public void call(String line){
+            StringTokenizer tokens = new StringTokenizer(line);
+            if (tokens.hasMoreTokens())
+                addTweetID(Long.valueOf(tokens.nextToken()));
         }
     }
-
-    private static void readUserhandles(){
-        BufferedReader reader = null;
-        try {
-            try {
-                reader = new BufferedReader(new FileReader(Configuration.getAccountsOutputFile()));
-            }catch(FileNotFoundException ex){ return; }
-
-            while (reader.ready()){
-                StringTokenizer tokens = new StringTokenizer(reader.readLine());
-                if (tokens.hasMoreTokens()) {
-                    userhandles.add(tokens.nextToken());//HardCoded to read Userhandles
-                }
-            }
-        }catch(IOException e){e.printStackTrace();}
-        finally{
-            try {
-                assert reader != null;
-                reader.close();
-            }catch(NullPointerException e){System.out.println("Output File does not exist");}
-            catch (IOException e) {e.printStackTrace();}
+    //Class that can be called to add the first token of a line to userhandles
+    private static class readUserhandles implements Callable{
+        @Override
+        public void call(String line) {
+            StringTokenizer tokens = new StringTokenizer(line);
+            if (tokens.hasMoreTokens())
+                addUserhandle(tokens.nextToken());
         }
     }
 

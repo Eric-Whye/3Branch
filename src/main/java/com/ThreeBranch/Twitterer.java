@@ -40,17 +40,17 @@ public class Twitterer {
                 if (counter % Configuration.getSearchBuffer() == 0){
 
                     //Writing Tweet Data to File
-                    TweetData.writeDataToFile(convertTweetsToListOfStringLists(tweets),
+                    FileEntryIO.appendToFile(convertTweetsToListOfStringLists(tweets),
                             Configuration.getDelim(),
                             Configuration.getNewLineDelim(),
-                            new File(Configuration.getOutputFile())
+                            Configuration.getOutputFile()
                     );
 
                     //Writing Account Data to file
-                    TweetData.writeDataToFile(convertAccountsToListOfStringList(tweets),
+                    FileEntryIO.appendToFile(convertAccountsToListOfStringList(tweets),
                             Configuration.getDelim(),
                             Configuration.getNewLineDelim(),
-                            new File(Configuration.getAccountsOutputFile())
+                            Configuration.getAccountsOutputFile()
                     );
 
                     //Resetting Buffer
