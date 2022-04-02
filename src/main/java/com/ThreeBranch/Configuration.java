@@ -9,6 +9,8 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 public abstract class Configuration {
+    public static final String ConfigFilename = "twitter4j.properties";//config file
+
     //Holds the configuration file in memory
     private static final Properties properties = new Properties();
 
@@ -61,18 +63,19 @@ public abstract class Configuration {
 
     /**
      * Reads from Configuration file and changes fields based on its values
+     * @param filename Name of configuration File
      */
-    public static void initialise() throws Exception{
-        readConfig();
+    public static void initialise(String filename) throws Exception{
+        readConfig(filename);
         setConfig();
 
         new File(getOutputDir()).mkdirs();
     }
 
     //Read from Configuration file
-    private static void readConfig(){
+    private static void readConfig(String filename){
         try {
-            properties.load(new FileReader("twitter4j.properties"));
+            properties.load(new FileReader(filename));
         } catch (IOException e) {e.printStackTrace();}
     }
 

@@ -27,14 +27,13 @@ abstract class TweetData {
      * @param tweetID Twitter.Status id
      * @return true if found
      */
-    public static boolean checkDupID(Long tweetID){
-        return tweetIDs.contains(tweetID);
-    }
-    protected static void addTweetID(Long tweetID){
-        tweetIDs.add(tweetID);
-    }
-    public static int getNumTweetsInData(){return tweetIDs.size();}
-
+    public static boolean checkDupID(Long tweetID){return tweetIDs.contains(tweetID);}
+    protected static void addTweetID(Long tweetID){tweetIDs.add(tweetID);}
+    /**
+     * Twitter user duplication checking
+     * @param userhandle Twitter userhandle
+     * @return true if found
+     */
     public static boolean checkDupAccount(String userhandle) { return userhandles.contains(userhandle);}
     protected static void addUserhandle(String userhandle) { userhandles.add(userhandle);}
 
@@ -42,8 +41,8 @@ abstract class TweetData {
     //Class that can be called to add the first token of a line to tweetID
     private static class readTweetIDs implements Callable{
         @Override
-        public void call(String line){
-            StringTokenizer tokens = new StringTokenizer(line);
+        public void call(Object o){
+            StringTokenizer tokens = new StringTokenizer((String)o);
             if (tokens.hasMoreTokens())
                 addTweetID(Long.valueOf(tokens.nextToken()));
         }
@@ -51,8 +50,8 @@ abstract class TweetData {
     //Class that can be called to add the first token of a line to userhandles
     private static class readUserhandles implements Callable{
         @Override
-        public void call(String line) {
-            StringTokenizer tokens = new StringTokenizer(line);
+        public void call(Object o) {
+            StringTokenizer tokens = new StringTokenizer((String)o);
             if (tokens.hasMoreTokens())
                 addUserhandle(tokens.nextToken());
         }

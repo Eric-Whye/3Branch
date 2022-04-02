@@ -1,5 +1,6 @@
 package com.ThreeBranch;
 
+
 public class Main {
 
     public static void main(String[] args) {
@@ -12,7 +13,7 @@ public class Main {
                 case "-G":
                 default:
                     try {
-                        Configuration.initialise();//read from config file
+                        Configuration.initialise(Configuration.ConfigFilename);//read from config file
                         TweetData.initialise();//Read TweetIDs and userhandles for duplication checking
                     }catch(Exception e){e.printStackTrace();}
                     System.out.println(Configuration.getConfigInfo());

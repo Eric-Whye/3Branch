@@ -8,9 +8,6 @@ import java.util.*;
 
 
 public class FileProcessor {
-    private final HashSet<Vertex> vertices = new HashSet<>();
-    private final HashMap<Vertex, Arc> retweets = new HashMap<>();
-
 
 
     public FileProcessor() {
@@ -21,17 +18,15 @@ public class FileProcessor {
 
     private void addArc(String user1, String user2){
         Arc arc = new Arc(new Vertex(user1), new Vertex(user2));
-        if (retweets.containsKey(new Vertex(user1))){
+        /*if (retweets.containsKey(new Vertex(user1))){
             retweets.get(new Vertex(user1)).incrementValue();
-        }
-
-
+        }*/
     }
 
     private class readRetweets implements Callable {
         @Override
-        public void call(String line) {
-            StringTokenizer tokens = new StringTokenizer(line);
+        public void call(Object o) {
+            StringTokenizer tokens = new StringTokenizer((String)o);
             while (tokens.hasMoreTokens()){
                 tokens.nextToken();//Skip status Id
                 String user1 = tokens.nextToken();//Save userhandle
@@ -39,6 +34,17 @@ public class FileProcessor {
 
                 addArc(user1, tokens.nextToken());
             }
+        }
+    }
+
+    public void writeGraphToFile(Graph graph){
+
+    }
+
+    private class readGraphFromFile implements Callable {
+        @Override
+        public void call(Object o){
+            StringTokenizer tokens = new StringTokenizer((String)o);
         }
     }
 }

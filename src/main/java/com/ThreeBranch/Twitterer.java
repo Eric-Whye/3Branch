@@ -80,6 +80,7 @@ public class Twitterer {
         twitterStream.filter(query);
     }
 
+    //Breaking up tweets buffer into relevant tweet data
     private List<List<String>> convertTweetsToListOfStringLists(List<Status> tweets){
         List<List<String>> tweetList = new ArrayList<>();
 
@@ -103,6 +104,7 @@ public class Twitterer {
         return tweetList;
     }
 
+    //Breaking up tweets buffer into relevant user data
     private List<List<String>> convertAccountsToListOfStringList(List<Status> tweets){
         List<List<String>> tweetList = new ArrayList<>();
 
@@ -132,7 +134,7 @@ public class Twitterer {
      * Write Data to File using FileEntryIO
      * @param tweets List of twiter4j.Status
      */
-    private void writeDataToFile(List<Status> tweets){
+    private synchronized void writeDataToFile(List<Status> tweets){
         //Writing Tweet Data to File
         FileEntryIO.appendToFile(convertTweetsToListOfStringLists(tweets),
                 Configuration.getDelim(),

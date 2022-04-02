@@ -23,7 +23,7 @@ class FileEntryIOTest {
         writer.close();
 
 
-        Configuration.initialise();
+        Configuration.initialise("testConfiguration.properties");
         List<List<String>> list = new ArrayList<>();
         for (int i = 0; i < 10; i++){
             List<String> line = new ArrayList<>();
