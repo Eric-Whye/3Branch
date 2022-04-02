@@ -8,7 +8,8 @@ public class Arc{
     private int value = 1;
 
     public Vertex getStartVertex() {return startVertex;}
-
+    public Vertex getEndVertex() {return endVertex;}
+    
     protected Arc(Vertex startVertex, Vertex endVertex){
         this.startVertex = startVertex;
         this.endVertex = endVertex;
