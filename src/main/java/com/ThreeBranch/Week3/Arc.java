@@ -5,14 +5,19 @@ import java.util.Objects;
 public class Arc implements Comparable<Arc>{
     private final Vertex startVertex;
     private final Vertex endVertex;
-    private int value = 1;
+    private int value;
 
     public Vertex getStartVertex() {return startVertex;}
     public Vertex getEndVertex() {return endVertex;}
     
     protected Arc(Vertex startVertex, Vertex endVertex){
-        this.startVertex = startVertex;
-        this.endVertex = endVertex;
+      this(startVertex, endVertex, 1);
+    }
+
+    protected Arc(Vertex startVertex, Vertex endVertex, int value) {
+      this.startVertex = startVertex;
+      this.endVertex = endVertex;
+      this.value = value;
     }
 
     public void incrementValue(){

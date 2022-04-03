@@ -75,9 +75,24 @@ public class Graph implements Iterable<Vertex>{
     Vertex fromV = getVertex(from);
     Vertex toV = getVertex(to);
     
-    Arc a = getEdgeIfExists(fromV, toV);
+    addArc(fromV, toV, 1);
+  }
+  
+  public void addArc(Vertex from, Vertex to) {
+    addArc(from, to, 1);
+  }
+  
+  public void addArc(String from, String to, int weight) {
+    Vertex fromV = getVertex(from);
+    Vertex toV = getVertex(to);
+    
+    addArc(fromV, toV, weight);
+  }
+  
+  public void addArc(Vertex from, Vertex to, int weight) {
+    Arc a = getEdgeIfExists(from, to);
     if(a == null) {
-      getAdj(fromV).add(new Arc(fromV, toV));
+      getAdj(from).add(new Arc(from, to, weight));
     } else {
       a.incrementValue();
     }

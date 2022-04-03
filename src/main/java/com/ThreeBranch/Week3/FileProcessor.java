@@ -73,9 +73,29 @@ public class FileProcessor {
     }
 
     private class readGraphFromFile implements Callable {
+        String currentTweeter = null;
+        
         @Override
         public void call(Object o){
+            if(currentTweeter == null) {
+              currentTweeter = (String)o;
+              return;
+            }
+            
+            if(((String)o).length() == 0) {
+              currentTweeter = null;
+            }
+            
             StringTokenizer tokens = new StringTokenizer((String)o);
+            
+            while(tokens.hasMoreTokens()) {
+              String s = tokens.nextToken();
+              s = s.substring(0, s.length() - 1);
+              String[] parsedString = s.split("(");
+              String to = parsedString[0];
+              int weight = Integer.parseInt(parsedString[1]);
+            }
+            
         }
     }
 }
