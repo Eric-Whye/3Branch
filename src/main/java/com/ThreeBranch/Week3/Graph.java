@@ -1,10 +1,8 @@
 package com.ThreeBranch.Week3;
 
-import java.util.Hashtable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class Graph {
+public class Graph implements Iterable<Vertex>{
   private Hashtable<Vertex, List<Arc>> adjacencyList = new Hashtable<>();
   
   public void addVertex(String s) {
@@ -83,5 +81,9 @@ public class Graph {
     } else {
       a.incrementValue();
     }
+  }
+  
+  public Iterator<> arbitraryAccess() {
+    return adjacencyList.keySet();
   }
 }
