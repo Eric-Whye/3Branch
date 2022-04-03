@@ -49,4 +49,9 @@ public class Arc implements Edge, Comparable<Edge>{
     public int compareTo(Edge a) {
       return this.weight - a.getWeight();
     }
+
+    @Override
+    public String toString(){
+        return destination + "(" + weight + ")";
+    }
 }

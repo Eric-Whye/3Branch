@@ -8,12 +8,9 @@ import java.util.*;
 import java.io.*;
 
 public class FileProcessor {
-    Graph graph = new Graph();
+    private final List<List<String>> userRTRelations = new ArrayList<>();
   
-    //There is ABSOLUTELY a better way to do this, but idk what it is, so here we are
-    public Graph getGraph() {
-      return graph;
-    }
+    public List<List<String>> getUserRTRelations(){return userRTRelations;}
   
     public FileProcessor() {
         FileEntryIO.streamFromFile(Configuration.getGraphInputFile(), new readRetweets());
@@ -28,7 +25,10 @@ public class FileProcessor {
               String user1 = tokens.nextToken();//Save userhandle
               if (!tokens.nextToken().equals("RT")) return; //If not a retweet then discard
 
-              graph.addArc(user1, tokens.nextToken());
+              List<String> users = new ArrayList<>();
+              users.add(user1);
+              users.add(tokens.nextToken());
+              userRTRelations.add(users);
             }
         }
     }
@@ -47,14 +47,11 @@ public class FileProcessor {
           writer.write(newline);
           
           List<Edge> retweets = graph.getAdj(p);
-          Collections.sort(retweets, Collections.reverseOrder());
+          retweets.sort(Collections.reverseOrder());
           
           StringBuilder sb = new StringBuilder();
           for(Edge a : retweets) {
-            sb.append(a.getDestination());
-            sb.append("(");
-            sb.append(a.getWeight());
-            sb.append(")");
+            sb.append(a.toString());
             sb.append(delim);
           }
           

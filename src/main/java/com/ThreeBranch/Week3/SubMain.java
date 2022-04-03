@@ -8,8 +8,8 @@ public class SubMain {
       Configuration.initialise(Configuration.ConfigFilename);
       
       FileProcessor fp = new FileProcessor();
-      Graph data = fp.getGraph();
-      fp.writeGraphToFile(data);
+      Graph graph = new Graph();
+      graph.createGraph(fp.getUserRTRelations());
     } catch(Exception e) {
       e.printStackTrace();
     }

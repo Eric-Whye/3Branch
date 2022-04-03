@@ -4,7 +4,23 @@ import java.util.*;
 
 public class Graph implements Iterable<Point>{
   private final Hashtable<Point, List<Edge>> adjacencyList = new Hashtable<>();
-  
+
+  public Graph(){
+
+  }
+
+  /**
+   *
+   * @param list of
+   */
+  public void createGraph(List<List<String>> list){
+    try {
+      for (List<String> relation : list) {
+        addArc(relation.get(0), relation.get(1));
+      }
+    }catch(NullPointerException e){e.printStackTrace();}
+  }
+
   public void addVertex(String s) {
     addVertex(new Vertex(s));
   }
