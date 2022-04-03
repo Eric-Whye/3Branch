@@ -15,4 +15,5 @@ com\ThreeBranch\TweetData$readTweetIDs.class
 com\ThreeBranch\FileEntryIO.class
 com\ThreeBranch\Week3\Arc.class
 com\ThreeBranch\Main.class
+com\ThreeBranch\Week3\SubMain.class
 com\ThreeBranch\Week3\Vertex.class

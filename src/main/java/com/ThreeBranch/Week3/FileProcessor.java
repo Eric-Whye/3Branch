@@ -10,6 +10,11 @@ import java.io.*;
 public class FileProcessor {
     Graph graph = new Graph();
   
+    //There is ABSOLUTELY a better way to do this, but idk what it is, so here we are
+    public Graph getGraph() {
+      return graph;
+    }
+  
     public FileProcessor() {
         FileEntryIO.streamFromFile(Configuration.getGraphInputFile(), new readRetweets());
     }

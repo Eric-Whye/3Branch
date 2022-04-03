@@ -70,6 +70,20 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
             </plugin>
+
+          <!--Lets us run from the command line-->
+          <!--Run using "mvn clean compile exec:java"-->
+          <!--Add arguments with '-Dexec.args="" '-->
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <configuration>
+              	<mainClass>com.ThreeBranch.Main</mainClass>
+		<arguments>
+			<argument>-graph</argument>
+		</arguments>
+            </configuration>
+          </plugin>
         </plugins>
 
         <resources>
