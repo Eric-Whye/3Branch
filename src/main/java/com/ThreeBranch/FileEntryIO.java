@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 
-public interface FileEntryIO {
+public abstract class FileEntryIO {
 
     /**
      * Appends line entries to filename where each entry is a tokenized string in the form of a List.
