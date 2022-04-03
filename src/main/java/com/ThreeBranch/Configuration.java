@@ -30,6 +30,7 @@ public abstract class Configuration {
     public static String getOutputDir() {return properties.getProperty("OutputDir");}
     public static String getOutputFile() {return properties.getProperty("TweetsOutput");}
     public static String getAccountsOutputFile() {return properties.getProperty("AccountsOutput");}
+    public static String getGraphOutput() { return properties.getProperty("GraphOutput");}
 
     //Graph Input Files
     public static String getGraphDir(){ return properties.getProperty("GraphInputDir"); }
