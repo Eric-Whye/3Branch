@@ -2,34 +2,34 @@ package com.ThreeBranch.Week3;
 
 import java.util.Objects;
 
-public class Arc implements Comparable<Arc>{
-    private final Vertex startVertex;
-    private final Vertex endVertex;
-    private int value;
+public class Arc implements Edge, Comparable<Edge>{
+    private final Point source;
+    private final Point destination;
+    private int weight;
 
-    public Vertex getStartVertex() {return startVertex;}
-    public Vertex getEndVertex() {return endVertex;}
+    public Point getSource() {return source;}
+    public Point getDestination() {return destination;}
     
-    protected Arc(Vertex startVertex, Vertex endVertex){
-      this(startVertex, endVertex, 1);
+    protected Arc(Point source, Point destination){
+      this(source, destination, 1);
     }
 
-    protected Arc(Vertex startVertex, Vertex endVertex, int value) {
-      this.startVertex = startVertex;
-      this.endVertex = endVertex;
-      this.value = value;
+    protected Arc(Point source, Point destination, int weight) {
+      this.source = source;
+      this.destination = destination;
+      this.weight = weight;
     }
 
     public void incrementValue(){
-        this.value++;
+        this.weight++;
     }
 
-    public int getValue() {
-      return value;
+    public int getWeight() {
+      return weight;
     }
     
     public String endName() {
-      return endVertex.getName();
+      return destination.getName();
     }
 
     @Override
@@ -37,16 +37,16 @@ public class Arc implements Comparable<Arc>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Arc arc = (Arc) o;
-        return value == arc.value && startVertex.equals(arc.startVertex) && endVertex.equals(arc.endVertex);
+        return weight == arc.weight && source.equals(arc.source) && destination.equals(arc.destination);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(startVertex, endVertex);
+        return Objects.hash(source, destination);
     }
     
     @Override
-    public int compareTo(Arc a) {
-      return this.value - a.getValue();
+    public int compareTo(Edge a) {
+      return this.weight - a.getWeight();
     }
 }

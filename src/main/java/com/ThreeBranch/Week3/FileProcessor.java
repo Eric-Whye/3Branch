@@ -42,18 +42,18 @@ public class FileProcessor {
       try {
         writer = new BufferedWriter(new FileWriter(outputFile, true));
       
-        for(Vertex v : graph) {
-          writer.write(v.getName());
+        for(Point p : graph) {
+          writer.write(p.getName());
           writer.write(newline);
           
-          List<Arc> retweets = graph.getAdj(v);
+          List<Edge> retweets = graph.getAdj(p);
           Collections.sort(retweets, Collections.reverseOrder());
           
           StringBuilder sb = new StringBuilder();
-          for(Arc a : retweets) {
-            sb.append(a.endName());
+          for(Edge a : retweets) {
+            sb.append(a.getDestination());
             sb.append("(");
-            sb.append(a.getValue());
+            sb.append(a.getWeight());
             sb.append(")");
             sb.append(delim);
           }
@@ -91,7 +91,7 @@ public class FileProcessor {
             while(tokens.hasMoreTokens()) {
               String s = tokens.nextToken();
               s = s.substring(0, s.length() - 1);
-              String[] parsedString = s.split("(");
+              String[] parsedString = s.split("\\(");
               String to = parsedString[0];
               int weight = Integer.parseInt(parsedString[1]);
             }

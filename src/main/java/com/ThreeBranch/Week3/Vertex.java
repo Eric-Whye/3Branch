@@ -2,7 +2,7 @@ package com.ThreeBranch.Week3;
 
 import java.util.Objects;
 
-public class Vertex{
+public class Vertex implements Point{
     private final String name;
 
     public String getName() {return name;}

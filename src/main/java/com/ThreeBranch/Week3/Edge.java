@@ -1,11 +1,9 @@
 package com.ThreeBranch.Week3;
 
 public interface Edge {
-    public String toString();
+    Point getSource();
     
-    public String getSource();
+    Point getDestination();
     
-    public String getDestination();
-    
-    public int getWeight();
+    int getWeight();
 }
