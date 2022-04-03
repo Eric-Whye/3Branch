@@ -23,12 +23,12 @@ public class FileProcessor {
         @Override
         public void call(Object o) {
             StringTokenizer tokens = new StringTokenizer((String)o);
-            while (tokens.hasMoreTokens()){
-                tokens.nextToken();//Skip status Id
-                String user1 = tokens.nextToken();//Save userhandle
-                if (tokens.nextToken().equals("RT")) return; //If not a retweet then discard
+            if(tokens.countTokens() >= 4) {
+              tokens.nextToken();//Skip status Id
+              String user1 = tokens.nextToken();//Save userhandle
+              if (!tokens.nextToken().equals("RT")) return; //If not a retweet then discard
 
-                graph.addArc(user1, tokens.nextToken());
+              graph.addArc(user1, tokens.nextToken());
             }
         }
     }
