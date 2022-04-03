@@ -47,7 +47,7 @@ public class Graph implements Iterable<Vertex>{
   public boolean edgeExists(Vertex from, Vertex to) {
     try {
       for (Arc a : getAdj(from))
-        if(a.getEndVertex() == to)
+        if(a.getEndVertex().equals(to))
           return true;
       return false;
     } catch (IllegalArgumentException e) {
@@ -63,7 +63,7 @@ public class Graph implements Iterable<Vertex>{
   public Arc getEdgeIfExists(Vertex from, Vertex to) {
     try {
       for (Arc a : getAdj(from))
-        if(a.getEndVertex() == to)
+        if(a.getEndVertex().equals(to))
           return a;
       return null;
     } catch (IllegalArgumentException e) {

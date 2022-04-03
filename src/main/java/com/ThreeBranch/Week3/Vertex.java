@@ -16,7 +16,7 @@ public class Vertex{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vertex vertex = (Vertex) o;
-        return Objects.equals(name, vertex.name);
+        return name.equals(vertex.getName());
     }
 
     @Override
