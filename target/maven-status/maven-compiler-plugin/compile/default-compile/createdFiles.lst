@@ -7,6 +7,7 @@ com\ThreeBranch\TweetData$1.class
 com\ThreeBranch\Week3\FileProcessor$1.class
 com\ThreeBranch\Week3\FileProcessor$readRetweets.class
 com\ThreeBranch\Twitterer.class
+com\ThreeBranch\Week3\FileProcessor$readGraphFromFile.class
 com\ThreeBranch\Twitterer$1.class
 com\ThreeBranch\Week3\Edge.class
 com\ThreeBranch\Callable.class
@@ -15,4 +16,3 @@ com\ThreeBranch\FileEntryIO.class
 com\ThreeBranch\Week3\Arc.class
 com\ThreeBranch\Main.class
 com\ThreeBranch\Week3\Vertex.class
-com\ThreeBranch\FileEntryIO$1.class

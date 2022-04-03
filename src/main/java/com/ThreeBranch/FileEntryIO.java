@@ -13,7 +13,7 @@ public abstract class FileEntryIO {
      * @param newLineDelim between each line entry
      * @param filename filename
      */
-    static void appendToFile(List<List<String>> list, char delim, char newLineDelim, String filename){
+    public static void appendToFile(List<List<String>> list, char delim, char newLineDelim, String filename){
         Writer writer = null;
 
         try{
@@ -44,7 +44,7 @@ public abstract class FileEntryIO {
      * @param callable is called for each line
      * @param filename filename
      */
-    static void streamFromFile(String filename, Callable callable){
+    public static void streamFromFile(String filename, Callable callable){
         FileInputStream inputStream = null;
         Scanner sc = null;
 

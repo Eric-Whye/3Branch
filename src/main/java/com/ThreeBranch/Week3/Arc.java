@@ -2,7 +2,7 @@ package com.ThreeBranch.Week3;
 
 import java.util.Objects;
 
-public class Arc{
+public class Arc implements Comparable<Arc>{
     private final Vertex startVertex;
     private final Vertex endVertex;
     private int value = 1;
@@ -19,6 +19,14 @@ public class Arc{
         this.value++;
     }
 
+    public int getValue() {
+      return value;
+    }
+    
+    public String endName() {
+      return endVertex.getName();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -30,5 +38,10 @@ public class Arc{
     @Override
     public int hashCode() {
         return Objects.hash(startVertex, endVertex);
+    }
+    
+    @Override
+    public int compareTo(Arc a) {
+      return this.value - a.getValue();
     }
 }

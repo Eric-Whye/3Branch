@@ -83,7 +83,11 @@ public class Graph implements Iterable<Vertex>{
     }
   }
   
-  public Iterator<> arbitraryAccess() {
-    return adjacencyList.keySet();
+  public Iterator<Vertex> arbitraryAccess() {
+    return adjacencyList.keySet().iterator();
+  }
+  
+  public Iterator<Vertex> iterator() {
+    return arbitraryAccess();
   }
 }
