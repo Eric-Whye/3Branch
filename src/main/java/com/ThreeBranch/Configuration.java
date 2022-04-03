@@ -1,6 +1,7 @@
 package com.ThreeBranch;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public abstract class Configuration {
      * Reads from Configuration file and changes fields based on its values
      * @param filename Name of configuration File
      */
-    public static void initialise(String filename) throws Exception{
+    public static void initialise(String filename) throws FileNotFoundException {
         readConfig(filename);
         setConfig();
 

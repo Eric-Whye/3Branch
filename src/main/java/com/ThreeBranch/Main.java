@@ -8,7 +8,7 @@ public class Main {
         } else {
           switch(args[0]){
                   case "-graph":
-                    com.ThreeBranch.Week3.SubMain.handle();
+                    com.ThreeBranch.Graph.SubMain.handle();
                     break;
 
                   case "-g":
