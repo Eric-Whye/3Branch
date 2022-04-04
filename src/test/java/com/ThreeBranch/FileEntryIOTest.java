@@ -38,6 +38,7 @@ class FileEntryIOTest {
             String line = reader.readLine();
             assertEquals(line, count++ + "\t" + count, "File should be in the form of i + \t + i+1");
         }
+        reader.close();
     }
 
 }

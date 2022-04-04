@@ -37,8 +37,12 @@ public class Graph implements Iterable<Point>{
   public List<Edge> getAdj(Point p) throws IllegalArgumentException{
     List<Edge> adj = adjacencyList.get(p);
     if(adj == null)
-      throw new IllegalArgumentException("Vertex " + p.getName() + " does not exist");
+      throw new IllegalArgumentException("Edge " + p.getName() + " does not exist");
     return adj;
+  }
+
+  public Boolean hasAdj(Point p){
+    return adjacencyList.get(p).size() != 0;
   }
   
   public boolean arcExists(String from, String to) {
@@ -84,10 +88,10 @@ public class Graph implements Iterable<Point>{
   }
   
   public void addArc(String from, String to, int weight) {
-    Point fromV = getVertex(from);
-    Point toV = getVertex(to);
+    Point fromP = getVertex(from);
+    Point toP = getVertex(to);
     
-    addArc(fromV, toV, weight);
+    addArc(fromP, toP, weight);
   }
   
   public void addArc(Point from, Point to, int weight) {
@@ -97,6 +101,10 @@ public class Graph implements Iterable<Point>{
     } else {
       a.incrementValue();
     }
+  }
+
+  public void clear(){
+    adjacencyList.clear();
   }
   
   private Iterator<Point> arbitraryAccess() {

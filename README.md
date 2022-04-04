@@ -13,6 +13,13 @@ Using twitter4j libraries and developed using Maven.
 
 Currently able to gather tweets and process tweets into a graph structure(Sprint 3).
 
+<strong><br>Details from this Sprint:<br></strong>
+Tweet Data is processed into custom Graph data structure that is interfaced well.
+
+the Graph class has a sister class called GraphRTFileProcessor(bit of a bad name) 
+that uses the Graph data structure for the specific usage of processing tweet data.
+Usage of the tweet processor is decided in with argument parameters.
+
 <br>
 Functionality (Subject to Change):
 
@@ -37,7 +44,9 @@ Functionality (Subject to Change):
 Self Contained Jar with sources, class files and configuration file included.
 
 How to run:
-java -jar 3Branch-1.0-SNAPSHOT-shaded.jar
+java -jar 3Branch-1.0-SNAPSHOT-shaded.jar -G (for tweet gathering)
+java -jar 3Branch-1.0-SNAPSHOT-shaded.jar -graph -w (for writing graph data to file from tweet data)
+java -jar 3Branch-1.0-SNAPSHOT-shaded.jar -graph -r (for reading graph data into memory)
 
 Currently, 5190 english tweets and 3923 accounts associated with those tweets have been gathered according to these search terms: <br>
 "#vaccinate,#immunization,#immunisation,#immunize,#vaccineswork,#keepsusafe,#omicron,#maskup,#vaccinerollout,#ventilation,#antivaccine,#vaccineskill,#vaxxed,#forcedinjections,#antivaccine,#medicalfreedom,#knowtherisk,#antivaxx,#vaccinsanity,#pharma,#bewaretheneedle,#vaccineinjury,#byebyebigpharma,#pharmthesheep,#vaccineeducation"

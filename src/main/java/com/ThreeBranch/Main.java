@@ -1,5 +1,7 @@
 package com.ThreeBranch;
 
+import com.ThreeBranch.Graph.GraphMain;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -8,9 +10,18 @@ public class Main {
         } else {
           switch(args[0]){
                   case "-graph":
-                    com.ThreeBranch.Graph.SubMain.handle();
-                    break;
+                      if (args.length >= 2) {
+                          switch (args[1]) {
+                              case "-w":
+                                  GraphMain.writeGraph();
+                                  break;
+                              case "-r":
+                              default:
+                                  GraphMain.readGraph();
+                          }
+                      }else defaultHandle();
 
+                      break;
                   case "-g":
                   case "-G":
                       try {
@@ -31,6 +42,7 @@ public class Main {
     public static void defaultHandle() {
       System.out.println("Please enter an option");
       System.out.println("-g: Gather tweet data");
-      System.out.println("-graph: process a text file as a retweet graph");
+      System.out.println("-graph -w: write to a text file as a retweet graph");
+      System.out.println("-graph -r: read from a graph txt file to a Graph object in memory");
     }
 }
