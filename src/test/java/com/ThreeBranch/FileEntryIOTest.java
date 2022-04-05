@@ -1,5 +1,6 @@
 package com.ThreeBranch;
 
+import com.ThreeBranch.Twitter.Configuration;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;

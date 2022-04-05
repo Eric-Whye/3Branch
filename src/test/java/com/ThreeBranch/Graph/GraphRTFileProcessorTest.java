@@ -1,7 +1,9 @@
 package com.ThreeBranch.Graph;
 
-import com.ThreeBranch.Configuration;
+import com.ThreeBranch.Twitter.Configuration;
 import static org.junit.jupiter.api.Assertions.*;
+
+import com.ThreeBranch.Twitter.GraphRTFileProcessor;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -20,7 +22,7 @@ class GraphRTFileProcessorTest {
         BufferedReader reader = null;
         StringBuilder testOutput = new StringBuilder();
         try{
-            reader = new BufferedReader(new FileReader(Configuration.getGraphOutput()));
+            reader = new BufferedReader(new FileReader(Configuration.getValueFor("graph.output")));
             while (reader.ready()){
                 testOutput.append(reader.readLine());
             }
@@ -48,7 +50,7 @@ class GraphRTFileProcessorTest {
 
         Graph graph  = new Graph();
         GraphRTFileProcessor fp = new GraphRTFileProcessor(graph);
-        fp.readGraphFromFile(Configuration.getGraphOutput());
+        fp.readGraphFromFile(Configuration.getValueFor("graph.output"));
         fp.writeGraphToFile(graph);
 
 
@@ -56,7 +58,7 @@ class GraphRTFileProcessorTest {
         BufferedReader reader = null;
         StringBuilder testOutput = new StringBuilder();
         try{
-            reader = new BufferedReader(new FileReader(Configuration.getGraphOutput()));
+            reader = new BufferedReader(new FileReader(Configuration.getValueFor("graph.output")));
             while (reader.ready()){
                 testOutput.append(reader.readLine());
             }

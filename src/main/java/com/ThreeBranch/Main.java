@@ -1,6 +1,8 @@
 package com.ThreeBranch;
 
-import com.ThreeBranch.Graph.GraphMain;
+import com.ThreeBranch.Twitter.Configuration;
+import com.ThreeBranch.Twitter.TweetData;
+import com.ThreeBranch.Twitter.Twitterer;
 
 public class Main {
 
