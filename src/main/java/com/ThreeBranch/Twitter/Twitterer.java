@@ -30,8 +30,6 @@ public class Twitterer {
                 //Checking for Duplication
                 if (TweetData.checkDupID(status.getId()))
                     return;
-                if (TweetData.checkDupAccount("@" + status.getUser().getScreenName()))
-                    return;
 
                 //Adding new Tweets and Account data
                 TweetData.addTweetID(status.getId());
@@ -43,7 +41,7 @@ public class Twitterer {
                 //After vector buffer is filled, write tweet and account data to file according to correct config format
                 if (counter % Integer.parseInt(Configuration.getValueFor("tweet.searchBuffer")) == 0){
                     writeDataToFile(tweets);
-                    //Resetting Buffer
+                    //Clearing Buffer
                     tweets.clear();
                 }
                 counter++;
@@ -112,6 +110,10 @@ public class Twitterer {
         List<List<String>> tweetList = new ArrayList<>();
 
         for (Status tweet : tweets) {
+            //Checking for Account duplication in file
+            if (TweetData.checkDupAccount("@" + tweet.getUser().getScreenName()))
+                continue;
+
             List<String> line = new ArrayList<>();
 
             line.add("@" + tweet.getUser().getScreenName());
@@ -136,14 +138,10 @@ public class Twitterer {
     private synchronized void writeDataToFile(List<Status> tweets){
         char delim = Configuration.getValueFor("format.delim").charAt(0);
         char newLineDelim = Configuration.getValueFor("format.newLineDelim").charAt(0);
-        String filename = Configuration.getValueFor("tweet.vaxFile");
-        //Writing Tweet Data to File
         FileEntryIO.appendToFile(convertTweetsToListOfStringLists(tweets),
                 delim, newLineDelim,
                 Configuration.getValueFor("tweet.vaxFile")
         );
-
-        //Writing Account Data to file
         FileEntryIO.appendToFile(convertAccountsToListOfStringList(tweets),
                 delim, newLineDelim,
                 Configuration.getValueFor("tweet.accountsFile")
