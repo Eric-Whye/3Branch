@@ -15,7 +15,11 @@ public class GraphRTFileProcessor {
 
     public GraphRTFileProcessor(Graph graph) {
         this.graph = graph;
-        FileEntryIO.streamFromFile(Configuration.getValueFor("graph.tweetsInput"), new readRetweets());
+    }
+
+    public void populateGraphFromTweetFile(String filename){
+        graph.clear();
+        FileEntryIO.streamFromFile(filename, new readRetweets());
     }
 
     private class readRetweets implements Callable {
@@ -80,7 +84,7 @@ public class GraphRTFileProcessor {
       }
     }
 
-    public void readGraphFromFile(String filename){
+    public void populateGraphFromGraphFile(String filename){
         graph.clear();
         FileEntryIO.streamFromFile(filename, new readGraphFromFile());
     }

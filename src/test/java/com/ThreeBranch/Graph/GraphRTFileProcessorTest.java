@@ -17,8 +17,9 @@ class GraphRTFileProcessorTest {
 
         Graph graph = new Graph();
         GraphRTFileProcessor fp  = new GraphRTFileProcessor(graph);
-        fp.writeGraphToFile(graph);
+        fp.populateGraphFromTweetFile(Configuration.getValueFor("graph.tweetsInput"));
 
+        fp.writeGraphToFile(graph);
         BufferedReader reader = null;
         StringBuilder testOutput = new StringBuilder();
         try{
@@ -50,7 +51,8 @@ class GraphRTFileProcessorTest {
 
         Graph graph  = new Graph();
         GraphRTFileProcessor fp = new GraphRTFileProcessor(graph);
-        fp.readGraphFromFile(Configuration.getValueFor("graph.output"));
+        fp.populateGraphFromGraphFile(Configuration.getValueFor("graph.output"));
+
         fp.writeGraphToFile(graph);
 
 

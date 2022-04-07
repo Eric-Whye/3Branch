@@ -1,5 +1,6 @@
 package com.ThreeBranch;
 
+import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Twitter.Configuration;
 import com.ThreeBranch.Twitter.TweetData;
 import com.ThreeBranch.Twitter.Twitterer;
@@ -16,6 +17,9 @@ public class Main {
                           switch (args[1]) {
                               case "-w":
                                   GraphMain.writeGraph();
+                                  break;
+                              case "-h":
+                                  GraphMain.findInfluentials();
                                   break;
                               case "-r":
                               default:

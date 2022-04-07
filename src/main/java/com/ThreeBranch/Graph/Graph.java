@@ -115,4 +115,12 @@ public class Graph implements Iterable<Point>{
   public Iterator<Point> iterator() {
     return arbitraryAccess();
   }
+
+  public List<Point> getPointsList(){
+    List<Point> list = new ArrayList<>();
+    for (Point p : this){
+      list.add(p);
+    }
+    return list;
+  }
 }
