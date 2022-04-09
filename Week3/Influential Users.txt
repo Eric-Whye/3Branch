@@ -1,10 +1,10 @@
 @BernieSpofforth	mid
-@jamesmelville	anti
+@jamesmelville	mid
 @EssexPR	mid
 @alavibe	mid
 @GillianMcKeith	mid
 @jackjohnsoniv	pro
-@RealCandaceO	I dunno
+@RealCandaceO	mid
 @org_scp	mid
 @BananaMediaQ	mid
 @Togetherdec	mid
@@ -18,3 +18,5 @@
 @PeterDooleyDUB	mid
 @CTZebra	pro
 @atensnut	mid
+@greenhousemd   pro
+@HumanRights4UK mid

@@ -47,7 +47,6 @@ public abstract class FileEntryIO {
     public static void streamFromFile(String filename, Callable callable){
         FileInputStream inputStream = null;
         Scanner sc = null;
-
         try{
             inputStream = new FileInputStream(filename);
             sc = new Scanner(inputStream);

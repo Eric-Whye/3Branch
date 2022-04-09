@@ -2,7 +2,6 @@ package com.ThreeBranch.Twitter;
 
 import com.ThreeBranch.Callable;
 import com.ThreeBranch.FileEntryIO;
-import com.ThreeBranch.Twitter.Configuration;
 import com.ThreeBranch.Graph.Edge;
 import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
@@ -17,22 +16,31 @@ public class GraphRTFileProcessor {
         this.graph = graph;
     }
 
-    public void populateGraphFromTweetFile(String filename){
-        graph.clear();
-        FileEntryIO.streamFromFile(filename, new readRetweets());
-    }
-
     private class readRetweets implements Callable {
+        boolean reverse;
+        /**
+         * populates graph with retweets from file. The graph can be a retweet or retweeted graph depending on reverse
+         * @param reverse true for retweeted graph, false for retweet graph.
+         */
+        private readRetweets(boolean reverse){this.reverse = reverse;}
+
         @Override
-        public void call(Object o) {
+        public void call(Object o){
             StringTokenizer tokens = new StringTokenizer((String)o);
             if(tokens.countTokens() >= 3) {//If the Tweet has at least a text field
-                tokens.nextToken();//Skip status Id
+                tokens.nextToken();
+                /*try {//If the status id is not a number, then the file being read is the wrong file.
+                    Long.parseLong(tokens.nextToken());
+                }catch(NumberFormatException ignored){
+                    System.out.println("something");
+                    throw new IncorrectGraphFileException();
+                }*/
                 String user1 = tokens.nextToken();//Save userhandle
                 if (!tokens.nextToken().equals("RT")) return; //If not a retweet then discard
                 String user2 = tokens.nextToken();//Save userhandle
-
-                graph.addArc(user1, removeSpecialCharacters(user2));
+                if (!reverse)
+                    graph.addArc(user1, removeSpecialCharacters(user2));
+                else graph.addArc(removeSpecialCharacters(user2), user1);
             }
         }
     }
@@ -42,7 +50,7 @@ public class GraphRTFileProcessor {
         return str.replace(":", "");
     }
 
-    public void writeGraphToFile(Graph graph){
+    public synchronized void writeGraphToFile(Graph graph){
       String outputFile = Configuration.getValueFor("graph.output");
       String delim = Configuration.getValueFor("format.delim");
       String newline = Configuration.getValueFor("format.newLineDelim");
@@ -52,7 +60,7 @@ public class GraphRTFileProcessor {
         writer = new BufferedWriter(new FileWriter(outputFile));
       
         for(Point p : graph) {
-          if (!graph.hasAdj(p))
+          if (!graph.hasAdj(p))//Skip adding users who haven't done a retweet / been retweeted
               continue;
           writer.write(p.getName());
           writer.write(newline);
@@ -84,14 +92,36 @@ public class GraphRTFileProcessor {
       }
     }
 
-    public void populateGraphFromGraphFile(String filename){
+    public synchronized void populateRetweetedGraphFromFile(String filename){
         graph.clear();
-        FileEntryIO.streamFromFile(filename, new readGraphFromFile());
+        try{
+            FileEntryIO.streamFromFile(filename, new readRetweets(true));
+        }catch(IncorrectGraphFileException e){
+            populateFromGraphFile();
+        }
     }
 
-    private class readGraphFromFile implements Callable {
+    public synchronized void populateRetweetGraphFromFile(String filename){
+        graph.clear();
+        try{
+            FileEntryIO.streamFromFile(filename, new readRetweets(false));
+        }catch(IncorrectGraphFileException e){
+            //populateFromGraphFile();
+        }
+    }
+
+    public synchronized void populateFromGraphFile(){
+        graph.clear();
+        try {
+            FileEntryIO.streamFromFile(Configuration.getValueFor("graph.output"), new readRetweetsFromGraphFile());
+        }catch(IncorrectGraphFileException e){
+            e.printStackTrace();
+        }
+    }
+
+    private class readRetweetsFromGraphFile implements Callable {
         private String currentTweeter = null;
-        
+
         @Override
         public void call(Object o){
 

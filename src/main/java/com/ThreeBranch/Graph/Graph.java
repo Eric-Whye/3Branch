@@ -5,14 +5,13 @@ import java.util.*;
 public class Graph implements Iterable<Point>{
   private final Hashtable<Point, List<Edge>> adjacencyList = new Hashtable<>();
 
-
   public void addVertex(String s) {
     addVertex(new Vertex(s));
   }
   
-  public void addVertex(Point v) {
-    if(!hasVertex(v))
-      adjacencyList.put(v, new ArrayList<Edge>());
+  public void addVertex(Point p) {
+    if(!hasVertex(p))
+      adjacencyList.put(p, new ArrayList<Edge>());
   }
   
   public boolean hasVertex(String name) {
@@ -28,6 +27,13 @@ public class Graph implements Iterable<Point>{
       return new Vertex(s);
     addVertex(s);
     return new Vertex(s);
+  }
+
+  public List<Edge> removeVertex(String s){
+    return adjacencyList.remove(new Vertex(s));
+  }
+  public List<Edge> removeVertex(Point p){
+    return adjacencyList.remove(p);
   }
   
   public List<Edge> getAdj(String s) throws IllegalArgumentException{
@@ -123,4 +129,7 @@ public class Graph implements Iterable<Point>{
     }
     return list;
   }
+
+  public int size(){return adjacencyList.size();}
+  public boolean isEmpty(){return adjacencyList.isEmpty();}
 }

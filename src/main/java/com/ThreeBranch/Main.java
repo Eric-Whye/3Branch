@@ -13,20 +13,8 @@ public class Main {
         } else {
           switch(args[0]){
                   case "-graph":
-                      if (args.length >= 2) {
-                          switch (args[1]) {
-                              case "-w":
-                                  GraphMain.writeGraph();
-                                  break;
-                              case "-h":
-                                  GraphMain.findInfluentials();
-                                  break;
-                              case "-r":
-                              default:
-                                  GraphMain.readGraph();
-                          }
-                      }else defaultHandle();
-
+                      GraphShell shell = new GraphShell();
+                      shell.run();
                       break;
                   case "-g":
                   case "-G":
