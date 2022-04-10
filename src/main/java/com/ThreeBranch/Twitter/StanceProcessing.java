@@ -1,7 +1,5 @@
 package com.ThreeBranch.Twitter;
 
-import com.ThreeBranch.FileEntryIO;
-import com.ThreeBranch.Graph.Edge;
 import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
 
@@ -53,16 +51,10 @@ public class StanceProcessing {
             } catch (IOException e) {e.printStackTrace();}
         }
 
-        for (Point p : list){
-            List<Edge> arcs = graph.removeVertex(p.getName());
-            for (Edge arc : arcs){
-                graph.addArc(p, arc.getDestination());
-            }
-        }
         for (Point p : graph){
-
         }
     }
+
 
     public void writeStances(Graph graph){
         for (Point user : graph){

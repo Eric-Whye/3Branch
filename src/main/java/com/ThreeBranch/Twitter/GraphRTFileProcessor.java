@@ -60,7 +60,7 @@ public class GraphRTFileProcessor {
             if (!graph.hasAdj(p))//Skip adding users who haven't done a retweet / been retweeted
                 continue;
             List<String> entry = new ArrayList<>();
-            entry.add(p.getName());
+            entry.add((String) p.getName());
             entry.add(newline);
 
             List<Edge> retweets = graph.getAdj(p);

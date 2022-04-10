@@ -2,12 +2,12 @@ package com.ThreeBranch.Graph;
 
 import java.util.Objects;
 
-public class Vertex implements Point{
-    private final String name;
+public class Vertex<T> implements Point<T>{
+    private final T name;
 
-    public String getName() {return name;}
+    public T getName() {return name;}
 
-    protected Vertex(String name){
+    protected Vertex(T name){
         this.name = name;
     }
 
@@ -15,7 +15,7 @@ public class Vertex implements Point{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Vertex vertex = (Vertex) o;
+        Vertex<T> vertex = (Vertex<T>) o;
         return name.equals(vertex.getName());
     }
 
@@ -26,6 +26,6 @@ public class Vertex implements Point{
 
     @Override
     public String toString(){
-        return name;
+        return (String)name;
     }
 }
