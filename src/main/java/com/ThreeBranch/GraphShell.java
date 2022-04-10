@@ -6,11 +6,13 @@ import com.ThreeBranch.Graph.Point;
 import com.ThreeBranch.Twitter.Configuration;
 import com.ThreeBranch.Twitter.GraphRTFileProcessor;
 import com.ThreeBranch.Twitter.StanceProcessing;
+import com.ThreeBranch.Twitter.User;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLOutput;
 import java.util.*;
 import java.util.stream.Stream;
+import java.util.Optional;
 
 public class GraphShell {
     Graph graph = new Graph();
@@ -82,6 +84,10 @@ public class GraphShell {
                   stanceHandler();
                   break;
 
+                case "print stances":
+                  printStanceHandler();
+                  break;
+
                 default:
                     System.out.println("Unrecognised");
             }
@@ -123,4 +129,20 @@ public class GraphShell {
       
       System.out.println("Stances Assigned");
     }      
+    
+    private void printStanceHandler() {
+      for (Point p : graph) {
+        if(p instanceof User) {
+          User u = (User) p;
+          Optional<Integer> stance = u.getStance();
+          if(stance.isPresent()) {
+            System.out.println(u.getName() + ": " + u.getStance().get());
+          } else {
+            System.out.println(u.getName() + ": No Stance Assigned");
+          }
+        } else {
+          System.out.println(p.getName() + ": Not a user");
+        }
+      }
+    }
 }
