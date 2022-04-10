@@ -49,7 +49,7 @@ public class Graph implements Iterable<Point>{
   public List<Edge> getAdj(Point p) throws IllegalArgumentException{
     List<Edge> adj = adjacencyList.get(p);
     if(adj == null)
-      throw new IllegalArgumentException("Edge " + p.getName() + " does not exist");
+      throw new IllegalArgumentException("Point " + p.getName() + " does not exist");
     return adj;
   }
 
