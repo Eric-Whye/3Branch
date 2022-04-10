@@ -3,14 +3,16 @@ package com.ThreeBranch.Twitter;
 import com.ThreeBranch.Graph.Vertex;
 import java.util.Optional;
 
-public class User<T> extends Vertex<T> {
+public class User extends Vertex {
     public final int MAX_STANCE = 1000;
     public final int MIN_STANCE = -1000;
   
     private int stance = -9999; //Anything outside of the -1000 to 1000 range will be considered null
 
-    protected User(T name){super(name);}
-    protected User(T name, int stance) {
+    public User(String name){
+        super(name);
+    }
+    protected User(String name, int stance) {
         super(name);
         this.stance = stance;
     }

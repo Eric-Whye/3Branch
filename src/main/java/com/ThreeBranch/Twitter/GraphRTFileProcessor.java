@@ -11,10 +11,13 @@ import java.io.*;
 
 public class GraphRTFileProcessor {
     private final Graph graph;
+    private boolean stance = false;
+    private void setStance(boolean stance) {this.stance = stance;}
 
     public GraphRTFileProcessor(Graph graph) {
         this.graph = graph;
     }
+
 
     private class readRetweets implements Callable {
         boolean reverse;
@@ -38,9 +41,13 @@ public class GraphRTFileProcessor {
                 String user1 = tokens.nextToken();//Save userhandle
                 if (!tokens.nextToken().equals("RT")) return; //If not a retweet then discard
                 String user2 = tokens.nextToken();//Save userhandle
+
                 if (!reverse)
-                    graph.addArc(user1, removeSpecialCharacters(user2));
-                else graph.addArc(removeSpecialCharacters(user2), user1);
+                    if (stance) graph.addArc(new User(user1), new User(removeSpecialCharacters(user2)));
+                    else graph.addArc(user1, removeSpecialCharacters(user2));
+                else
+                    if (stance) graph.addArc(new User(removeSpecialCharacters(user2)), new User(user1));
+                    else graph.addArc(removeSpecialCharacters(user2), user1);
             }
         }
     }
@@ -60,7 +67,7 @@ public class GraphRTFileProcessor {
             if (!graph.hasAdj(p))//Skip adding users who haven't done a retweet / been retweeted
                 continue;
             List<String> entry = new ArrayList<>();
-            entry.add((String) p.getName());
+            entry.add(p.getName());
             entry.add(newline);
 
             List<Edge> retweets = graph.getAdj(p);
@@ -96,7 +103,10 @@ public class GraphRTFileProcessor {
             //populateFromGraphFile();
         }
     }
-
+    public synchronized void populateStanceFromFile(String filename){
+        setStance(true);
+        populateRetweetGraphFromFile(filename);
+    }
     public synchronized void populateFromGraphFile(){
         graph.clear();
         try {

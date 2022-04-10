@@ -51,7 +51,15 @@ public class GraphShell {
                     fp.populateRetweetedGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
                     System.out.println("Retweeted Graph Built");
                     break;
-                    
+
+                case "build stance":
+                    if (!graph.isEmpty())
+                        System.out.println("Old Graphs Dropped");
+                    System.out.println("Building Stance Graph");
+                    graph = new Graph();
+                    fp = new GraphRTFileProcessor(graph);
+                    break;
+
                 case "write":
                     if (graph.isEmpty()) {
                         System.out.println("Graph is empty");

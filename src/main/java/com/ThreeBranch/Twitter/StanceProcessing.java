@@ -55,6 +55,7 @@ public class StanceProcessing {
         }
 
         for (Point p : graph){
+
         }
     }
 
