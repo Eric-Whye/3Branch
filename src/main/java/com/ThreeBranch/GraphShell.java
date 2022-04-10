@@ -106,7 +106,7 @@ public class GraphShell {
         System.out.println(Arrays.toString(thing.toArray()));
     }
     
-    private static void stanceHandler() {
+    private void stanceHandler() {
       System.out.println("Assigning Stances");
       
       StanceProcessing sp = new StanceProcessing(graph);

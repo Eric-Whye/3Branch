@@ -4,6 +4,7 @@ import com.ThreeBranch.FileEntryIO;
 import com.ThreeBranch.Graph.Edge;
 import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
+import com.ThreeBranch.Graph.IllegalGraphException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.Optional;
 
 public class StanceProcessing {
     private final Graph graph;
@@ -64,25 +66,55 @@ public class StanceProcessing {
         }
     }
 
-    public boolean calcStances() {
+    public boolean calcStances() throws IllegalGraphException{
       boolean change = false;
       
       for(Point p : graph) {
-        if(!p instanceof User) 
-          throw new IllegalGraphException
+        if(!(p instanceof User)) 
+          throw new IllegalGraphException("This function only works on users");
+        
+        User u = (User) p;
+        
+        int neighbors = 0;
+        int stanceSum = 0;
+        
+        for(Edge e : graph.getAdj(u)) {
+          Point p2 = e.getDestination();
+          if(!(p2 instanceof User))
+            throw new IllegalGraphException("This function only works on users");
+          User u2 = (User) p2;
+          
+          Optional<Integer> stance = u2.getStance();
+          if (stance.isPresent()) {
+            neighbors++;
+            stanceSum += stance.get();
+            
+          }
+        }
+        
+        int newStance = stanceSum / neighbors;
+        
+        Optional<Integer> stance = u.getStance();
+        if((stance.isPresent() && stance.get() != newStance) || !stance.isPresent()) {
+          change = true;
+          u.setStance(newStance);
+        }
       }
+      
+      return change;
     }
 
     private class GraphStanceFileProcessor extends GraphRTFileProcessor{
 
         public GraphStanceFileProcessor(Graph graph) {
             super(graph);
-
-    public void writeStances(Graph graph){
-        for (Point user : graph){
-            try {
-                String str = user.getName() + Configuration.getValueFor("format.delim") + ((User) user).getStance();
-            }catch(ClassCastException e){e.printStackTrace();}
+        }
+        public void writeStances(Graph graph){
+            for (Point user : graph){
+                try {
+                    String str = user.getName() + Configuration.getValueFor("format.delim") + ((User) user).getStance();
+                }catch(ClassCastException e){e.printStackTrace();}
+            }
         }
     }
 }
