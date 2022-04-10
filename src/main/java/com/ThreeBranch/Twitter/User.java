@@ -1,6 +1,8 @@
 package com.ThreeBranch.Twitter;
 
 import com.ThreeBranch.Graph.Vertex;
+
+import java.util.Objects;
 import java.util.Optional;
 
 public class User extends Vertex {
@@ -25,10 +27,5 @@ public class User extends Vertex {
 
     public void setStance(int stance) {
         this.stance = stance;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
     }
 }
