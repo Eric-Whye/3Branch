@@ -50,46 +50,33 @@ public class GraphRTFileProcessor {
         return str.replace(":", "");
     }
 
-    public synchronized void writeGraphToFile(Graph graph){
-      String outputFile = Configuration.getValueFor("graph.output");
-      String delim = Configuration.getValueFor("format.delim");
-      String newline = Configuration.getValueFor("format.newLineDelim");
-      
-      Writer writer = null;
-      try {
-        writer = new BufferedWriter(new FileWriter(outputFile));
-      
-        for(Point p : graph) {
-          if (!graph.hasAdj(p))//Skip adding users who haven't done a retweet / been retweeted
-              continue;
-          writer.write(p.getName());
-          writer.write(newline);
-          
-          List<Edge> retweets = graph.getAdj(p);
-          retweets.sort(Collections.reverseOrder());
-          
-          StringBuilder sb = new StringBuilder();
-          for(Edge a : retweets) {
-            sb.append(a.toString());
-            sb.append(delim);
-          }
-          
-          //Fence post :(
-          if (sb.length() > 0)
-            sb.setLength(sb.length() - delim.length());
-          
-          
-          sb.append(newline);
-          sb.append(newline);
-          writer.write(sb.toString());
+    public synchronized void writeGraphToFile(Graph graph) {
+        String outputFile = Configuration.getValueFor("graph.output");
+        String delim = Configuration.getValueFor("format.delim");
+        String newline = Configuration.getValueFor("format.newLineDelim");
+
+        List<List<String>> entries = new ArrayList<>();
+        for (Point p : graph) {
+            if (!graph.hasAdj(p))//Skip adding users who haven't done a retweet / been retweeted
+                continue;
+            List<String> entry = new ArrayList<>();
+            entry.add(p.getName());
+            entry.add(newline);
+
+            List<Edge> retweets = graph.getAdj(p);
+            retweets.sort(Collections.reverseOrder());
+
+            for (Edge e : retweets)
+                entry.add(e.toString());
+
+            entry.add(newline);
+            entries.add(entry);
         }
-      } catch (IOException e) {e.printStackTrace();
-      }finally{
-          try {
-              assert writer != null;
-              writer.close();
-          }catch(IOException e){e.printStackTrace();}
-      }
+        FileEntryIO.writeToFile(entries,
+                delim.charAt(0),
+                newline.charAt(0),
+                outputFile
+        );
     }
 
     public synchronized void populateRetweetedGraphFromFile(String filename){

@@ -1,9 +1,9 @@
 package com.ThreeBranch.Twitter;
 
+import com.ThreeBranch.FileEntryIO;
 import com.ThreeBranch.Graph.Edge;
 import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
-import com.ThreeBranch.Graph.Vertex;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -77,6 +77,12 @@ public class StanceProcessing {
 
         public GraphStanceFileProcessor(Graph graph) {
             super(graph);
+
+    public void writeStances(Graph graph){
+        for (Point user : graph){
+            try {
+                String str = user.getName() + Configuration.getValueFor("format.delim") + ((User) user).getStance();
+            }catch(ClassCastException e){e.printStackTrace();}
         }
     }
 }
