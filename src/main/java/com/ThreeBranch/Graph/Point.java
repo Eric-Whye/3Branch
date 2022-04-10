@@ -1,5 +1,5 @@
 package com.ThreeBranch.Graph;
 
-public interface Point<T> {
-    T getName();
+public interface Point {
+    String getName();
 }
