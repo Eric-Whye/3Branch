@@ -27,19 +27,24 @@ public class GraphShell {
         GraphRTFileProcessor fp;
 
         while (true) {
+            System.out.print("GraphShell> ");
             String input = in.nextLine();
 
             switch (input.toLowerCase().trim()) {
                 case "build retweet":
+                    System.out.println("Building Retweet Graph");
                     graph = new Graph();
                     fp = new GraphRTFileProcessor(graph);
                     fp.populateRetweetGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
+                    System.out.println("Retweet Graph Built");
                     break;
                     
                 case "build retweeted":
+                    System.out.println("Building Retweeted Graph");
                     graph = new Graph();
                     fp = new GraphRTFileProcessor(graph);
                     fp.populateRetweetedGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
+                    System.out.println("Retweeted Graph Built");
                     break;
                     
                 case "write":
@@ -56,6 +61,7 @@ public class GraphShell {
                     break;
                     
                 case "quit":
+                    System.out.println("Goodbye");
                     System.exit(0);
                     break;
 
