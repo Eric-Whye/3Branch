@@ -5,6 +5,7 @@ import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
 import com.ThreeBranch.Twitter.Configuration;
 import com.ThreeBranch.Twitter.GraphRTFileProcessor;
+import com.ThreeBranch.Twitter.StanceProcessing;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLOutput;
@@ -69,6 +70,10 @@ public class GraphShell {
                     System.exit(0);
                     break;
 
+                case "assign stances":
+                  stanceHandler();
+                  break;
+
                 default:
                     System.out.println("Unrecognised");
             }
@@ -100,4 +105,14 @@ public class GraphShell {
 
         System.out.println(Arrays.toString(thing.toArray()));
     }
+    
+    private static void stanceHandler() {
+      System.out.println("Assigning Stances");
+      
+      StanceProcessing sp = new StanceProcessing(graph);
+      sp.initialiseStances();
+      while(sp.calcStances());
+      
+      System.out.println("Stances Assigned");
+    }      
 }

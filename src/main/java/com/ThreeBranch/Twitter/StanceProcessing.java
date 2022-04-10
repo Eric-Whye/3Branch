@@ -64,6 +64,14 @@ public class StanceProcessing {
         }
     }
 
+    public boolean calcStances() {
+      boolean change = false;
+      
+      for(Point p : graph) {
+        if(!p instanceof User) 
+          throw new IllegalGraphException
+      }
+    }
 
     private class GraphStanceFileProcessor extends GraphRTFileProcessor{
 
