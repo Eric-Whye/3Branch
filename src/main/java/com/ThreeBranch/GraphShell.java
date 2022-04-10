@@ -32,6 +32,8 @@ public class GraphShell {
 
             switch (input.toLowerCase().trim()) {
                 case "build retweet":
+                    if(!graph.isEmpty())
+                      System.out.println("Old Graphs Dropped");
                     System.out.println("Building Retweet Graph");
                     graph = new Graph();
                     fp = new GraphRTFileProcessor(graph);
@@ -40,6 +42,8 @@ public class GraphShell {
                     break;
                     
                 case "build retweeted":
+                    if(!graph.isEmpty())
+                      System.out.println("Old Graphs Dropped");
                     System.out.println("Building Retweeted Graph");
                     graph = new Graph();
                     fp = new GraphRTFileProcessor(graph);
