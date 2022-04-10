@@ -35,11 +35,13 @@ public class GraphShell {
                     fp = new GraphRTFileProcessor(graph);
                     fp.populateRetweetGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
                     break;
+                    
                 case "build retweeted":
                     graph = new Graph();
                     fp = new GraphRTFileProcessor(graph);
                     fp.populateRetweetedGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
                     break;
+                    
                 case "write":
                     if (graph.isEmpty()) {
                         System.out.println("Graph is empty");
@@ -48,9 +50,11 @@ public class GraphShell {
                         fp.writeGraphToFile(graph);
                     }
                     break;
+                    
                 case "sort":
                     findInfluentials(graph);
                     break;
+                    
                 case "quit":
                     System.exit(0);
                     break;
