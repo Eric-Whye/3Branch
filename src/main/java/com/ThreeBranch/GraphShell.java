@@ -58,6 +58,7 @@ public class GraphShell {
                     System.out.println("Building Stance Graph");
                     graph = new Graph();
                     fp = new GraphRTFileProcessor(graph);
+                    fp.populateStanceFromFile(Configuration.getValueFor("graph.tweetsInput"));
                     break;
 
                 case "write":
