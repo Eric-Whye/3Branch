@@ -3,6 +3,7 @@ package com.ThreeBranch.Twitter;
 import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
 import com.ThreeBranch.Graph.IllegalGraphException;
+import com.ThreeBranch.Graph.Edge;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
