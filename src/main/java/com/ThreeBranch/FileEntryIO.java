@@ -39,6 +39,32 @@ public abstract class FileEntryIO {
         }
     }
 
+    public static void writeToFile(List<List<String>> list, char delim, char newLineDelim, String filename){
+        Writer writer = null;
+
+        try{
+            writer = new BufferedWriter(new FileWriter(filename));
+
+            for (List<String> line : list) {
+                StringBuilder str = new StringBuilder();
+                for (String token : line)
+                    str.append(token).append(delim);
+
+                str.deleteCharAt(str.length()-1);
+                str.append(newLineDelim);
+
+                writer.write(str.toString());
+            }
+
+        }catch(IOException e){e.printStackTrace();}
+        finally{
+            try{
+                assert writer != null;
+                writer.close();
+            }catch(IOException e){e.printStackTrace();}
+        }
+    }
+
     /**
      * Stream files from filename, and applies a Callable "function" call to each line
      * @param callable is called for each line
