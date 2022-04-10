@@ -39,6 +39,13 @@ public abstract class FileEntryIO {
         }
     }
 
+    /**
+     * Writes line entries to filename where each entry is a tokenized string in the form of a List.
+     * @param list of lists where each inner list is a tokenized string
+     * @param delim between each token
+     * @param newLineDelim between each line entry
+     * @param filename filename
+     */
     public static void writeToFile(List<List<String>> list, char delim, char newLineDelim, String filename){
         Writer writer = null;
 
