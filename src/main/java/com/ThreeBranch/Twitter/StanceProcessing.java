@@ -1,10 +1,10 @@
 package com.ThreeBranch.Twitter;
 
+import com.ThreeBranch.FileEntryIO;
 import com.ThreeBranch.Graph.Edge;
 import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
 import com.ThreeBranch.Graph.IllegalGraphException;
-import com.ThreeBranch.Graph.Edge;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -26,7 +26,7 @@ public class StanceProcessing {
      */
     public void initialiseStances(){
         BufferedReader reader = null;
-        List<Point> list = new ArrayList<>();
+        List<User> list = new ArrayList<>();
         try{
             reader = new BufferedReader(new FileReader("Week3/Influential Users.txt"));
             while (reader.ready()){
@@ -55,8 +55,8 @@ public class StanceProcessing {
             } catch (IOException e) {e.printStackTrace();}
         }
 
-        for (Point p : graph){
-
+        for (User p : list){
+            graph.addUser(p.getName());
         }
     }
 
@@ -104,11 +104,19 @@ public class StanceProcessing {
             super(graph);
         }
         public void writeStances(Graph graph){
+            List<List<String>> list = new ArrayList<>();
             for (Point user : graph){
                 try {
-                    String str = user.getName() + Configuration.getValueFor("format.delim") + ((User) user).getStance();
+                    List<String> entry = new ArrayList<>();
+                    entry.add(user.getName());
+                    entry.add(((User) user).getStance().toString());
+                    list.add(entry);
                 }catch(ClassCastException e){e.printStackTrace();}
             }
+            FileEntryIO.writeToFile(list,
+                    Configuration.getValueFor("format.delim").charAt(0),
+                    Configuration.getValueFor("format.newLineDelim").charAt(0),
+                    Configuration.getValueFor("graph.stanceOutput"));
         }
     }
 }
