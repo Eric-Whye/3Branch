@@ -41,6 +41,7 @@ public class GraphShell {
                     graph = new Graph();
                     fp = new GraphRTFileProcessor(graph);
                     fp.populateRetweetGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
+                    fp.writeGraphToFile(graph);
                     System.out.println("Retweet Graph Built");
                     break;
                     
@@ -51,6 +52,7 @@ public class GraphShell {
                     graph = new Graph();
                     fp = new GraphRTFileProcessor(graph);
                     fp.populateRetweetedGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
+                    fp.writeGraphToFile(graph);
                     System.out.println("Retweeted Graph Built");
                     break;
 
@@ -61,6 +63,7 @@ public class GraphShell {
                     graph = new Graph();
                     fp = new GraphRTFileProcessor(graph);
                     fp.populateStanceFromFile(Configuration.getValueFor("graph.tweetsInput"));
+                    fp.writeGraphToFile(graph);
                     break;
 
                 case "write":

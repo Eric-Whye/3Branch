@@ -7,12 +7,11 @@ import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
 
 import java.util.*;
-import java.io.*;
 
 public class GraphRTFileProcessor {
     private final Graph graph;
     private boolean stance = false;
-    private void setStance(boolean stance) {this.stance = stance;}
+    private void setStance() {this.stance = true;}
 
     public GraphRTFileProcessor(Graph graph) {
         this.graph = graph;
@@ -42,12 +41,17 @@ public class GraphRTFileProcessor {
                 if (!tokens.nextToken().equals("RT")) return; //If not a retweet then discard
                 String user2 = tokens.nextToken();//Save userhandle
 
-                if (!reverse)
-                    if (stance) graph.addArc(new User(user1), new User(removeSpecialCharacters(user2)));
-                    else graph.addArc(user1, removeSpecialCharacters(user2));
-                else
-                    if (stance) graph.addArc(new User(removeSpecialCharacters(user2)), new User(user1));
-                    else graph.addArc(removeSpecialCharacters(user2), user1);
+                if (!reverse) {
+                    if (stance)
+                        graph.addArc(new User(user1), new User(removeSpecialCharacters(user2)));
+                    else
+                        graph.addArc(user1, removeSpecialCharacters(user2));
+                } else {
+                    if (stance)
+                        graph.addArc(new User(removeSpecialCharacters(user2)), new User(user1));
+                    else
+                        graph.addArc(removeSpecialCharacters(user2), user1);
+                }
             }
         }
     }
@@ -103,10 +107,12 @@ public class GraphRTFileProcessor {
             //populateFromGraphFile();
         }
     }
+
     public synchronized void populateStanceFromFile(String filename){
-        setStance(true);
+        setStance();
         populateRetweetGraphFromFile(filename);
     }
+
     public synchronized void populateFromGraphFile(){
         graph.clear();
         try {

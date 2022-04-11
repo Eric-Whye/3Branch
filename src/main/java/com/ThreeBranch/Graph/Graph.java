@@ -96,6 +96,8 @@ public class Graph implements Iterable<Point>{
   }
   
   public void addArc(Point from, Point to) {
+    if (!adjacencyList.containsKey(from))
+      addUser(from.getName());
     addArc(from, to, 1);
   }
   
