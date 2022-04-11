@@ -58,6 +58,8 @@ public class StanceProcessing {
         for (User p : list){
             graph.addUser(p.getName());
         }
+        System.out.println(graph.size());
+        writeStances(graph);
     }
 
     public boolean calcStances() throws IllegalGraphException{
@@ -98,25 +100,19 @@ public class StanceProcessing {
       return change;
     }
 
-    private class GraphStanceFileProcessor extends GraphRTFileProcessor{
-
-        public GraphStanceFileProcessor(Graph graph) {
-            super(graph);
+    private void writeStances(Graph graph){
+        List<List<String>> list = new ArrayList<>();
+        for (Point user : graph){
+            try {
+                List<String> entry = new ArrayList<>();
+                entry.add(user.getName());
+                entry.add(((User) user).getStance().toString());
+                list.add(entry);
+            }catch(ClassCastException e){e.printStackTrace();}
         }
-        public void writeStances(Graph graph){
-            List<List<String>> list = new ArrayList<>();
-            for (Point user : graph){
-                try {
-                    List<String> entry = new ArrayList<>();
-                    entry.add(user.getName());
-                    entry.add(((User) user).getStance().toString());
-                    list.add(entry);
-                }catch(ClassCastException e){e.printStackTrace();}
-            }
-            FileEntryIO.writeToFile(list,
-                    Configuration.getValueFor("format.delim").charAt(0),
-                    Configuration.getValueFor("format.newLineDelim").charAt(0),
-                    Configuration.getValueFor("graph.stanceOutput"));
-        }
+        FileEntryIO.writeToFile(list,
+                Configuration.getValueFor("format.delim").charAt(0),
+                Configuration.getValueFor("format.newLineDelim").charAt(0),
+                Configuration.getValueFor("graph.stanceOutput"));
     }
 }
