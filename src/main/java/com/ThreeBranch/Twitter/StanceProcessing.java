@@ -86,12 +86,14 @@ public class StanceProcessing {
           }
         }
         
-        int newStance = stanceSum / neighbors;
-        
-        Optional<Integer> stance = u.getStance();
-        if((stance.isPresent() && stance.get() != newStance) || !stance.isPresent()) {
-          change = true;
-          u.setStance(newStance);
+        if(neighbors != 0) {
+          int newStance = stanceSum / neighbors;
+          
+          Optional<Integer> stance = u.getStance();
+          if((stance.isPresent() && stance.get() != newStance) || !stance.isPresent()) {
+            change = true;
+            u.setStance(newStance);
+          }
         }
       }
       
