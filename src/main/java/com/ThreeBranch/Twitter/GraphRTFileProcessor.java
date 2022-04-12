@@ -31,12 +31,6 @@ public class GraphRTFileProcessor {
             StringTokenizer tokens = new StringTokenizer((String)o);
             if(tokens.countTokens() >= 3) {//If the Tweet has at least a text field
                 tokens.nextToken();
-                /*try {//If the status id is not a number, then the file being read is the wrong file.
-                    Long.parseLong(tokens.nextToken());
-                }catch(NumberFormatException ignored){
-                    System.out.println("something");
-                    throw new IncorrectGraphFileException();
-                }*/
                 String user1 = tokens.nextToken();//Save userhandle
                 if (!tokens.nextToken().equals("RT")) return; //If not a retweet then discard
                 String user2 = tokens.nextToken();//Save userhandle

@@ -18,60 +18,57 @@ public class GraphShell {
     Graph graph = new Graph();
 
     public GraphShell() {
-        try {
-            Configuration.initialise(Configuration.ConfigFilename);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     public void run() {
         Scanner in = new Scanner(System.in);
-        GraphRTFileProcessor fp;
+        GraphRTFileProcessor fp = new GraphRTFileProcessor(graph);
+        StanceProcessing sp = new StanceProcessing(graph);
 
         while (true) {
+            try {
+                Configuration.initialise(Configuration.ConfigFilename);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
             System.out.print("GraphShell> ");
             String input = in.nextLine();
 
             switch (input.toLowerCase().trim()) {
                 case "build retweet":
                     if(!graph.isEmpty())
-                      System.out.println("Old Graphs Dropped");
+                      System.out.println("Old Graph Dropped");
                     System.out.println("Building Retweet Graph");
                     graph.clear();
-                    fp = new GraphRTFileProcessor(graph);
                     fp.populateRetweetGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
-                    fp.writeGraphToFile(graph);
+                    System.out.println(graph.size());
                     System.out.println("Retweet Graph Built");
                     break;
                     
                 case "build retweeted":
                     if(!graph.isEmpty())
-                      System.out.println("Old Graphs Dropped");
+                      System.out.println("Old Graph Dropped");
                     System.out.println("Building Retweeted Graph");
                     graph.clear();
-                    fp = new GraphRTFileProcessor(graph);
                     fp.populateRetweetedGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
-                    fp.writeGraphToFile(graph);
+                    System.out.println(graph.size());
                     System.out.println("Retweeted Graph Built");
                     break;
 
                 case "build stance":
                     if (!graph.isEmpty())
-                        System.out.println("Old Graphs Dropped");
+                        System.out.println("Old Graph Dropped");
                     System.out.println("Building Stance Graph");
                     graph.clear();
-                    fp = new GraphRTFileProcessor(graph);
                     fp.populateStanceFromFile(Configuration.getValueFor("graph.tweetsInput"));
-                    fp.writeGraphToFile(graph);
                     System.out.println("Stance graph built");
                     break;
 
                 case "write":
                     if (graph.isEmpty()) {
-                        System.out.println("Graph is empty");
+                        System.out.println("No Graph built");
                     } else {
-                        fp = new GraphRTFileProcessor(graph);
                         fp.writeGraphToFile(graph);
                     }
                     break;
@@ -86,8 +83,21 @@ public class GraphShell {
                     break;
 
                 case "assign stances":
-                  stanceHandler();
+                    System.out.println("Assigning Stances");
+                    if (graph.isEmpty()) {
+                        System.out.println("No Graph built");
+                    } else {
+                        sp.initialiseStances();
+                        int i = 0;
+                        while (sp.calcStances() && i++ < Integer.parseInt(Configuration.getValueFor("stance.iterations"))) {}
+                        sp.writeStances(graph);
+                        System.out.println("Stances Assigned");
+                    }
                   break;
+
+                case "print coverage":
+                    System.out.println(sp.stanceCoverage());
+                    break;
 
                 case "print stances":
                   printStanceHandler();
@@ -125,18 +135,6 @@ public class GraphShell {
         System.out.println(Arrays.toString(thing.toArray()));
     }
     
-    private void stanceHandler() {
-      System.out.println("Assigning Stances");
-      
-      StanceProcessing sp = new StanceProcessing(graph);
-      sp.initialiseStances();
-      int i = 0;
-      while(sp.calcStances() && i < 16) {
-      System.out.println(i++);}
-      
-      System.out.println("Stances Assigned");
-    }      
-    
     private void printStanceHandler() {
       for (Point p : graph) {
         if(p instanceof User) {
@@ -145,7 +143,7 @@ public class GraphShell {
           if(stance.isPresent()) {
             System.out.println(u.getName() + ": " + u.getStance().get());
           } else {
-            //System.out.println(u.getName() + ": No Stance Assigned");
+            System.out.println(u.getName() + ": No Stance Assigned");
           }
         } else {
           System.out.println(p.getName() + ": Not a user");

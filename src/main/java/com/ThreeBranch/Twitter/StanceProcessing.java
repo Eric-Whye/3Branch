@@ -4,15 +4,11 @@ import com.ThreeBranch.FileEntryIO;
 import com.ThreeBranch.Graph.Edge;
 import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
-import com.ThreeBranch.Graph.IllegalGraphException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.Optional;
+import java.util.*;
 
 public class StanceProcessing {
     private final Graph graph;
@@ -33,20 +29,20 @@ public class StanceProcessing {
                 if (tokens.countTokens() >= 2){
                     String userName = tokens.nextToken();
                     Optional<Point> userOption = graph.getPointIfExists(userName);
-                    
+
                     if(userOption.isPresent()) {
                       Point p = userOption.get();
                       if(p instanceof User) {
                         User user = (User) p;
                         switch(tokens.nextToken()){
                             case "mid":
-                                user.setStance(-500);
+                                user.setStance(Integer.parseInt(Configuration.getValueFor("stance.midStance")));
                                 break;
                             case "pro":
-                                user.setStance(1000);
+                                user.setStance(Integer.parseInt(Configuration.getValueFor("stance.maxStance")));
                                 break;
                             case "anti":
-                                user.setStance(-1000);
+                                user.setStance(Integer.parseInt(Configuration.getValueFor("stance.minStance")));
                                 break;
                         }
                       } else {
@@ -66,12 +62,12 @@ public class StanceProcessing {
         }
     }
 
-    public boolean calcStances() throws IllegalGraphException{
+    public boolean calcStances() throws ClassCastException{
       boolean change = false;
       
       for(Point p : graph) {
         if(!(p instanceof User)) 
-          throw new IllegalGraphException("This function only works on users");
+          throw new ClassCastException("This function only works on User objects");
         
         User u = (User) p;
         
@@ -81,14 +77,13 @@ public class StanceProcessing {
         for(Edge e : graph.getAdj(u)) {
           Point p2 = e.getDestination();
           if(!(p2 instanceof User))
-            throw new IllegalGraphException("This function only works on users");
+              throw new ClassCastException("This function only works on User objects");
           User u2 = (User) p2;
           
           Optional<Integer> stance = u2.getStance();
           if (stance.isPresent()) {
             neighbors++;
             stanceSum += stance.get();
-            
           }
         }
         
@@ -101,7 +96,7 @@ public class StanceProcessing {
             u.setStance(newStance);
           }
         }
-        
+
         //if(neighbors != 0)
         //System.out.println("Worked on " + p.getName() + " neighbours = " + neighbors + " weight = " + u.getStance());
       }
@@ -109,7 +104,7 @@ public class StanceProcessing {
       return change;
     }
 
-    private void writeStances(Graph graph){
+    public void writeStances(Graph graph){
         List<List<String>> list = new ArrayList<>();
         for (Point user : graph){
             try {
@@ -122,6 +117,31 @@ public class StanceProcessing {
         FileEntryIO.writeToFile(list,
                 Configuration.getValueFor("format.delim").charAt(0),
                 Configuration.getValueFor("format.newLineDelim").charAt(0),
-                Configuration.getValueFor("graph.stanceOutput"));
+                Configuration.getValueFor("stance.output"));
     }
+
+    public String stanceCoverage(){
+        StringBuilder str = new StringBuilder();
+
+        int sumPos = 0;
+        int sumNeg = 0;
+        int sumStances = 0;
+        for (Point p : graph){
+            if (((User)p).getStance().isPresent()) {
+                sumStances++;
+
+                if (((User) p).getStance().get() > 0)
+                    sumPos++;
+                else if (((User) p).getStance().get() < 0)
+                    sumNeg++;
+            }
+        }
+
+        str.append("Coverage: " + ((double)sumStances/ graph.size())*100 + "%" + "\n");
+        str.append("Positive Stances: " + ((double)sumPos / (double)sumStances)*100 + "%" + "\n");
+        str.append("Negative Staneces: "+ ((double)sumNeg / (double)sumStances)*100 + "%" + "\n");
+
+        return str.toString();
+    }
+
 }

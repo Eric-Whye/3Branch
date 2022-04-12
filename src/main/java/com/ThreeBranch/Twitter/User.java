@@ -6,8 +6,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class User extends Vertex {
-    public final int MAX_STANCE = 1000;
-    public final int MIN_STANCE = -1000;
+    private final int MAX_STANCE = Integer.parseInt(Configuration.getValueFor("stance.maxStance"));
+    private final int MIN_STANCE = Integer.parseInt(Configuration.getValueFor("stance.minStance"));
   
     private int stance = -9999; //Anything outside of the -1000 to 1000 range will be considered null
 
