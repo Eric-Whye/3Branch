@@ -9,11 +9,29 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.io.FileNotFoundException;
 
 public class StanceProcessing {
     private final Graph graph;
 
+    private int LARGEST_WEIGHT_CALCULATED;
+    private int SMALLEST_WEIGHT_CALCULATED;
+    private final int MAX_STANCE;
+    private final int MIN_STANCE;
+    
     public StanceProcessing(Graph graph){
+        try {
+            Configuration.initialise(Configuration.ConfigFilename);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+      
+        MAX_STANCE = Integer.parseInt(Configuration.getValueFor("stance.maxStance"));
+        MIN_STANCE = Integer.parseInt(Configuration.getValueFor("stance.minStance"));
+         
+        LARGEST_WEIGHT_CALCULATED = MAX_STANCE;
+        SMALLEST_WEIGHT_CALCULATED = MIN_STANCE;
+      
         this.graph = graph;
     }
 
@@ -73,6 +91,7 @@ public class StanceProcessing {
         
         int neighbors = 0;
         int stanceSum = 0;
+        int weights = 0;
         
         for(Edge e : graph.getAdj(u)) {
           Point p2 = e.getDestination();
@@ -83,12 +102,27 @@ public class StanceProcessing {
           Optional<Integer> stance = u2.getStance();
           if (stance.isPresent()) {
             neighbors++;
-            stanceSum += stance.get();
+            stanceSum += stance.get() * e.getWeight();
+            weights += e.getWeight();
           }
         }
         
         if(neighbors != 0) {
-          int newStance = stanceSum / neighbors;
+          int newStance = stanceSum / weights;
+          newStance = newStance / neighbors;
+          
+          //Update the range of calculated values
+          if(newStance > LARGEST_WEIGHT_CALCULATED)
+            LARGEST_WEIGHT_CALCULATED = newStance;
+          
+          if(newStance < SMALLEST_WEIGHT_CALCULATED)
+            SMALLEST_WEIGHT_CALCULATED = newStance;
+          
+          //Scale the calculated weight to the new range
+          int newRange = (MAX_STANCE - MIN_STANCE);
+          int oldRange = (LARGEST_WEIGHT_CALCULATED - SMALLEST_WEIGHT_CALCULATED);
+          
+          newStance = (((newStance - SMALLEST_WEIGHT_CALCULATED) * newRange) / oldRange) + MIN_STANCE;
           
           Optional<Integer> stance = u.getStance();
           if((stance.isPresent() && stance.get() != newStance) || !stance.isPresent()) {

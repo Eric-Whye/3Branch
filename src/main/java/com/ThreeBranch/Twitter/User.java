@@ -9,7 +9,7 @@ public class User extends Vertex {
     private final int MAX_STANCE = Integer.parseInt(Configuration.getValueFor("stance.maxStance"));
     private final int MIN_STANCE = Integer.parseInt(Configuration.getValueFor("stance.minStance"));
   
-    private int stance = -9999; //Anything outside of the -1000 to 1000 range will be considered null
+    private int stance = MAX_STANCE + 1; //Anything outside of the MIN to MAX range will be considered null
 
     public User(String name){
         super(name);

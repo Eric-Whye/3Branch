@@ -89,7 +89,7 @@ public class GraphShell {
                     } else {
                         sp.initialiseStances();
                         int i = 0;
-                        while (sp.calcStances() && i++ < Integer.parseInt(Configuration.getValueFor("stance.iterations"))) {}
+                        while (sp.calcStances() && i++ < Integer.parseInt(Configuration.getValueFor("stance.iterations"))) {System.out.println(i);}
                         sp.writeStances(graph);
                         System.out.println("Stances Assigned");
                     }

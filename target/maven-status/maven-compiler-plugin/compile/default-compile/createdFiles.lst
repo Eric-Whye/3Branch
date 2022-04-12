@@ -1,4 +1,3 @@
-com\ThreeBranch\Graph\IllegalGraphException.class
 com\ThreeBranch\Graph\Edge.class
 com\ThreeBranch\Twitter\TweetData.class
 com\ThreeBranch\GraphShell.class
