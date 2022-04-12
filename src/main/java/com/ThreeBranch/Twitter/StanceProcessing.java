@@ -26,25 +26,35 @@ public class StanceProcessing {
      */
     public void initialiseStances(){
         BufferedReader reader = null;
-        List<User> list = new ArrayList<>();
         try{
             reader = new BufferedReader(new FileReader("Week3/Influential Users.txt"));
             while (reader.ready()){
                 StringTokenizer tokens = new StringTokenizer(reader.readLine());
                 if (tokens.countTokens() >= 2){
-                    User user = new User(tokens.nextToken());
-                    switch(tokens.nextToken()){
-                        case "mid":
-                            user.setStance(-500);
-                            break;
-                        case "pro":
-                            user.setStance(1000);
-                            break;
-                        case "anti":
-                            user.setStance(-1000);
-                            break;
+                    String userName = tokens.nextToken();
+                    Optional<Point> userOption = graph.getPointIfExists(userName);
+                    
+                    if(userOption.isPresent()) {
+                      Point p = userOption.get();
+                      if(p instanceof User) {
+                        User user = (User) p;
+                        switch(tokens.nextToken()){
+                            case "mid":
+                                user.setStance(-500);
+                                break;
+                            case "pro":
+                                user.setStance(1000);
+                                break;
+                            case "anti":
+                                user.setStance(-1000);
+                                break;
+                        }
+                      } else {
+                        System.err.println(userName + " is not a user object");
+                      }
+                    } else {
+                      System.err.println(userName + " is not present in graph");
                     }
-                    list.add(user);
                 }
             }
         } catch(IOException e){ e.printStackTrace(); }
@@ -54,12 +64,6 @@ public class StanceProcessing {
                 reader.close();
             } catch (IOException e) {e.printStackTrace();}
         }
-
-        for (User p : list){
-            graph.addUser(p.getName());
-        }
-        System.out.println(graph.size());
-        writeStances(graph);
     }
 
     public boolean calcStances() throws IllegalGraphException{
@@ -97,6 +101,9 @@ public class StanceProcessing {
             u.setStance(newStance);
           }
         }
+        
+        //if(neighbors != 0)
+        //System.out.println("Worked on " + p.getName() + " neighbours = " + neighbors + " weight = " + u.getStance());
       }
       
       return change;

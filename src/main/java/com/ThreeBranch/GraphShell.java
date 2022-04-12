@@ -38,7 +38,7 @@ public class GraphShell {
                     if(!graph.isEmpty())
                       System.out.println("Old Graphs Dropped");
                     System.out.println("Building Retweet Graph");
-                    graph = new Graph();
+                    graph.clear();
                     fp = new GraphRTFileProcessor(graph);
                     fp.populateRetweetGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
                     fp.writeGraphToFile(graph);
@@ -49,7 +49,7 @@ public class GraphShell {
                     if(!graph.isEmpty())
                       System.out.println("Old Graphs Dropped");
                     System.out.println("Building Retweeted Graph");
-                    graph = new Graph();
+                    graph.clear();
                     fp = new GraphRTFileProcessor(graph);
                     fp.populateRetweetedGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
                     fp.writeGraphToFile(graph);
@@ -60,10 +60,11 @@ public class GraphShell {
                     if (!graph.isEmpty())
                         System.out.println("Old Graphs Dropped");
                     System.out.println("Building Stance Graph");
-                    graph = new Graph();
+                    graph.clear();
                     fp = new GraphRTFileProcessor(graph);
                     fp.populateStanceFromFile(Configuration.getValueFor("graph.tweetsInput"));
                     fp.writeGraphToFile(graph);
+                    System.out.println("Stance graph built");
                     break;
 
                 case "write":
@@ -129,7 +130,9 @@ public class GraphShell {
       
       StanceProcessing sp = new StanceProcessing(graph);
       sp.initialiseStances();
-      while(sp.calcStances());
+      int i = 0;
+      while(sp.calcStances() && i < 16) {
+      System.out.println(i++);}
       
       System.out.println("Stances Assigned");
     }      
@@ -142,7 +145,7 @@ public class GraphShell {
           if(stance.isPresent()) {
             System.out.println(u.getName() + ": " + u.getStance().get());
           } else {
-            System.out.println(u.getName() + ": No Stance Assigned");
+            //System.out.println(u.getName() + ": No Stance Assigned");
           }
         } else {
           System.out.println(p.getName() + ": Not a user");

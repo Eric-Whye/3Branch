@@ -11,13 +11,32 @@ public class Graph implements Iterable<Point>{
     addPoint(new Vertex(s));
   }
 
+  public Optional<Point> getPointIfExists(String s) {
+    Point target = new Vertex(s);
+    List<Edge> adj = adjacencyList.get(target);
+    if(adj != null)
+      return Optional.of(adj.get(0).getSource());
+    return Optional.empty();
+  }
+
   public void addUser(String s){
     addPoint(new User(s));
   }
   
+  public Point addOrGet(Point p) {
+    Optional<Point> op = getPointIfExists(p.getName());
+    if(op.isPresent())
+      return op.get();
+    addPoint(p);
+    return p;
+  }
+  
   public void addPoint(Point p) {
-    if(!hasVertex(p))
-      adjacencyList.put(p, new ArrayList<Edge>());
+    if(!hasVertex(p)) {
+      ArrayList<Edge> adjacencies = new ArrayList<Edge>();
+      adjacencies.add(new Arc(p, p));
+      adjacencyList.put(p, adjacencies);
+    }
   }
   
   public boolean hasVertex(String name) {
@@ -50,11 +69,11 @@ public class Graph implements Iterable<Point>{
     List<Edge> adj = adjacencyList.get(p);
     if(adj == null)
       throw new IllegalArgumentException("Point " + p.getName() + " does not exist");
-    return adj;
+    return adj.subList(1, adj.size());
   }
 
   public Boolean hasAdj(Point p){
-    return adjacencyList.get(p).size() != 0;
+    return adjacencyList.get(p).size() != 1;
   }
   
   public boolean arcExists(String from, String to) {
@@ -96,6 +115,7 @@ public class Graph implements Iterable<Point>{
   }
   
   public void addArc(Point from, Point to) {
+    //System.out.println("CALLED FOR " + from.getName() + " : " + to.getName() + " " + size());
     if (!adjacencyList.containsKey(from))
       addUser(from.getName());
     addArc(from, to, 1);
@@ -109,6 +129,8 @@ public class Graph implements Iterable<Point>{
   }
   
   public void addArc(Point from, Point to, int weight) {
+    from = addOrGet(from);
+    to = addOrGet(to);
     Arc a = (Arc) getArcIfExists(from, to);
     if(a == null) {
       getAdj(from).add(new Arc(from, to, weight));

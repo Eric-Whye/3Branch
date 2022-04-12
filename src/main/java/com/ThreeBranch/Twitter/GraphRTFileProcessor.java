@@ -104,6 +104,7 @@ public class GraphRTFileProcessor {
         try{
             FileEntryIO.streamFromFile(filename, new readRetweets(false));
         }catch(IncorrectGraphFileException e){
+            System.err.println("Error: Retweet data file not found");
             //populateFromGraphFile();
         }
     }
