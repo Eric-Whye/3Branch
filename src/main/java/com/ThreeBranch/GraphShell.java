@@ -103,6 +103,10 @@ public class GraphShell {
                   printStanceHandler();
                   break;
 
+                case "get random user":
+                  randomUserHandler();
+                  break;
+
                 default:
                     System.out.println("Unrecognised");
             }
@@ -148,6 +152,35 @@ public class GraphShell {
         } else {
           System.out.println(p.getName() + ": Not a user");
         }
+      }
+    }
+    
+    private void randomUserHandler() {
+      User u = new User("");
+      Point p;
+      int retweets = 0;
+      
+      try {
+        do {
+          p = graph.getRandomPoint();
+          
+          if(!(p instanceof User)) {
+            System.out.println("Graph contains non-users");
+            return;
+          }
+          u = (User) p;
+          
+          retweets = graph.getAdj(u).stream().mapToInt(o -> o.getWeight()).sum();
+        } while(retweets < 10);
+      } catch (IllegalStateException e) {
+        System.err.println("Graph is empty");
+      }
+      
+      Optional<Integer> stance = u.getStance();
+      if(stance.isPresent()) {
+        System.out.println(u.getName() + " Stance: " + stance.get() + " Retweets: " + retweets);
+      } else {
+        System.out.println(u.getName() + " No Stance Assigned " + " Retweets: " + retweets);
       }
     }
 }

@@ -5,6 +5,8 @@ import com.ThreeBranch.Twitter.User;
 import java.util.*;
 
 public class Graph implements Iterable<Point>{
+  Random random = new Random();
+  
   private final Hashtable<Point, List<Edge>> adjacencyList = new Hashtable<>();
 
   public void addVertex(String s) {
@@ -158,6 +160,14 @@ public class Graph implements Iterable<Point>{
       list.add(p);
     }
     return list;
+  }
+
+  public Point getRandomPoint() throws IllegalStateException{
+    if(size() == 0)
+      throw new IllegalStateException("Graph is empty");
+    
+    List<Point> keys = new ArrayList<Point>(adjacencyList.keySet());
+    return keys.get(random.nextInt(keys.size()));
   }
 
   public int size(){return adjacencyList.size();}
