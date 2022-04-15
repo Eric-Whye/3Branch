@@ -33,7 +33,6 @@ public class Twitterer {
 
                 //Adding new Tweets and Account data
                 TweetData.addTweetID(status.getId());
-                TweetData.addUserhandle("@" + status.getUser().getScreenName());
 
                 //Adding tweets to buffer
                 tweets.add(status);
@@ -113,6 +112,8 @@ public class Twitterer {
             //Checking for Account duplication in file
             if (TweetData.checkDupAccount("@" + tweet.getUser().getScreenName()))
                 continue;
+
+            TweetData.addUserhandle("@" + tweet.getUser().getScreenName());
 
             List<String> line = new ArrayList<>();
 

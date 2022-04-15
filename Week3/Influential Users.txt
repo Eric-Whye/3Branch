@@ -8,10 +8,10 @@
 @org_scp	mid
 @BananaMediaQ	mid
 @Togetherdec	mid
-@JamesfWells	anti
+@JamesfWells    anti
 @LozzaFox	mid
 @djlange	mid
-@kernaghanscott5	anti
+@kernaghanscott5    anti
 @EU_Commission	pro
 @TonyHinton2016	mid
 @ToniaBuxton	mid

@@ -2,19 +2,18 @@ package com.ThreeBranch.Twitter;
 
 import com.ThreeBranch.Graph.Vertex;
 
-import java.util.Objects;
 import java.util.Optional;
 
-public class User extends Vertex {
+public class StancePoint extends Vertex {
     private final int MAX_STANCE = Integer.parseInt(Configuration.getValueFor("stance.maxStance"));
     private final int MIN_STANCE = Integer.parseInt(Configuration.getValueFor("stance.minStance"));
   
     private int stance = MAX_STANCE + 1; //Anything outside of the MIN to MAX range will be considered null
 
-    public User(String name){
+    public StancePoint(String name){
         super(name);
     }
-    protected User(String name, int stance) {
+    protected StancePoint(String name, int stance) {
         super(name);
         this.stance = stance;
     }

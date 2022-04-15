@@ -5,11 +5,10 @@ import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
 import com.ThreeBranch.Twitter.Configuration;
 import com.ThreeBranch.Twitter.GraphRTFileProcessor;
+import com.ThreeBranch.Twitter.StancePoint;
 import com.ThreeBranch.Twitter.StanceProcessing;
-import com.ThreeBranch.Twitter.User;
 
 import java.io.FileNotFoundException;
-import java.sql.SQLOutput;
 import java.util.*;
 import java.util.stream.Stream;
 import java.util.Optional;
@@ -65,6 +64,26 @@ public class GraphShell {
                     System.out.println("Stance graph built");
                     break;
 
+                case "build user to hashtag":
+                    if (!graph.isEmpty())
+                        System.out.println("Old Graph Dropped");
+                    System.out.println("Building user to hashtag Graph");
+                    graph.clear();
+                    fp.populateUserToHashtagGraph(Configuration.getValueFor("graph.tweetsInput"));
+                    fp.writeGraphToFile(graph);
+                    System.out.println("User to hashtag graph built");
+                    break;
+
+                case "build hashtag to user":
+                    if (!graph.isEmpty())
+                        System.out.println("Old Graph Dropped");
+                    System.out.println("Building hashtag to user Graph");
+                    graph.clear();
+                    fp.populateHashtagToUserGraph(Configuration.getValueFor("graph.tweetsInput"));
+                    fp.writeGraphToFile(graph);
+                    break;
+
+
                 case "write":
                     if (graph.isEmpty()) {
                         System.out.println("No Graph built");
@@ -73,7 +92,7 @@ public class GraphShell {
                     }
                     break;
                     
-                case "sort":
+                case "print mostretweeted":
                     findInfluentials(graph);
                     break;
                     
@@ -93,7 +112,7 @@ public class GraphShell {
                         sp.writeStances(graph);
                         System.out.println("Stances Assigned");
                     }
-                  break;
+                    break;
 
                 case "print coverage":
                     System.out.println(sp.stanceCoverage());
@@ -141,8 +160,8 @@ public class GraphShell {
     
     private void printStanceHandler() {
       for (Point p : graph) {
-        if(p instanceof User) {
-          User u = (User) p;
+        if(p instanceof StancePoint) {
+          StancePoint u = (StancePoint) p;
           Optional<Integer> stance = u.getStance();
           if(stance.isPresent()) {
             System.out.println(u.getName() + ": " + u.getStance().get());
@@ -156,7 +175,7 @@ public class GraphShell {
     }
     
     private void randomUserHandler() {
-      User u = new User("");
+      StancePoint u = new StancePoint("");
       Point p;
       int retweets = 0;
       
@@ -164,11 +183,11 @@ public class GraphShell {
         do {
           p = graph.getRandomPoint();
           
-          if(!(p instanceof User)) {
+          if(!(p instanceof StancePoint)) {
             System.out.println("Graph contains non-users");
             return;
           }
-          u = (User) p;
+          u = (StancePoint) p;
           
           retweets = graph.getAdj(u).stream().mapToInt(o -> o.getWeight()).sum();
         } while(retweets < 10);

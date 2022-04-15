@@ -6,6 +6,7 @@ import com.ThreeBranch.Graph.Edge;
 import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
 
+import java.io.IOException;
 import java.util.*;
 
 public class GraphRTFileProcessor {
@@ -27,7 +28,7 @@ public class GraphRTFileProcessor {
         private readRetweets(boolean reverse){this.reverse = reverse;}
 
         @Override
-        public void call(Object o){
+        public void call(Object o) throws IncorrectGraphFileException{
             StringTokenizer tokens = new StringTokenizer((String)o);
             if(tokens.countTokens() >= 3) {//If the Tweet has at least a text field
                 tokens.nextToken();
@@ -37,12 +38,12 @@ public class GraphRTFileProcessor {
 
                 if (!reverse) {
                     if (stance)
-                        graph.addArc(new User(user1), new User(removeSpecialCharacters(user2)));
+                        graph.addArc(new StancePoint(user1), new StancePoint(removeSpecialCharacters(user2)));
                     else
                         graph.addArc(user1, removeSpecialCharacters(user2));
                 } else {
                     if (stance)
-                        graph.addArc(new User(removeSpecialCharacters(user2)), new User(user1));
+                        graph.addArc(new StancePoint(removeSpecialCharacters(user2)), new StancePoint(user1));
                     else
                         graph.addArc(removeSpecialCharacters(user2), user1);
                 }
@@ -104,9 +105,53 @@ public class GraphRTFileProcessor {
     }
 
     public synchronized void populateStanceFromFile(String filename){
+        graph.clear();
         setStance();
         populateRetweetGraphFromFile(filename);
     }
+
+
+
+    public synchronized void populateUserToHashtagGraph(String filename){
+        graph.clear();
+        try{
+            FileEntryIO.streamFromFile(filename, new readHashtags(false));
+        }catch(IncorrectGraphFileException e){e.printStackTrace();}
+    }
+
+    public synchronized void populateHashtagToUserGraph(String filename){
+        graph.clear();
+        try{
+            FileEntryIO.streamFromFile(filename, new readHashtags(true));
+        }catch(IncorrectGraphFileException e){e.printStackTrace();}
+    }
+
+    private class readHashtags implements Callable{
+        boolean reverse = false;
+        private readHashtags(boolean reverse){this.reverse = reverse;}
+
+        @Override
+        public void call(Object o) {
+            StringTokenizer tokens = new StringTokenizer((String)o);
+            if (tokens.countTokens() >= 3) {
+                tokens.nextToken();
+                String user1 = tokens.nextToken();
+                while (tokens.hasMoreTokens()) {
+                    String token = tokens.nextToken();
+                    if (token.charAt(0) == '#') {
+                        token = token.replaceAll("[^a-zA-Z0-9_]", "");
+                        if (token.length() <= 1) continue;
+                        if (!reverse)
+                            graph.addArc(new StancePoint(user1), new StancePoint(token.toLowerCase()));
+                        else
+                            graph.addArc(new StancePoint(token.toLowerCase()), new StancePoint(user1));
+                    }
+                }
+            }
+        }
+    }
+
+
 
     public synchronized void populateFromGraphFile(){
         graph.clear();
@@ -121,7 +166,7 @@ public class GraphRTFileProcessor {
         private String currentTweeter = null;
 
         @Override
-        public void call(Object o){
+        public void call(Object o) throws IncorrectGraphFileException{
 
             //First line is the retweeter
             if(currentTweeter == null) {

@@ -51,17 +51,17 @@ public class StanceProcessing {
 
                     if(userOption.isPresent()) {
                       Point p = userOption.get();
-                      if(p instanceof User) {
-                        User user = (User) p;
+                      if(p instanceof StancePoint) {
+                        StancePoint stancePoint = (StancePoint) p;
                         switch(tokens.nextToken()){
                             case "mid":
-                                user.setStance(Integer.parseInt(Configuration.getValueFor("stance.midStance")));
+                                stancePoint.setStance(Integer.parseInt(Configuration.getValueFor("stance.midStance")));
                                 break;
                             case "pro":
-                                user.setStance(Integer.parseInt(Configuration.getValueFor("stance.maxStance")));
+                                stancePoint.setStance(Integer.parseInt(Configuration.getValueFor("stance.maxStance")));
                                 break;
                             case "anti":
-                                user.setStance(Integer.parseInt(Configuration.getValueFor("stance.minStance")));
+                                stancePoint.setStance(Integer.parseInt(Configuration.getValueFor("stance.minStance")));
                                 break;
                         }
                       } else {
@@ -85,10 +85,10 @@ public class StanceProcessing {
       boolean change = false;
       
       for(Point p : graph) {
-        if(!(p instanceof User)) 
+        if(!(p instanceof StancePoint))
           throw new ClassCastException("This function only works on User objects");
         
-        User u = (User) p;
+        StancePoint u = (StancePoint) p;
         
         int neighbors = 0;
         int stanceSum = 0;
@@ -96,9 +96,9 @@ public class StanceProcessing {
         
         for(Edge e : graph.getAdj(u)) {
           Point p2 = e.getDestination();
-          if(!(p2 instanceof User))
+          if(!(p2 instanceof StancePoint))
               throw new ClassCastException("This function only works on User objects");
-          User u2 = (User) p2;
+          StancePoint u2 = (StancePoint) p2;
           
           Optional<Integer> stance = u2.getStance();
           if (stance.isPresent()) {
@@ -145,7 +145,7 @@ public class StanceProcessing {
             try {
                 List<String> entry = new ArrayList<>();
                 entry.add(user.getName());
-                entry.add(((User) user).getStance().toString());
+                entry.add(((StancePoint) user).getStance().toString());
                 list.add(entry);
             }catch(ClassCastException e){e.printStackTrace();}
         }
@@ -154,6 +154,8 @@ public class StanceProcessing {
                 Configuration.getValueFor("format.newLineDelim").charAt(0),
                 Configuration.getValueFor("stance.output"));
     }
+
+
 
     public String stanceCoverage(){
         StringBuilder str = new StringBuilder();
@@ -166,10 +168,10 @@ public class StanceProcessing {
         int sumNeg = 0;
         int sumStances = 0;
         for (Point p : graph){
-            if (((User)p).getStance().isPresent()) {
+            if (((StancePoint)p).getStance().isPresent()) {
                 sumStances++;
 
-                int number = ((User) p).getStance().get();
+                int number = ((StancePoint) p).getStance().get();
                 int firstDigit = Integer.parseInt(Integer.toString(Math.abs(number)).substring(0, 1));
 
                 if (number < 0) {
@@ -205,7 +207,7 @@ public class StanceProcessing {
 
         str.append("Coverage: " + ((double)sumStances/ graph.size())*100 + "%" + "\n");
         str.append("Positive Stances: " + ((double)sumPos / (double)sumStances)*100 + "%" + "\n");
-        str.append("Negative Staneces: "+ ((double)sumNeg / (double)sumStances)*100 + "%" + "\n");
+        str.append("Negative Stances: "+ ((double)sumNeg / (double)sumStances)*100 + "%" + "\n");
 
         for(int i = 0; i < list.length;i++){
             list[i] = (list[i] / (double)sumStances)*100;
@@ -219,18 +221,18 @@ public class StanceProcessing {
         str.append("-499 - -400\t" + list[4] + "%\n");
         str.append("-399 - -300\t" + list[3] + "%\n");
         str.append("-299 - -200\t" + list[2] + "%\n");
-        str.append("-199 - 100\t" + list[1] + "%\n");
+        str.append("-199 - -100\t" + list[1] + "%\n");
         str.append("-099 - -001\t" + list[0] + "%\n");
-        str.append("000 - 099\t" + list[10] + "%\n");
-        str.append("100 - 199\t" + list[11] + "%\n");
-        str.append("200 - 299\t" + list[12] + "%\n");
-        str.append("300 - 399\t" + list[13] + "%\n");
-        str.append("400 - 499\t" + list[14] + "%\n");
-        str.append("500 - 599\t" + list[15] + "%\n");
-        str.append("600 - 699\t" + list[16] + "%\n");
-        str.append("700 - 799\t" + list[17] + "%\n");
-        str.append("800 - 899\t" + list[18] + "%\n");
-        str.append("900 - 1000\t" + list[19] + "%\n");
+        str.append(" 000 -  099\t" + list[10] + "%\n");
+        str.append(" 100 -  199\t" + list[11] + "%\n");
+        str.append(" 200 -  299\t" + list[12] + "%\n");
+        str.append(" 300 -  399\t" + list[13] + "%\n");
+        str.append(" 400 -  499\t" + list[14] + "%\n");
+        str.append(" 500 -  599\t" + list[15] + "%\n");
+        str.append(" 600 -  699\t" + list[16] + "%\n");
+        str.append(" 700 -  799\t" + list[17] + "%\n");
+        str.append(" 800 -  899\t" + list[18] + "%\n");
+        str.append(" 900 - 1000\t" + list[19] + "%\n");
 
         return str.toString();
     }

@@ -1,6 +1,6 @@
 package com.ThreeBranch.Graph;
 
-import com.ThreeBranch.Twitter.User;
+import com.ThreeBranch.Twitter.StancePoint;
 
 import java.util.*;
 
@@ -21,8 +21,9 @@ public class Graph implements Iterable<Point>{
     return Optional.empty();
   }
 
+
   public void addUser(String s){
-    addPoint(new User(s));
+    addPoint(new StancePoint(s));
   }
   
   public Point addOrGet(Point p) {

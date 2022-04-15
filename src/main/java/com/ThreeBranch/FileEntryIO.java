@@ -95,7 +95,5 @@ public abstract class FileEntryIO {
                 sc.close();
             }catch(IOException e){e.printStackTrace();}
         }
-
-
     }
 }

@@ -5,6 +5,7 @@ import com.ThreeBranch.FileEntryIO;
 import com.ThreeBranch.Twitter.Configuration;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 /*
@@ -13,9 +14,9 @@ The Code that is commented out is my attempt to prevent tweet duplication, but I
 public abstract class TweetData {
     //Holds the Ids of gathered tweets for duplication checking purposes
     private static final HashSet<Long> tweetIDs = new HashSet<>();
-
+    public static String count;
     //Holds the userhandles of all the accounts
-    private static final HashSet<String> userhandles = new HashSet<>();
+    public static final HashSet<String> userhandles = new HashSet<>();
 
     /**
      * Reads TweetIDs and userhandles from output files for duplication checking procedures
@@ -40,7 +41,6 @@ public abstract class TweetData {
      */
     public static boolean checkDupAccount(String userhandle) { return userhandles.contains(userhandle);}
     protected static void addUserhandle(String userhandle) { userhandles.add(userhandle);}
-
 
     //Class that can be called to add the first token of a line to tweetID
     private static class readTweetIDs implements Callable {
