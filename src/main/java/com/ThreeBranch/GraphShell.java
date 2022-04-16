@@ -107,7 +107,7 @@ public class GraphShell {
                     }
                     break;
                     
-                case "print mostretweeted":
+                case "print most retweeted":
                     findInfluentials(graph);
                     break;
                     

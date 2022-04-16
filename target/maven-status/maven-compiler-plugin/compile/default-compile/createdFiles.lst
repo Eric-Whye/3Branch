@@ -10,14 +10,15 @@ com\ThreeBranch\Twitter\TweetData$readUserhandles.class
 com\ThreeBranch\Twitter\GraphRTFileProcessor$readRetweets.class
 com\ThreeBranch\Graph\Graph.class
 com\ThreeBranch\Twitter\TweetData$readTweetIDs.class
+com\ThreeBranch\Twitter\StancePoint.class
 com\ThreeBranch\Callable.class
 com\ThreeBranch\FileEntryIO.class
-com\ThreeBranch\Twitter\User.class
 com\ThreeBranch\Twitter\GraphRTFileProcessor.class
 com\ThreeBranch\Twitter\IncorrectGraphFileException.class
 com\ThreeBranch\Twitter\TweetData$1.class
 com\ThreeBranch\Main.class
 com\ThreeBranch\Twitter\Twitterer.class
+com\ThreeBranch\Twitter\GraphRTFileProcessor$readHashtags.class
 com\ThreeBranch\Twitter\Twitterer$1.class
 com\ThreeBranch\Graph\Vertex.class
 com\ThreeBranch\Twitter\StanceProcessing.class
