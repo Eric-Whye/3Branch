@@ -21,13 +21,14 @@ public class GraphShell {
 
     public void run() {
         Scanner in = new Scanner(System.in);
-        GraphRTFileProcessor fp = new GraphRTFileProcessor(graph);
-        StanceProcessing sp = new StanceProcessing(graph);
         List<Graph> listOfGraphs = new ArrayList<>();
         String stanceFile = "";
 
 
         while (true) {
+            GraphRTFileProcessor fp = new GraphRTFileProcessor(graph);
+            StanceProcessing sp = new StanceProcessing(graph);
+
             try {
                 Configuration.initialise(Configuration.ConfigFilename);
             } catch (FileNotFoundException e) {
@@ -58,7 +59,7 @@ public class GraphShell {
                     System.out.println("Retweeted Graph Built");
                     break;
 
-                case "build stance":
+                case "combine graphs":
                     if (!graph.isEmpty())
                         System.out.println("Old Graph Dropped");
                     System.out.println("Building Stance Graph");
@@ -194,21 +195,21 @@ public class GraphShell {
     }
 
     private void graphBootstrapping(List<Graph> list){
-        HashSet<StancePoint> nonStances = new HashSet<>();
+        HashSet<Point> nonStances = new HashSet<>();
         Graph output = new Graph();
 
         for (Point p : list.get(0)) {
-            //If the point does not have a stance assigned, add it to a list to be bootstrapped.
-            //Else add it to the output graph without change.
-            if (!((StancePoint) p).getStance().isPresent())
-                nonStances.add((StancePoint) p);
-            else
+            //If the point has a stance assigned, add it without change to the output
+            //
+            if (((StancePoint) p).getStance().isPresent()) {
                 output.addArc(p, list.get(0).getAdj(p));
+            } else {
+                nonStances.add(p);
+            }
         }
 
-
-        for (Point p : list.get(1)){
-            if (nonStances.contains((StancePoint) p)){
+        for (Point p : nonStances){
+            if (list.get(1).hasVertex(p.getName()) && list.get(1).getAdj(p).size() != 0){
                 output.addArc(p, list.get(1).getAdj(p));
             }
         }

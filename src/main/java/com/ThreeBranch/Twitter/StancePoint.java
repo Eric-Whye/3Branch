@@ -1,5 +1,6 @@
 package com.ThreeBranch.Twitter;
 
+import com.ThreeBranch.Graph.Point;
 import com.ThreeBranch.Graph.Vertex;
 
 import java.util.Optional;
