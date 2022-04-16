@@ -46,8 +46,8 @@ public class StanceProcessing {
             while (reader.ready()){
                 StringTokenizer tokens = new StringTokenizer(reader.readLine());
                 if (tokens.countTokens() >= 2){
-                    String userName = tokens.nextToken();
-                    Optional<Point> userOption = graph.getPointIfExists(userName);
+                    String name = tokens.nextToken();
+                    Optional<Point> userOption = graph.getPointIfExists(name);
 
                     if(userOption.isPresent()) {
                       Point p = userOption.get();
@@ -65,10 +65,10 @@ public class StanceProcessing {
                                 break;
                         }
                       } else {
-                        System.err.println(userName + " is not a user object");
+                        System.err.println(name + " is not a user object");
                       }
                     } else {
-                      System.err.println(userName + " is not present in graph");
+                      System.err.println(name + " is not present in graph");
                     }
                 }
             }

@@ -24,6 +24,7 @@ public class GraphShell {
         GraphRTFileProcessor fp = new GraphRTFileProcessor(graph);
         StanceProcessing sp = new StanceProcessing(graph);
         List<Graph> listOfGraphs = new ArrayList<>();
+        String stanceFile = "";
 
 
         while (true) {
@@ -43,6 +44,7 @@ public class GraphShell {
                     System.out.println("Building Retweet Graph");
                     graph.clear();
                     fp.populateRetweetGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
+                    stanceFile = Configuration.getValueFor("stance.influentials");
                     System.out.println("Retweet Graph Built");
                     break;
                     
@@ -52,6 +54,7 @@ public class GraphShell {
                     System.out.println("Building Retweeted Graph");
                     graph.clear();
                     fp.populateRetweetedGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
+                    stanceFile = Configuration.getValueFor("stance.influentials");
                     System.out.println("Retweeted Graph Built");
                     break;
 
@@ -68,7 +71,7 @@ public class GraphShell {
                     System.out.println("Building user to hashtag Graph");
                     graph.clear();
                     fp.populateUserToHashtagGraph(Configuration.getValueFor("graph.tweetsInput"));
-                    fp.writeGraphToFile(graph);
+                    stanceFile = Configuration.getValueFor("stance.hashtags");
                     System.out.println("User to hashtag graph built");
                     break;
 
@@ -78,7 +81,9 @@ public class GraphShell {
                     System.out.println("Building hashtag to user Graph");
                     graph.clear();
                     fp.populateHashtagToUserGraph(Configuration.getValueFor("graph.tweetsInput"));
-                    fp.writeGraphToFile(graph);
+                    stanceFile = Configuration.getValueFor("stance.hashtags");
+                    System.out.println(graph.size());
+                    System.out.println("hashtag to user graph built");
                     break;
 
                 case "add graph":
@@ -115,7 +120,7 @@ public class GraphShell {
                     if (graph.isEmpty()) {
                         System.out.println("No Graph built");
                     } else {
-                        sp.initialiseStances(Configuration.getValueFor("stance.influentials"));
+                        sp.initialiseStances(stanceFile);
                         int i = 0;
                         while (sp.calcStances() && i++ < Integer.parseInt(Configuration.getValueFor("stance.iterations"))) {}
                         sp.writeStances(graph);
@@ -207,6 +212,8 @@ public class GraphShell {
                 output.addArc(p, list.get(1).getAdj(p));
             }
         }
+
+        graph = output;
 
     }
 }

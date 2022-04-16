@@ -124,12 +124,12 @@ public class GraphRTFileProcessor {
                 while (tokens.hasMoreTokens()) {
                     String token = tokens.nextToken();
                     if (token.charAt(0) == '#') {
-                        token = token.replaceAll("[^a-zA-Z0-9_]", "");
+                        token = token.replaceAll("[^a-zA-Z0-9#_]", "");
                         if (token.length() <= 1) continue;
                         if (!reverse)
-                            graph.addArc(new StancePoint(user1), new StancePoint(token.toLowerCase()));
+                            graph.addArc(new StancePoint(user1), new StancePoint(token));
                         else
-                            graph.addArc(new StancePoint(token.toLowerCase()), new StancePoint(user1));
+                            graph.addArc(new StancePoint(token), new StancePoint(user1));
                     }
                 }
             }
