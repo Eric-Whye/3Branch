@@ -39,10 +39,10 @@ public class StanceProcessing {
     /**
      *Assign Stances to the recorded influential users
      */
-    public void initialiseStances(){
+    public void initialiseStances(String filename){
         BufferedReader reader = null;
         try{
-            reader = new BufferedReader(new FileReader("Week3/Influential Users.txt"));
+            reader = new BufferedReader(new FileReader(filename));
             while (reader.ready()){
                 StringTokenizer tokens = new StringTokenizer(reader.readLine());
                 if (tokens.countTokens() >= 2){

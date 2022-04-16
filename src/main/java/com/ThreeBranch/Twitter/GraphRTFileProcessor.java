@@ -11,8 +11,6 @@ import java.util.*;
 
 public class GraphRTFileProcessor {
     private final Graph graph;
-    private boolean stance = false;
-    private void setStance() {this.stance = true;}
 
     public GraphRTFileProcessor(Graph graph) {
         this.graph = graph;
@@ -36,16 +34,10 @@ public class GraphRTFileProcessor {
                 if (!tokens.nextToken().equals("RT")) return; //If not a retweet then discard
                 String user2 = tokens.nextToken();//Save userhandle
 
-                if (!reverse) {
-                    if (stance)
-                        graph.addArc(new StancePoint(user1), new StancePoint(removeSpecialCharacters(user2)));
-                    else
-                        graph.addArc(user1, removeSpecialCharacters(user2));
+                if (!reverse){
+                    graph.addArc(new StancePoint(user1), new StancePoint(removeSpecialCharacters(user2)));
                 } else {
-                    if (stance)
-                        graph.addArc(new StancePoint(removeSpecialCharacters(user2)), new StancePoint(user1));
-                    else
-                        graph.addArc(removeSpecialCharacters(user2), user1);
+                    graph.addArc(new StancePoint(removeSpecialCharacters(user2)), new StancePoint(user1));
                 }
             }
         }
@@ -103,13 +95,6 @@ public class GraphRTFileProcessor {
             //populateFromGraphFile();
         }
     }
-
-    public synchronized void populateStanceFromFile(String filename){
-        graph.clear();
-        setStance();
-        populateRetweetGraphFromFile(filename);
-    }
-
 
 
     public synchronized void populateUserToHashtagGraph(String filename){

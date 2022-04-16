@@ -2,6 +2,7 @@ package com.ThreeBranch.Graph;
 
 import com.ThreeBranch.Twitter.StancePoint;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class Graph implements Iterable<Point>{
@@ -22,7 +23,7 @@ public class Graph implements Iterable<Point>{
   }
 
 
-  public void addUser(String s){
+  public void addStancePoint(String s){
     addPoint(new StancePoint(s));
   }
   
@@ -109,6 +110,9 @@ public class Graph implements Iterable<Point>{
       return null;
     }
   }
+  public void addArc(Point from, List<Edge> edges){
+    adjacencyList.put(from, edges);
+  }
   
   public void addArc(String from, String to) {
     Point fromV = getVertex(from);
@@ -120,7 +124,7 @@ public class Graph implements Iterable<Point>{
   public void addArc(Point from, Point to) {
     //System.out.println("CALLED FOR " + from.getName() + " : " + to.getName() + " " + size());
     if (!adjacencyList.containsKey(from))
-      addUser(from.getName());
+      addStancePoint(from.getName());
     addArc(from, to, 1);
   }
   

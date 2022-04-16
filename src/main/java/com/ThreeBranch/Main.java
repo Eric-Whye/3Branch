@@ -3,12 +3,7 @@ package com.ThreeBranch;
 import com.ThreeBranch.Twitter.Configuration;
 import com.ThreeBranch.Twitter.TweetData;
 import com.ThreeBranch.Twitter.Twitterer;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
 
-import java.io.*;
-import java.util.*;
 
 public class Main {
 

@@ -23,6 +23,8 @@ public class GraphShell {
         Scanner in = new Scanner(System.in);
         GraphRTFileProcessor fp = new GraphRTFileProcessor(graph);
         StanceProcessing sp = new StanceProcessing(graph);
+        List<Graph> listOfGraphs = new ArrayList<>();
+
 
         while (true) {
             try {
@@ -41,7 +43,6 @@ public class GraphShell {
                     System.out.println("Building Retweet Graph");
                     graph.clear();
                     fp.populateRetweetGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
-                    System.out.println(graph.size());
                     System.out.println("Retweet Graph Built");
                     break;
                     
@@ -51,7 +52,6 @@ public class GraphShell {
                     System.out.println("Building Retweeted Graph");
                     graph.clear();
                     fp.populateRetweetedGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
-                    System.out.println(graph.size());
                     System.out.println("Retweeted Graph Built");
                     break;
 
@@ -59,9 +59,7 @@ public class GraphShell {
                     if (!graph.isEmpty())
                         System.out.println("Old Graph Dropped");
                     System.out.println("Building Stance Graph");
-                    graph.clear();
-                    fp.populateStanceFromFile(Configuration.getValueFor("graph.tweetsInput"));
-                    System.out.println("Stance graph built");
+                    graphBootstrapping(listOfGraphs);
                     break;
 
                 case "build user to hashtag":
@@ -83,6 +81,17 @@ public class GraphShell {
                     fp.writeGraphToFile(graph);
                     break;
 
+                case "add graph":
+                    if (graph.isEmpty()) {
+                        System.out.println("No graph built");
+                        break;
+                    }
+                    listOfGraphs.add(graph);
+                    break;
+
+                case "clear list":
+                    listOfGraphs.clear();
+                    break;
 
                 case "write":
                     if (graph.isEmpty()) {
@@ -106,7 +115,7 @@ public class GraphShell {
                     if (graph.isEmpty()) {
                         System.out.println("No Graph built");
                     } else {
-                        sp.initialiseStances();
+                        sp.initialiseStances(Configuration.getValueFor("stance.influentials"));
                         int i = 0;
                         while (sp.calcStances() && i++ < Integer.parseInt(Configuration.getValueFor("stance.iterations"))) {}
                         sp.writeStances(graph);
@@ -117,10 +126,6 @@ public class GraphShell {
                 case "print coverage":
                     System.out.println(sp.stanceCoverage());
                     break;
-
-                case "print stances":
-                  printStanceHandler();
-                  break;
 
                 case "get random user":
                   randomUserHandler();
@@ -145,7 +150,6 @@ public class GraphShell {
                     table.put(e.getDestination(), e.getWeight());
             }
         }
-
         Set<Map.Entry<Point, Integer>> numRetweetsByUser = table.entrySet();
         Stream<Map.Entry<Point, Integer>> thing = numRetweetsByUser.stream().sorted((o1, o2) -> {
             if (o1.getValue().equals(o2.getValue()))
@@ -154,31 +158,13 @@ public class GraphShell {
                 return 1;
             else return -1;
         });
-
         System.out.println(Arrays.toString(thing.toArray()));
-    }
-    
-    private void printStanceHandler() {
-      for (Point p : graph) {
-        if(p instanceof StancePoint) {
-          StancePoint u = (StancePoint) p;
-          Optional<Integer> stance = u.getStance();
-          if(stance.isPresent()) {
-            System.out.println(u.getName() + ": " + u.getStance().get());
-          } else {
-            System.out.println(u.getName() + ": No Stance Assigned");
-          }
-        } else {
-          System.out.println(p.getName() + ": Not a user");
-        }
-      }
     }
     
     private void randomUserHandler() {
       StancePoint u = new StancePoint("");
       Point p;
       int retweets = 0;
-      
       try {
         do {
           p = graph.getRandomPoint();
@@ -194,12 +180,33 @@ public class GraphShell {
       } catch (IllegalStateException e) {
         System.err.println("Graph is empty");
       }
-      
       Optional<Integer> stance = u.getStance();
       if(stance.isPresent()) {
         System.out.println(u.getName() + " Stance: " + stance.get() + " Retweets: " + retweets);
       } else {
         System.out.println(u.getName() + " No Stance Assigned " + " Retweets: " + retweets);
       }
+    }
+
+    private void graphBootstrapping(List<Graph> list){
+        HashSet<StancePoint> nonStances = new HashSet<>();
+        Graph output = new Graph();
+
+        for (Point p : list.get(0)) {
+            //If the point does not have a stance assigned, add it to a list to be bootstrapped.
+            //Else add it to the output graph without change.
+            if (!((StancePoint) p).getStance().isPresent())
+                nonStances.add((StancePoint) p);
+            else
+                output.addArc(p, list.get(0).getAdj(p));
+        }
+
+
+        for (Point p : list.get(1)){
+            if (nonStances.contains((StancePoint) p)){
+                output.addArc(p, list.get(1).getAdj(p));
+            }
+        }
+
     }
 }
