@@ -1,5 +1,19 @@
 Please see "3Branch-1.0-SNAPSHOT.jar", this is our executable jar.
 
+Instructions:
+-For the regular stance algorithm first launch the program from the command line with "-graph" as the only argument (this launches the shell)
+-Then run the command "build retweet" to build the retweet graph
+-Then run the command "assign stances" to preform the stance assignment algorithm
+
+-For the enhanced algorithm first launch the program from the command line with "-graph" as the only argument (this launches the shell)
+-Then run the command "build retweet" to build the retweet graph
+-Then "assign stances" to preform the normal stance assignment algorithm on this graph
+-Then "add graph" to store the graph for future use
+-Then "build user to hashtag" to build the hashtag graph
+-Then "assign stances"
+-Then "add graph"
+-Then "combine graphs" to combine these graphs into one combined graph
+
 Algorithm implementation completed by Eric, algorithm annalysis implemented by Deven.
 
 Answers to questions:
