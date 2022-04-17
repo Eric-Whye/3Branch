@@ -20,12 +20,13 @@ public class GraphShell {
     }
 
     public void run() {
+        boolean run = true;
         Scanner in = new Scanner(System.in);
         List<Graph> listOfGraphs = new ArrayList<>();
         String stanceFile = "";
 
 
-        while (true) {
+        while (run) {
             GraphRTFileProcessor fp = new GraphRTFileProcessor(graph);
             StanceProcessing sp = new StanceProcessing(graph);
 
@@ -59,12 +60,6 @@ public class GraphShell {
                     System.out.println("Retweeted Graph Built");
                     break;
 
-                case "combine graphs":
-                    if (!graph.isEmpty())
-                        System.out.println("Old Graph Dropped");
-                    System.out.println("Building Stance Graph");
-                    graphBootstrapping(listOfGraphs);
-                    break;
 
                 case "build user to hashtag":
                     if (!graph.isEmpty())
@@ -85,6 +80,18 @@ public class GraphShell {
                     stanceFile = Configuration.getValueFor("stance.hashtags");
                     System.out.println(graph.size());
                     System.out.println("hashtag to user graph built");
+                    break;
+
+                case "combine graphs":
+                    if (!graph.isEmpty())
+                        System.out.println("Old Graph Dropped");
+                    if (listOfGraphs.size() <= 1) {
+                        System.out.println("Graphs list doesn't not have enough graphs");
+                        break;
+                    }
+                    System.out.println("Building Stance Graph");
+                    graphBootstrapping(listOfGraphs);
+                    System.out.println("Stance Graph built");
                     break;
 
                 case "add graph":
@@ -112,8 +119,8 @@ public class GraphShell {
                     break;
                     
                 case "quit":
+                    run = false;
                     System.out.println("Goodbye");
-                    System.exit(0);
                     break;
 
                 case "assign stances":
@@ -201,13 +208,13 @@ public class GraphShell {
         for (Point p : list.get(0)) {
             //If the point has a stance assigned, add it without change to the output
             //
-            if (((StancePoint) p).getStance().isPresent()) {
+            if (((StancePoint) p).getStance().isPresent() && list.get(0).getAdj(p).size() != 0) {
                 output.addArc(p, list.get(0).getAdj(p));
             } else {
                 nonStances.add(p);
             }
         }
-
+        
         for (Point p : nonStances){
             if (list.get(1).hasVertex(p.getName()) && list.get(1).getAdj(p).size() != 0){
                 output.addArc(p, list.get(1).getAdj(p));

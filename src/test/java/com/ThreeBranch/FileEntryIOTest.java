@@ -31,7 +31,7 @@ class FileEntryIOTest {
             line.add(i + "\t" + (i + 1));
             list.add(line);
         }
-        FileEntryIO.appendToFile(list, '\t', '\n', "TestFiles/testFileEntryIO.txt");
+        FileEntryIO.appendLineByLine(list, '\t', '\n', "TestFiles/testFileEntryIO.txt");
 
         int count = 0;
         BufferedReader reader = getReader();

@@ -6,7 +6,6 @@ import com.ThreeBranch.Graph.Edge;
 import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
 
-import java.io.IOException;
 import java.util.*;
 
 public class GraphRTFileProcessor {
@@ -59,7 +58,6 @@ public class GraphRTFileProcessor {
                 continue;
             List<String> entry = new ArrayList<>();
             entry.add(p.getName());
-            entry.add(newline);
 
             List<Edge> retweets = graph.getAdj(p);
             retweets.sort(Collections.reverseOrder());
@@ -67,47 +65,49 @@ public class GraphRTFileProcessor {
             for (Edge e : retweets)
                 entry.add(e.toString());
 
-            entry.add(newline);
             entries.add(entry);
         }
-        FileEntryIO.writeToFile(entries,
+        FileEntryIO.writeDataBlocks(entries,
                 delim.charAt(0),
                 newline.charAt(0),
                 outputFile
         );
     }
 
-    public synchronized void populateRetweetedGraphFromFile(String filename){
-        graph.clear();
-        try{
-            FileEntryIO.streamFromFile(filename, new readRetweets(true));
-        }catch(IncorrectGraphFileException e){
-            populateFromGraphFile();
-        }
+    public void thing(String filename){
+        FileEntryIO.streamLineByLine(filename, new readRetweets(false));
     }
 
     public synchronized void populateRetweetGraphFromFile(String filename){
         graph.clear();
         try{
-            FileEntryIO.streamFromFile(filename, new readRetweets(false));
+            FileEntryIO.streamLineByLine(filename, new readRetweets(false));
         }catch(IncorrectGraphFileException e){
             System.err.println("Error: Retweet data file not found");
             //populateFromGraphFile();
         }
     }
 
+    public synchronized void populateRetweetedGraphFromFile(String filename){
+        graph.clear();
+        try{
+            FileEntryIO.streamLineByLine(filename, new readRetweets(true));
+        }catch(IncorrectGraphFileException e){
+            populateFromGraphFile();
+        }
+    }
 
     public synchronized void populateUserToHashtagGraph(String filename){
         graph.clear();
         try{
-            FileEntryIO.streamFromFile(filename, new readHashtags(false));
+            FileEntryIO.streamLineByLine(filename, new readHashtags(false));
         }catch(IncorrectGraphFileException e){e.printStackTrace();}
     }
 
     public synchronized void populateHashtagToUserGraph(String filename){
         graph.clear();
         try{
-            FileEntryIO.streamFromFile(filename, new readHashtags(true));
+            FileEntryIO.streamLineByLine(filename, new readHashtags(true));
         }catch(IncorrectGraphFileException e){e.printStackTrace();}
     }
 
@@ -141,7 +141,7 @@ public class GraphRTFileProcessor {
     public synchronized void populateFromGraphFile(){
         graph.clear();
         try {
-            FileEntryIO.streamFromFile(Configuration.getValueFor("graph.output"), new readRetweetsFromGraphFile());
+            FileEntryIO.streamLineByLine(Configuration.getValueFor("graph.output"), new readRetweetsFromGraphFile());
         }catch(IncorrectGraphFileException e){
             e.printStackTrace();
         }

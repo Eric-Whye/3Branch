@@ -149,7 +149,7 @@ public class StanceProcessing {
                 list.add(entry);
             }catch(ClassCastException e){e.printStackTrace();}
         }
-        FileEntryIO.writeToFile(list,
+        FileEntryIO.writeLineByLine(list,
                 Configuration.getValueFor("format.delim").charAt(0),
                 Configuration.getValueFor("format.newLineDelim").charAt(0),
                 Configuration.getValueFor("stance.output"));

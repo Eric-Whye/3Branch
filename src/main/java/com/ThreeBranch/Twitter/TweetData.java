@@ -2,10 +2,8 @@ package com.ThreeBranch.Twitter;
 
 import com.ThreeBranch.Callable;
 import com.ThreeBranch.FileEntryIO;
-import com.ThreeBranch.Twitter.Configuration;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 
 /*
@@ -23,8 +21,8 @@ public abstract class TweetData {
      * @throws NumberFormatException upon unexpected type parsing
      */
     public static void initialise() throws NumberFormatException {
-        FileEntryIO.streamFromFile(Configuration.getValueFor("tweet.vaxFile"), new readTweetIDs());
-        FileEntryIO.streamFromFile(Configuration.getValueFor("tweet.accountsFile"), new readUserhandles());
+        FileEntryIO.streamLineByLine(Configuration.getValueFor("tweet.vaxFile"), new readTweetIDs());
+        FileEntryIO.streamLineByLine(Configuration.getValueFor("tweet.accountsFile"), new readUserhandles());
     }
 
     /**

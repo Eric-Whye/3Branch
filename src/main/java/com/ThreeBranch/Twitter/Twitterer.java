@@ -139,11 +139,11 @@ public class Twitterer {
     private synchronized void writeDataToFile(List<Status> tweets){
         char delim = Configuration.getValueFor("format.delim").charAt(0);
         char newLineDelim = Configuration.getValueFor("format.newLineDelim").charAt(0);
-        FileEntryIO.appendToFile(convertTweetsToListOfStringLists(tweets),
+        FileEntryIO.appendLineByLine(convertTweetsToListOfStringLists(tweets),
                 delim, newLineDelim,
                 Configuration.getValueFor("tweet.vaxFile")
         );
-        FileEntryIO.appendToFile(convertAccountsToListOfStringList(tweets),
+        FileEntryIO.appendLineByLine(convertAccountsToListOfStringList(tweets),
                 delim, newLineDelim,
                 Configuration.getValueFor("tweet.accountsFile")
         );

@@ -9,9 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 
 class GraphRTFileProcessorTest {
-    /*
     @Test
-    void testReadRetweets(){
+    void testRetweetGraph(){
         try {
             Configuration.initialise("testConfiguration.properties");
         } catch (FileNotFoundException e) {e.printStackTrace();}
@@ -27,7 +26,7 @@ class GraphRTFileProcessorTest {
         try{
             reader = new BufferedReader(new FileReader(Configuration.getValueFor("graph.output")));
             while (reader.ready()){
-                testOutput.append(reader.readLine());
+                testOutput.append(reader.readLine()).append("\n");
             }
         } catch (IOException e) {e.printStackTrace();} finally {
             try {
@@ -36,34 +35,32 @@ class GraphRTFileProcessorTest {
             } catch (IOException e) {e.printStackTrace();}
         }
 
-        assertEquals("@Zinger" +
-                        "@Testy(1)\t@Oof(1)" +
-                        "@DGHisham" +
-                        "@bernamadotcom(1)" +
-                        "@Testy" +
-                        "@Testy(4)\t@Zinger(1)",
+        assertEquals("@Zinger\n"+
+                        "@Testy(1)\t@Oof(1)\n\n" +
+                        "@DGHisham\n" +
+                        "@bernamadotcom(1)\n\n" +
+                        "@Testy\n" +
+                        "@Testy(4)\t@Zinger(1)\n\n",
                 testOutput.toString());
     }
 
     @Test
-    void testWriteRetweets(){
-        try{
+    void testRetweetedGraph(){
+        try {
             Configuration.initialise("testConfiguration.properties");
-        }catch(IOException e){e.printStackTrace();}
+        } catch (FileNotFoundException e) {e.printStackTrace();}
+        Graph graph = new Graph();
+        GraphRTFileProcessor fp  = new GraphRTFileProcessor(graph);
+        fp.populateRetweetedGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
 
-        Graph graph  = new Graph();
-        GraphRTFileProcessor fp = new GraphRTFileProcessor(graph);
-
-        fp.populateRetweetGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
         fp.writeGraphToFile(graph);
-
 
         BufferedReader reader = null;
         StringBuilder testOutput = new StringBuilder();
         try{
             reader = new BufferedReader(new FileReader(Configuration.getValueFor("graph.output")));
             while (reader.ready()){
-                testOutput.append(reader.readLine());
+                testOutput.append(reader.readLine()).append("\n");
             }
         } catch (IOException e) {e.printStackTrace();} finally {
             try {
@@ -72,13 +69,15 @@ class GraphRTFileProcessorTest {
             } catch (IOException e) {e.printStackTrace();}
         }
 
-        assertEquals("@Zinger" +
-                        "@Testy(1)\t@Oof(1)" +
-                        "@DGHisham" +
-                        "@bernamadotcom(1)" +
-                        "@Testy" +
-                        "@Testy(4)\t@Zinger(1)",
+        assertEquals("@bernamadotcom\n" +
+                        "@DGHisham(1)\n\n" +
+                        "@Zinger\n" +
+                        "@Testy(1)\n\n" +
+                        "@Oof\n" +
+                        "@Zinger(1)\n\n" +
+                        "@Testy\n" +
+                        "@Testy(4)\t@Zinger(1)\n\n",
                 testOutput.toString());
 
-    }*/
+    }
 }
