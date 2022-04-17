@@ -137,6 +137,10 @@ public class GraphShell {
                   randomUserHandler();
                   break;
 
+                case "compare algorithms":
+                  algCompHandler();
+                  break;
+
                 default:
                     System.out.println("Unrecognised");
             }
@@ -215,6 +219,98 @@ public class GraphShell {
         }
 
         graph = output;
-
+    }
+    
+    private void algCompHandler() {
+      final int comparisonCount = Integer.parseInt(Configuration.getValueFor("comparison.count"));
+      String stanceFile = "";
+      List<Graph> listOfGraphs = new ArrayList<>();
+      
+      System.out.println("This is for comparing how much the hashtags contribute to stance assignment, it will take a while");
+      
+      //---------------------------------------
+      System.out.println("Building first graph");
+      Graph unenhancedGraph = new Graph();
+      GraphRTFileProcessor ufp = new GraphRTFileProcessor(unenhancedGraph);
+      StanceProcessing usp = new StanceProcessing(unenhancedGraph);
+      ufp.populateRetweetGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
+      stanceFile = Configuration.getValueFor("stance.influentials");
+      usp.initialiseStances(stanceFile);
+      int i = 0;
+      while (usp.calcStances() && i++ < Integer.parseInt(Configuration.getValueFor("stance.iterations"))) {}
+      
+      //---------------------------------------
+      System.out.println("Building second graph");
+      
+      listOfGraphs.clear();
+      
+      Graph uthGraph = new Graph();
+      GraphRTFileProcessor uthfp = new GraphRTFileProcessor(uthGraph);
+      StanceProcessing uthsp = new StanceProcessing(uthGraph);
+      uthfp.populateUserToHashtagGraph(Configuration.getValueFor("graph.tweetsInput"));
+      stanceFile = Configuration.getValueFor("stance.hashtags");
+      uthsp.initialiseStances(stanceFile);
+      i = 0;
+      while (uthsp.calcStances() && i++ < Integer.parseInt(Configuration.getValueFor("stance.iterations"))) {}
+      
+      listOfGraphs.add(uthGraph);
+      
+      Graph htuGraph = new Graph();
+      GraphRTFileProcessor htufp = new GraphRTFileProcessor(htuGraph);
+      StanceProcessing htusp = new StanceProcessing(htuGraph);
+      htufp.populateHashtagToUserGraph(Configuration.getValueFor("graph.tweetsInput"));
+      stanceFile = Configuration.getValueFor("stance.hashtags");
+      htusp.initialiseStances(stanceFile);
+      i = 0;
+      while (htusp.calcStances() && i++ < Integer.parseInt(Configuration.getValueFor("stance.iterations"))) {}
+      
+      listOfGraphs.add(htuGraph);
+      
+      graphBootstrapping(listOfGraphs);
+      Graph enhancedGraph = graph;
+      
+      System.out.println("All Graphs Built");
+      
+      //---------------------------------------
+      System.out.println("Comparing Graphs");
+      
+      double avergageDifference = 0;
+      int sum = 0;
+      int count = 0;
+      Point p1;
+      Point p2;
+      StancePoint u1;
+      StancePoint u2;
+      
+      for(i = 0; i < comparisonCount; i++) {
+        try{
+          p1 = unenhancedGraph.getRandomPoint();
+          if(!(p1 instanceof StancePoint)) {
+            System.err.println("Illegal Graph Structure, Please Use StancePoint");
+            return;
+          }
+          u1 = (StancePoint)p1;
+          
+          Optional<Point> op = enhancedGraph.getPointIfExists(u1.getName());
+          if(op.isPresent()) {
+            p2 = op.get();
+            if(!(p2 instanceof StancePoint)) {
+              System.err.println("Illegal Graph Structure, Please, Use StancePoint");
+              return;
+            }
+            u2 = (StancePoint)p2;
+            
+            System.out.println(u1.toString() + " --- " + u2.toString());
+            
+          } else {
+            System.err.println("Second graph does not contain " + u1.getName());
+          }
+          
+        } catch (IllegalStateException e) {
+          System.err.println("Error: At least one graph is empty");
+          e.printStackTrace();
+        }
+      }
+      
     }
 }
