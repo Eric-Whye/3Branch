@@ -274,8 +274,8 @@ public class GraphShell {
       //---------------------------------------
       System.out.println("Comparing Graphs");
       
-      double avergageDifference = 0;
-      int sum = 0;
+      int agreements = 0;
+      int disagreements = 0;
       int count = 0;
       Point p1;
       Point p2;
@@ -302,6 +302,24 @@ public class GraphShell {
             
             System.out.println(u1.toString() + " --- " + u2.toString());
             
+            Optional<Integer> os1 = u1.getStance();
+            Optional<Integer> os2 = u2.getStance();
+            if(os1.isPresent() && os2.isPresent()) {
+              int s1 = os1.get();
+              int s2 = os2.get();
+              
+              if(
+                (s1 < 0 && s2 < 0) ||
+                (s1 == 0 && s2 == 0) ||
+                (s1 > 0 && s2 > 0)) {
+                  agreements++;
+                  count++;
+                } else {
+                  disagreements++;
+                  count++;
+                }
+            }
+            
           } else {
             System.err.println("Second graph does not contain " + u1.getName());
           }
@@ -312,5 +330,11 @@ public class GraphShell {
         }
       }
       
+      System.out.println("----------------------------------");
+      System.out.println("Agrees: " + agreements);
+      System.out.println(((double)agreements / count) * 100 + "%");
+      System.out.println("Disagreements: " + disagreements);
+      System.out.println(((double)disagreements / count) * 100 + "%");
+      System.out.println("Total: " + count);
     }
 }
