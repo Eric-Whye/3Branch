@@ -105,7 +105,7 @@ public abstract class GraphQueries {
 
                     Optional<Integer> os1 = u1.getStance();
                     Optional<Integer> os2 = u2.getStance();
-                    if(os1.isPresent() && os2.isPresent()) {
+                    if(os1.isPresent() && os2.isPresent() && unenhancedGraph.getAdj(u1).size() >= 10 && enhancedGraph.getAdj(u2).size() >= 10) {
                         int s1 = os1.get();
                         int s2 = os2.get();
 
