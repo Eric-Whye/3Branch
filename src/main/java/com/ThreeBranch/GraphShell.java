@@ -167,7 +167,7 @@ public class GraphShell {
                 nonStances.add(p);
             }
         }
-        
+
         for (Point p : nonStances){
             if (list.get(1).hasVertex(p.getName()) && list.get(1).getAdj(p).size() != 0){
                 output.addArc(p, list.get(1).getAdj(p));
