@@ -28,15 +28,5 @@ public class StancePoint extends Vertex {
     public void setStance(int stance) {
         this.stance = stance;
     }
-    
-    @Override
-    public String toString() {
-      Optional<Integer> stanceOption = getStance();
-      
-      if(stanceOption.isPresent()) {
-        return this.getName() + ": " + stanceOption.get();
-      } else {
-        return this.getName() + ": No Stance";
-      }
-    }
+
 }

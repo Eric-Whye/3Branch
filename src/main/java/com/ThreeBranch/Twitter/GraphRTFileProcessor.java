@@ -74,10 +74,6 @@ public class GraphRTFileProcessor {
         );
     }
 
-    public void thing(String filename){
-        FileEntryIO.streamLineByLine(filename, new readRetweets(false));
-    }
-
     public synchronized void populateRetweetGraphFromFile(String filename){
         graph.clear();
         try{
@@ -97,6 +93,7 @@ public class GraphRTFileProcessor {
         }
     }
 
+    
     public synchronized void populateUserToHashtagGraph(String filename){
         graph.clear();
         try{
