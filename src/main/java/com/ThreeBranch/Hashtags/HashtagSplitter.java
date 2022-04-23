@@ -7,37 +7,49 @@ import com.ThreeBranch.Twitter.Configuration;
 import java.util.*;
 
 public abstract class HashtagSplitter {
-    String lexiconFile = Configuration.getValueFor("hashtags.lexiconFile");
-    List<String> hashtagsList;
-    HashMap<String, HashtagLabel> lexicon = new HashMap<>();
+    private List<String> lowercaseHashtags = new ArrayList<>();
+    private List<HashtagLabel> labelList = new ArrayList<>();
 
     public void initialise(){
-        FileEntryIO.streamLineByLine(lexiconFile, new readLexicon());
+        //FileEntryIO.streamLineByLine(lexiconFile, new readLexicon());
     }
 
-    public List<String> split(String hashtag){
-        
-        for (int i = 0 ; i < hashtag.length(); i++){
-            switch(hashtag.charAt(i)){
+    public void splitHashtags(List<String> hashtags){
+        boolean isCamel = false;
 
+        for (String hashtag : hashtags) {
+            for (int i = 0; i < hashtag.length(); i++) {
+                if (Character.isUpperCase(hashtag.charAt(i))) {
+                    isCamel = true;
+                    break;
+                }
             }
+
+            if (isCamel){
+                StringBuilder word = new StringBuilder();
+                word.append(hashtag.charAt(0));
+                List<String> splitWords = new ArrayList<>();
+
+                for (int i = 1; i < hashtag.length(); i++){
+                    char currentLetter = hashtag.charAt(i);
+
+                    if (Character.isUpperCase(hashtag.charAt(i))) {
+                        splitWords.add(word.toString());
+                        word.delete(0, word.length()-1);
+                        word.append(currentLetter);
+                    }
+                    else
+                        word.append(currentLetter);
+                }
+                HashtagLabel label = new HashtagLabel(splitWords);
+                labelList.add(label);
+            }
+            else
+                lowercaseHashtags.add(hashtag);
+
+            isCamel = false;
         }
+
     }
 
-
-    private class readLexicon implements Callable {
-
-        @Override
-        public void call(Object o) {
-            String word;
-            StringTokenizer tokens = new StringTokenizer((String)o);
-            if (tokens.hasMoreTokens())
-                word = tokens.nextToken();
-            else return;
-
-            String label = ((String)o).substring(word.length()+1);
-            HashtagLabel hLabel = new HashtagLabel(label);
-            lexicon.put(word, hLabel);
-        }
-    }
 }
