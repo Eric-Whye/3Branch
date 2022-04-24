@@ -1,6 +1,8 @@
 package com.ThreeBranch;
 
 import com.ThreeBranch.Graph.Graph;
+import com.ThreeBranch.Hashtags.HashtagLexicon;
+import com.ThreeBranch.Hashtags.HashtagMain;
 import com.ThreeBranch.Twitter.Configuration;
 import com.ThreeBranch.Twitter.GraphRTFileProcessor;
 import com.ThreeBranch.Twitter.TweetData;
@@ -33,6 +35,13 @@ public class Main {
 
                     Twitterer twitterer = new Twitterer();
                     twitterer.streamStart();
+                    break;
+
+                case "-h":
+                    try {
+                        Configuration.initialise(Configuration.ConfigFilename);
+                    } catch (FileNotFoundException e) {e.printStackTrace();}
+                    HashtagMain.run(Configuration.getValueFor("tweet.vaxFile"));
                     break;
                 default:
                     defaultHandle();

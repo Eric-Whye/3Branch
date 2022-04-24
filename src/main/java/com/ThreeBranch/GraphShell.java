@@ -29,9 +29,7 @@ public class GraphShell {
 
             try {
                 Configuration.initialise(Configuration.ConfigFilename);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            } catch (FileNotFoundException e) {e.printStackTrace();}
 
             System.out.print("GraphShell> ");
             String input = in.nextLine();

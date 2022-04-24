@@ -22,10 +22,6 @@ public class Graph implements Iterable<Point>{
     return Optional.empty();
   }
 
-
-  public void addStancePoint(String s){
-    addPoint(new StancePoint(s));
-  }
   
   public Point addOrGet(Point p) {
     Optional<Point> op = getPointIfExists(p.getName());
@@ -124,7 +120,7 @@ public class Graph implements Iterable<Point>{
   public void addArc(Point from, Point to) {
     //System.out.println("CALLED FOR " + from.getName() + " : " + to.getName() + " " + size());
     if (!adjacencyList.containsKey(from))
-      addStancePoint(from.getName());
+      addPoint(from);
     addArc(from, to, 1);
   }
   
