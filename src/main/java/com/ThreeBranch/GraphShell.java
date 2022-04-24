@@ -73,7 +73,6 @@ public class GraphShell {
                     graph.clear();
                     fp.populateHashtagToUserGraph(Configuration.getValueFor("graph.tweetsInput"));
                     stanceFile = Configuration.getValueFor("stance.hashtags");
-                    System.out.println(graph.size());
                     System.out.println("hashtag to user graph built");
                     break;
 

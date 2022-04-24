@@ -21,13 +21,14 @@ public class HashtagLexicon extends Graph{
         @Override
         public void call(Object o) {
             String word;
-            StringTokenizer tokens = new StringTokenizer((String)o);
-            if (tokens.hasMoreTokens())
+            StringTokenizer tokens = new StringTokenizer(((String)o).replace(", ", ","));
+            if (tokens.hasMoreTokens()) {
+                tokens.nextToken();//Skipping numbered column
                 word = tokens.nextToken();
-            else return;
 
-            String label = ((String)o).substring(word.length()+1);
-            addArc(new HashtagLabel(word), new HashtagLabel(label));
+                String label = tokens.nextToken().replace("[", "").replace("]", "");
+                addArc(new HashtagLabel(word), new HashtagLabel(label));
+            }
         }
     }
 }

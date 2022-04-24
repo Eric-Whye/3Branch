@@ -120,9 +120,9 @@ public class GraphRTFileProcessor {
                 String user1 = tokens.nextToken();
                 while (tokens.hasMoreTokens()) {
                     String token = tokens.nextToken();
+                    token = token.replaceAll("[^a-zA-Z0-9#_]", "");
+                    if (token.length() <= 1) continue;
                     if (token.charAt(0) == '#') {
-                        token = token.replaceAll("[^a-zA-Z0-9#_]", "");
-                        if (token.length() <= 1) continue;
                         if (!reverse)
                             graph.addArc(new StancePoint(user1), new StancePoint(token));
                         else

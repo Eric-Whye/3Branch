@@ -26,6 +26,7 @@ public class HashtagSplitter {
 
     private void splitHashtags(){
         for (String hashtag : hashtags) {
+
             boolean isCamel = false;
 
             //Check to see if the hashtag contains *any* uppercase characters
@@ -42,19 +43,21 @@ public class HashtagSplitter {
                 StringBuilder word = new StringBuilder();
                 List<Point> splitWords = new ArrayList<>();
 
-                word.append(hashtag.charAt(0));
-                for (int i = 1; i < hashtag.length(); i++){
+                word.append(hashtag.charAt(1));
+                for (int i = 2; i < hashtag.length(); i++){
                     char currentLetter = hashtag.charAt(i);
 
                     //If letter is uppercase, add the camelled word to splitWords, then add the uppercase letter to start the new word
-                    if (Character.isUpperCase(hashtag.charAt(i))) {
+                    if (Character.isUpperCase(currentLetter)) {
                         splitWords.add(new HashtagLabel(word.toString()));
-                        word.delete(0, word.length()-1);
+                        word.delete(0, word.length());
                         word.append(currentLetter);
                     }
                     else
                         word.append(currentLetter);
                 }
+                splitWords.add(new HashtagLabel(word.toString()));
+
                 //Add the current label with an arc for each camelled word.
                 for (Point p : splitWords)
                     splitTags.addArc(new HashtagLabel(hashtag), p);

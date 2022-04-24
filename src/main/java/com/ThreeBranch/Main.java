@@ -41,7 +41,8 @@ public class Main {
                     try {
                         Configuration.initialise(Configuration.ConfigFilename);
                     } catch (FileNotFoundException e) {e.printStackTrace();}
-                    HashtagMain.run(Configuration.getValueFor("tweet.vaxFile"));
+                    HashtagMain hashtagMain = new HashtagMain();
+                    hashtagMain.run(Configuration.getValueFor("graph.tweetsInput"));
                     break;
                 default:
                     defaultHandle();
