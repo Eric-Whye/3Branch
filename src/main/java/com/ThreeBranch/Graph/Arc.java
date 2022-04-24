@@ -27,6 +27,8 @@ public class Arc implements Edge, Comparable<Edge>{
     public int getWeight() {
       return weight;
     }
+
+    public void setWeight(int weight){ this.weight = weight; }
     
     public String endName() {
       return destination.getName();

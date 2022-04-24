@@ -6,41 +6,20 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class Graph implements Iterable<Point>{
-  Random random = new Random();
-  
   private final Hashtable<Point, List<Edge>> adjacencyList = new Hashtable<>();
 
-  public void addVertex(String s) {
-    addPoint(new Vertex(s));
-  }
 
   public Optional<Point> getPointIfExists(String s) {
-    Point target = new Vertex(s);
-    List<Edge> adj = adjacencyList.get(target);
-    if(adj != null)
-      return Optional.of(adj.get(0).getSource());
+    getPointIfExists(new Vertex(s));
     return Optional.empty();
   }
 
-
-  public void addStancePoint(String s){
-    addPoint(new StancePoint(s));
-  }
-  
-  public Point addOrGet(Point p) {
-    Optional<Point> op = getPointIfExists(p.getName());
-    if(op.isPresent())
-      return op.get();
-    addPoint(p);
-    return p;
-  }
-  
-  public void addPoint(Point p) {
-    if(!hasVertex(p)) {
-      ArrayList<Edge> adjacencies = new ArrayList<Edge>();
-      adjacencies.add(new Arc(p, p));
-      adjacencyList.put(p, adjacencies);
+  public Optional<Point> getPointIfExists(Point p){
+    for (Map.Entry<Point, List<Edge>> entry: adjacencyList.entrySet()){
+      if (p.equals(entry))
+        return Optional.of(p);
     }
+    return Optional.empty();
   }
   
   public boolean hasVertex(String name) {
@@ -51,35 +30,17 @@ public class Graph implements Iterable<Point>{
     return adjacencyList.containsKey(p);
   }
   
-  public Point getVertex(String s) {
-    if(hasVertex(s))
-      return new Vertex(s);
-    addVertex(s);
-    return new Vertex(s);
-  }
-
-  public List<Edge> removeVertex(String s){
-    return adjacencyList.remove(new Vertex(s));
-  }
-  public List<Edge> removeVertex(Point p){
-    return adjacencyList.remove(p);
-  }
-  
-  public List<Edge> getAdj(String s) throws IllegalArgumentException{
-    return getAdj(new Vertex(s));
-  }
-  
   public List<Edge> getAdj(Point p) throws IllegalArgumentException{
     List<Edge> adj = adjacencyList.get(p);
     if(adj == null)
       throw new IllegalArgumentException("Point " + p.getName() + " does not exist");
-    return adj.subList(1, adj.size());
+    return adj;
   }
 
   public Boolean hasAdj(Point p){
-    return adjacencyList.get(p).size() != 1;
+    return adjacencyList.get(p).size() != 0;
   }
-  
+
   public boolean arcExists(String from, String to) {
     return arcExists(new Vertex(from), new Vertex(to));
   }
@@ -102,47 +63,74 @@ public class Graph implements Iterable<Point>{
   
   public Edge getArcIfExists(Point from, Point to) {
     try {
-      for (Edge a : getAdj(from))
-        if(a.getDestination().equals(to))
-          return a;
+      for (Edge e : getAdj(from))
+        if(e.getDestination().equals(to))
+          return e;
       return null;
     } catch (IllegalArgumentException e) {
       return null;
     }
   }
   public void addArc(Point from, List<Edge> edges){
-    adjacencyList.put(from, edges);
+    if (adjacencyList.containsKey(from)) {
+      Edge uniqEdge = null;
+      //Finds the unique edges in edges and adds them if they are unique
+      for (Edge e : getAdj(from)) {
+        for (Edge e2 : edges) {
+          uniqEdge = e2;
+          if (e.equals(e2)) {
+            uniqEdge = null;
+            break;
+          }
+        }
+
+        if (uniqEdge != null)
+          getAdj(from).add(uniqEdge);
+      }
+    }
   }
-  
+
+
   public void addArc(String from, String to) {
-    Point fromV = getVertex(from);
-    Point toV = getVertex(to);
-    
-    addArc(fromV, toV, 1);
+    addArc(new Vertex(from), new Vertex(to));
   }
-  
+
   public void addArc(Point from, Point to) {
-    //System.out.println("CALLED FOR " + from.getName() + " : " + to.getName() + " " + size());
-    if (!adjacencyList.containsKey(from))
-      addStancePoint(from.getName());
-    addArc(from, to, 1);
+    Arc arc = (Arc) getArcIfExists(from, to);
+    if (arc != null) {
+      arc.incrementValue();
+    }
+    else {//Arc doesn't already exist
+      //Check if source Point exists
+      if (adjacencyList.containsKey(from))
+        getAdj(from).add(new Arc(from, to));
+      else {//Totally new entry added
+        List<Edge> edges = new ArrayList<>();
+        edges.add(new Arc(from, to));
+        adjacencyList.put(from, edges);
+      }
+    }
   }
   
   public void addArc(String from, String to, int weight) {
-    Point fromP = getVertex(from);
-    Point toP = getVertex(to);
-    
-    addArc(fromP, toP, weight);
+    addArc(new Vertex(from), new Vertex(to), weight);
   }
   
   public void addArc(Point from, Point to, int weight) {
-    from = addOrGet(from);
-    to = addOrGet(to);
-    Arc a = (Arc) getArcIfExists(from, to);
-    if(a == null) {
-      getAdj(from).add(new Arc(from, to, weight));
-    } else {
-      a.incrementValue();
+    Arc arc = (Arc) getArcIfExists(from, to);
+    if (arc != null) {//increase weight as arc exists
+      arc.setWeight(weight);
+    }
+    else {//Arc doesn't exist
+      //Check if source Point exists
+      if (adjacencyList.containsKey(from))
+        getAdj(from).add(new Arc(from, to, weight));
+
+      else {//Totally new entry added
+        List<Edge> edges = new ArrayList<>();
+        edges.add(new Arc(from, to));
+        adjacencyList.put(from, edges);
+      }
     }
   }
 
@@ -172,7 +160,7 @@ public class Graph implements Iterable<Point>{
       throw new IllegalStateException("Graph is empty");
     
     List<Point> keys = new ArrayList<Point>(adjacencyList.keySet());
-    return keys.get(random.nextInt(keys.size()));
+    return keys.get(new Random().nextInt(keys.size()));
   }
 
   public int size(){return adjacencyList.size();}
