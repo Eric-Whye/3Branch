@@ -24,4 +24,12 @@ public class HashtagLabel extends Vertex {
     private void calculateArgument() {
 
     }
+
+    public String getArgument() {
+        return argument;
+    }
+
+    public void setArgument(String argument) {
+        this.argument = argument;
+    }
 }

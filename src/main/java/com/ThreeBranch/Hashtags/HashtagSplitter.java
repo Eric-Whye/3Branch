@@ -11,7 +11,7 @@ import java.util.*;
 
 public class HashtagSplitter {
     private List<String> hashtags;
-    private Graph splitTags = new Graph();
+    private final Graph splitTags = new Graph();
     private Graph lowerTags = new Graph();
     private List<Point> lowercaseHashtags = new ArrayList<>();
     private List<Point> camelHashtags = new ArrayList<>();
@@ -21,6 +21,8 @@ public class HashtagSplitter {
         this.hashtags = hashtags;
         splitHashtags();
     }
+
+    public Graph getSplitTags(){ return splitTags; }
 
     private void splitHashtags(){
         for (String hashtag : hashtags) {
