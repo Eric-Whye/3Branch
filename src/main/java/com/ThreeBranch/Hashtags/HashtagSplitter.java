@@ -26,6 +26,7 @@ public class HashtagSplitter {
         for (String hashtag : hashtags) {
             boolean isCamel = false;
 
+            //Check to see if the hashtag contains *any* uppercase characters
             for (int i = 0; i < hashtag.length(); i++) {
                 if (Character.isUpperCase(hashtag.charAt(i))) {
                     isCamel = true;
