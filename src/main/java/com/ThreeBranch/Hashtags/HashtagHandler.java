@@ -10,6 +10,9 @@ package com.ThreeBranch.Hashtags;
 public static HashtagHandler {
   //Input is the graph being built into, any old contents are removed
   public static void buildHashtagGraph(Graph graph) {
+    graph.clear();
+    
+    
   }
   
   //Input is assumed to be whatever buildHashtagGraph outputs
