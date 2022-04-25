@@ -146,7 +146,12 @@ public class GraphShell {
                   break;
 
                 case "build hashtag graph":
-                  
+                  graph = HashtagHandler.build(graph);
+                  break;
+
+                case "sum hashtag graph":
+                  HashtagHandler.summerize(graph);
+                  break;
 
                 default:
                     System.out.println("Unrecognised");
