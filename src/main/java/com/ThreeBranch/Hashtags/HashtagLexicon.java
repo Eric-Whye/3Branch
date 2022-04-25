@@ -27,7 +27,10 @@ public class HashtagLexicon extends Graph{
                 word = tokens.nextToken();
 
                 String label = tokens.nextToken().replace("[", "").replace("]", "");
-                addArc(new HashtagLabel(word), new HashtagLabel(label));
+                
+                StringTokenizer labels = new StringTokenizer(label, ",");
+                while(labels.hasMoreTokens())
+                  addArc(new HashtagLabel(word), new HashtagLabel(labels.nextToken()));
             }
         }
     }
