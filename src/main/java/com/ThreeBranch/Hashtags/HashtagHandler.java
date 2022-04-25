@@ -22,8 +22,11 @@ public class HashtagHandler {
   }
   
   //Input is assumed to be whatever buildHashtagGraph outputs
-  public static void summerize(Graph graph) {
-    System.out.println(graph.size());
+  public static void rawPrint(Graph graph) {
     HashtagSummarizer.rawPrintGraph(graph);
+  }
+  
+  public static void labelCount(Graph g) {
+    HashtagSummarizer.labelCount(g);
   }
 }

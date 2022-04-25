@@ -149,8 +149,12 @@ public class GraphShell {
                   graph = HashtagHandler.build(graph);
                   break;
 
-                case "sum hashtag graph":
-                  HashtagHandler.summerize(graph);
+                case "print hashtag graph":
+                  HashtagHandler.rawPrint(graph);
+                  break;
+
+                case "count labels":
+                  HashtagHandler.labelCount(graph);
                   break;
 
                 default:
