@@ -4,6 +4,7 @@ import com.ThreeBranch.Graph.Edge;
 import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
 import com.ThreeBranch.Twitter.*;
+import com.ThreeBranch.Hashtags.*;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -143,6 +144,9 @@ public class GraphShell {
                 case "compare algorithms":
                   GraphQueries.algCompHandler(graph);
                   break;
+
+                case "build hashtag graph":
+                  
 
                 default:
                     System.out.println("Unrecognised");

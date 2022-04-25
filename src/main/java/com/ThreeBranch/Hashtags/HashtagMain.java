@@ -14,13 +14,14 @@ public class HashtagMain {
     private List<String> hashtags = new ArrayList<>();
     private Graph lexicon = new HashtagLexicon(Configuration.getValueFor("hashtags.lexiconFile"));
 
-    public void run(String tweetsFilename){
-        FileEntryIO.streamLineByLine(tweetsFilename, new collectHashtags());
+    public Graph run(String tweetsFilename){
+        FileEntryIO.streamLineByLine(tweetsFilename, new collectHashtags()); //Note: after this point "hashtags" is filled
         HashtagLexicon lexicon = new HashtagLexicon(Configuration.getValueFor("hashtags.lexiconFile"));
 
         HashtagSplitter splitter = new HashtagSplitter(hashtags);
         Graph splitTags = splitter.getSplitTags();
-
+        
+        return splitTags;
     }
 
     private class collectHashtags implements Callable {
