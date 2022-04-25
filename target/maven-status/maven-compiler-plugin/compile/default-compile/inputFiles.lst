@@ -1,12 +1,18 @@
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Twitter\TweetData.java
+D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Hashtags\HashtagLexicon.java
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Twitter\Configuration.java
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Twitter\StancePoint.java
+D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Hashtags\HashtagLabel.java
+D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Hashtags\HashtagMain.java
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Twitter\StanceProcessing.java
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Graph\Point.java
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Twitter\IncorrectGraphFileException.java
+D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Hashtags\HashtagSplitter.java
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Graph\Arc.java
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Main.java
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Twitter\GraphRTFileProcessor.java
+D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Hashtags\HashtagSummarizer.java
+D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Twitter\GraphQueries.java
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\FileEntryIO.java
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Graph\Vertex.java
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Twitter\Twitterer.java
@@ -14,3 +20,4 @@ D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\m
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Graph\Edge.java
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\GraphShell.java
 D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Graph\Graph.java
+D:\universityWork\yearThree\Software Engineering Project 3 - 30880\3Branch\src\main\java\com\ThreeBranch\Hashtags\HashtagHandler.java
