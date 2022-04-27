@@ -5,7 +5,8 @@ import com.ThreeBranch.Graph.Vertex;
 import java.util.List;
 
 public class HashtagLabel extends Vertex {
-    private String argument;
+    //Hashtag arguments will be seen as the sum of their assoc labels, which are not accessible from here.
+    //private String argument;
 
     protected HashtagLabel(String name){
         super(name);
@@ -21,7 +22,7 @@ public class HashtagLabel extends Vertex {
         calculateArgument();
     }*/
 
-    private void calculateArgument() {
+    /*private void calculateArgument() {
 
     }
 
@@ -31,5 +32,5 @@ public class HashtagLabel extends Vertex {
 
     public void setArgument(String argument) {
         this.argument = argument;
-    }
+    }*/
 }
