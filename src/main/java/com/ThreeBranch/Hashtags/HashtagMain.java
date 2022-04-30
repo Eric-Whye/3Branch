@@ -11,12 +11,13 @@ import java.util.StringTokenizer;
 import java.lang.String;
 
 public class HashtagMain {
+    private Configuration config = Configuration.getInstance(Configuration.ConfigFilename);
     private List<String> hashtags = new ArrayList<>();
-    private Graph lexicon = new HashtagLexicon(Configuration.getValueFor("hashtags.lexiconFile"));
+    private Graph lexicon = new HashtagLexicon(config.getValueFor("hashtags.lexiconFile"));
 
     public Graph run(String tweetsFilename){
         FileEntryIO.streamLineByLine(tweetsFilename, new collectHashtags()); //Note: after this point "hashtags" is filled
-        HashtagLexicon lexicon = new HashtagLexicon(Configuration.getValueFor("hashtags.lexiconFile"));
+        HashtagLexicon lexicon = new HashtagLexicon(config.getValueFor("hashtags.lexiconFile"));
         
         HashtagSplitter splitter = new HashtagSplitter(hashtags);
         Graph splitTags = splitter.getSplitTags();

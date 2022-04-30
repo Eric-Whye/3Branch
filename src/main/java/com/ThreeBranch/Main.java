@@ -24,26 +24,19 @@ public class Main {
                     break;
                 case "-g":
                 case "-G":
+                    Configuration config = Configuration.getInstance(Configuration.ConfigFilename);
                     try {
-                        Configuration.initialise(Configuration.ConfigFilename);//read from config file
-                        TweetData.initialise();//Read TweetIDs and userhandles for duplication checking
+                        TweetData.initialise(Configuration.ConfigFilename);//Read TweetIDs and userhandles for duplication checking
                         System.out.println(TweetData.count);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    System.out.println(Configuration.getConfigInfo());
+                    System.out.println(config.getConfigInfo());
 
                     Twitterer twitterer = new Twitterer();
                     twitterer.streamStart();
                     break;
 
-                case "-h":
-                    try {
-                        Configuration.initialise(Configuration.ConfigFilename);
-                    } catch (FileNotFoundException e) {e.printStackTrace();}
-                    HashtagMain hashtagMain = new HashtagMain();
-                    hashtagMain.run(Configuration.getValueFor("graph.tweetsInput"));
-                    break;
                 default:
                     defaultHandle();
             }

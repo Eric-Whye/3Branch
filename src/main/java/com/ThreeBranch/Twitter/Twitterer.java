@@ -10,6 +10,7 @@ import java.util.Vector;
 
 public class Twitterer {
     private TwitterStream twitterStream;
+    private Configuration config = Configuration.getInstance(Configuration.ConfigFilename);
 
     public Twitterer(){
     }
@@ -38,7 +39,7 @@ public class Twitterer {
                 tweets.add(status);
 
                 //After vector buffer is filled, write tweet and account data to file according to correct config format
-                if (counter % Integer.parseInt(Configuration.getValueFor("tweet.searchBuffer")) == 0){
+                if (counter % Integer.parseInt(config.getValueFor("tweet.searchBuffer")) == 0){
                     writeDataToFile(tweets);
                     //Clearing Buffer
                     tweets.clear();
@@ -73,10 +74,10 @@ public class Twitterer {
         FilterQuery query = new FilterQuery();
 
         //To convert a string seperated by white space to be readable by api
-        String track = Configuration.getValueFor("tweet.searchTerms").replace(" ", ",");
+        String track = config.getValueFor("tweet.searchTerms").replace(" ", ",");
 
         query.track(track);
-        query.language(Configuration.getValueFor("tweet.languages"));
+        query.language(config.getValueFor("tweet.languages"));
         twitterStream.filter(query);
     }
 
@@ -137,15 +138,15 @@ public class Twitterer {
      * @param tweets List of twiter4j.Status
      */
     private synchronized void writeDataToFile(List<Status> tweets){
-        char delim = Configuration.getValueFor("format.delim").charAt(0);
-        char newLineDelim = Configuration.getValueFor("format.newLineDelim").charAt(0);
+        char delim = config.getValueFor("format.delim").charAt(0);
+        char newLineDelim = config.getValueFor("format.newLineDelim").charAt(0);
         FileEntryIO.appendLineByLine(convertTweetsToListOfStringLists(tweets),
                 delim, newLineDelim,
-                Configuration.getValueFor("tweet.vaxFile")
+                config.getValueFor("tweet.vaxFile")
         );
         FileEntryIO.appendLineByLine(convertAccountsToListOfStringList(tweets),
                 delim, newLineDelim,
-                Configuration.getValueFor("tweet.accountsFile")
+                config.getValueFor("tweet.accountsFile")
         );
     }
 

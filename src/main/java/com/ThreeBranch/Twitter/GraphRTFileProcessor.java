@@ -48,9 +48,10 @@ public class GraphRTFileProcessor {
     }
 
     public synchronized void writeGraphToFile(Graph graph) {
-        String outputFile = Configuration.getValueFor("graph.output");
-        String delim = Configuration.getValueFor("format.delim");
-        String newline = Configuration.getValueFor("format.newLineDelim");
+        Configuration config = Configuration.getInstance(Configuration.ConfigFilename);
+        String outputFile = config.getValueFor("graph.output");
+        String delim = config.getValueFor("format.delim");
+        String newline = config.getValueFor("format.newLineDelim");
 
         List<List<String>> entries = new ArrayList<>();
         for (Point p : graph) {
@@ -138,7 +139,8 @@ public class GraphRTFileProcessor {
     public synchronized void populateFromGraphFile(){
         graph.clear();
         try {
-            FileEntryIO.streamLineByLine(Configuration.getValueFor("graph.output"), new readRetweetsFromGraphFile());
+            Configuration config = Configuration.getInstance(Configuration.ConfigFilename);
+            FileEntryIO.streamLineByLine(config.getValueFor("graph.output"), new readRetweetsFromGraphFile());
         }catch(IncorrectGraphFileException e){
             e.printStackTrace();
         }

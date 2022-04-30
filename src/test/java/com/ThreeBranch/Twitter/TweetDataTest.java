@@ -7,9 +7,8 @@ import org.junit.jupiter.api.Test;
 class TweetDataTest {
 
     @Test
-    void testInitialise() throws Exception {
-        Configuration.initialise("testConfiguration.properties");
-        TweetData.initialise();
+    void testInitialise(){
+        TweetData.initialise("testConfiguration.properties");
 
 
         assertTrue(TweetData.checkDupAccount("@" + "Testy"), "Testy is a duplicate Account");

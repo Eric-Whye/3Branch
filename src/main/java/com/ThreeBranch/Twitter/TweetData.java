@@ -18,11 +18,13 @@ public abstract class TweetData {
 
     /**
      * Reads TweetIDs and userhandles from output files for duplication checking procedures
+     * @param filename of output files
      * @throws NumberFormatException upon unexpected type parsing
      */
-    public static void initialise() throws NumberFormatException {
-        FileEntryIO.streamLineByLine(Configuration.getValueFor("tweet.vaxFile"), new readTweetIDs());
-        FileEntryIO.streamLineByLine(Configuration.getValueFor("tweet.accountsFile"), new readUserhandles());
+    public static void initialise(String filename) throws NumberFormatException {
+        Configuration config = Configuration.getInstance(filename);
+        FileEntryIO.streamLineByLine(config.getValueFor("tweet.vaxFile"), new readTweetIDs());
+        FileEntryIO.streamLineByLine(config.getValueFor("tweet.accountsFile"), new readUserhandles());
     }
 
     /**
