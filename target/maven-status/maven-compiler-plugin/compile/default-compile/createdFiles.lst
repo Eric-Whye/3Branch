@@ -28,7 +28,6 @@ com\ThreeBranch\Hashtags\HashtagSplitter.class
 com\ThreeBranch\Hashtags\HashtagLexicon$1.class
 com\ThreeBranch\Twitter\IncorrectGraphFileException.class
 com\ThreeBranch\Twitter\Twitterer.class
-com\ThreeBranch\Hashtags\HashtagSummarizer$Tri.class
 com\ThreeBranch\Tri.class
 com\ThreeBranch\Hashtags\HashtagMain$collectHashtags.class
 com\ThreeBranch\Twitter\Configuration.class
