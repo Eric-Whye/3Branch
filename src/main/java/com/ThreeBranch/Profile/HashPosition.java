@@ -23,21 +23,22 @@ public class HashPosition implements Position, Point {
   }
   
   public void add(Point p) {
-    switch(p.getName()) {
+    add(p.getName());
+  }
+  
+  public void add(String s) {
+    switch(s) {
       case "rejecting":
         positiveLean = Tri.FALSE;
         break;
-        
       case "accepting":
         positiveLean = Tri.TRUE;
         break;
-        
       case "negation":
         inverted = true;
         break;
-        
       default:
-        labels.add(p.getName());
+        labels.add(s);
     }
   }
   
@@ -74,6 +75,14 @@ public class HashPosition implements Position, Point {
     return Tri.NONE;
   }
  
+  public void invert() {
+    inverted = !inverted;
+  }
+  
+  public void setLean(Tri lean) {
+    positiveLean = lean;
+  }
+ 
   public String toString() {
     StringBuilder sb = new StringBuilder();
     switch(this.rectify()) {
@@ -102,5 +111,34 @@ public class HashPosition implements Position, Point {
   
   public int hashCode() {
     return Objects.hash(hashtag);
+  }
+  
+  //This is JUST for debugging purposes
+  public String debugString() {
+    String output = hashtag + ": \n";
+    
+    if(inverted) {
+      output += "\tinverted == true\n";
+    } else {
+      output += "\tinverted == false\n";
+    }
+    
+    switch(positiveLean) {
+      case TRUE:
+        output += "\tpositiveLean == TRUE\n";
+        break;
+      case FALSE:
+        output += "\tpositiveLean == FALSE\n";
+        break;
+      case NONE:
+        output += "\tpositiveLean == NONE\n";
+        break;
+    }
+    
+    output += "\tLabels: \n";
+    for(String s : labels)
+      output += "\t\t" + s + "\n";
+    
+    return output;
   }
 }

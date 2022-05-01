@@ -19,6 +19,10 @@ public class GraphShell {
     }
 
     public void run() {
+        //Clear Screen
+        System.out.print("\033[H\033[2J"); 
+        System.out.flush(); 
+      
         boolean run = true;
         Scanner in = new Scanner(System.in);
         List<Graph> listOfGraphs = new ArrayList<>();
@@ -33,7 +37,7 @@ public class GraphShell {
                 Configuration.initialise(Configuration.ConfigFilename);
             } catch (FileNotFoundException e) {e.printStackTrace();}
 
-            System.out.print("GraphShell> ");
+            System.out.print("\nGraphShell> ");
             String input = in.nextLine();
 
             switch (input.toLowerCase().trim()) {
@@ -164,6 +168,16 @@ public class GraphShell {
 
                 case "print profile graph":
                   ProfileHandler.handleRawPrint(graph);
+                  break;
+                  
+                case "analyse profile graph":
+                case "analyze profile graph":
+                  ProfileHandler.handleAnalysis(in, graph);
+                  break;
+                  
+                case "clear":
+                  System.out.print("\033[H\033[2J");  
+                  System.out.flush();
                   break;
                   
                 default:

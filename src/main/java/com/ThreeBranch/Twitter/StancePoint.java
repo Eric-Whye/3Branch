@@ -39,4 +39,9 @@ public class StancePoint extends Vertex {
         this.stance = MAX_STANCE + 1;
       }
     }
+    
+    //This is ONLY for debugging
+    public String toString() {
+      return this.getName() + ": " + stance;
+    }
 }

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.Scanner; //This is ONLY used for the debug toString function
 
 import com.ThreeBranch.Graph.*;
 import com.ThreeBranch.Twitter.StancePoint;
@@ -53,11 +54,19 @@ public class UserPosition implements Position, Point{
     
     UserPosition up = (UserPosition) p;
     
-    for(HashPosition hp : up.hashtags)
-      if(!this.hashtags.contains(hp))
+    for(HashPosition hp : up.hashtags) {
+      boolean found = false;
+      for(HashPosition ht : this.hashtags) {
+        if(ht.contains(hp)) {
+          found = true;
+          break;
+        }
+      }
+      if(!found)
         return false;
+    }
       
-      return true;
+    return true;
   }
   
   public Iterator<HashPosition> getHashtags() {
@@ -75,5 +84,26 @@ public class UserPosition implements Position, Point{
   
   public int hashCode() {
     return Objects.hash(username);
+  }
+  
+  //This is JUST for debugging
+  public String toString() {
+    String output = username + ":\n"; 
+    
+    for(HashPosition hp : hashtags) {
+      String hpString = hp.debugString();
+      
+      Scanner scn = new Scanner(hpString);
+      while(scn.hasNextLine()) {
+        output += "\t";
+        output += scn.nextLine();
+        output += "\n";
+      }
+      scn.close();
+    }
+    
+    output += "\tStance: \n\t\t" + stance.toString();
+      
+    return output;
   }
 }
