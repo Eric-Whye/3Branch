@@ -10,7 +10,7 @@ import java.util.Vector;
 
 public class Twitterer {
     private TwitterStream twitterStream;
-    private Configuration config = Configuration.getInstance(Configuration.ConfigFilename);
+    private final Configuration config = Configuration.getInstance();
 
     public Twitterer(){
     }

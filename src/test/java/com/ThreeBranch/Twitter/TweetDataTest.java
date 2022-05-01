@@ -8,8 +8,7 @@ class TweetDataTest {
 
     @Test
     void testInitialise(){
-        TweetData.initialise("testConfiguration.properties");
-
+        TweetData.initialise();
 
         assertTrue(TweetData.checkDupAccount("@" + "Testy"), "Testy is a duplicate Account");
         assertTrue(TweetData.checkDupAccount("@" + "Zesty"), "Zesty is a duplicate Account");

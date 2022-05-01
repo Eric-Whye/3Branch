@@ -25,9 +25,8 @@ public class HashtagLexicon extends Graph{
             if (tokens.hasMoreTokens()) {
                 tokens.nextToken();//Skipping numbered column
                 word = tokens.nextToken();
-
                 String label = tokens.nextToken().replace("[", "").replace("]", "");
-                
+                //System.out.println(label);
                 StringTokenizer labels = new StringTokenizer(label, ",");
                 while(labels.hasMoreTokens())
                   addArc(new HashtagLabel(word), new HashtagLabel(labels.nextToken()));

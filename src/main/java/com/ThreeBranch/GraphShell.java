@@ -27,7 +27,7 @@ public class GraphShell {
         Scanner in = new Scanner(System.in);
         List<Graph> listOfGraphs = new ArrayList<>();
         String stanceFile = "";
-        Configuration config = Configuration.getInstance(Configuration.ConfigFilename);
+        Configuration config = Configuration.getInstance();
 
 
         while (run) {

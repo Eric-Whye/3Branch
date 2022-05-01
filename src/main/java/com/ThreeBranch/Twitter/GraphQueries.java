@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 public abstract class GraphQueries {
     public static void algCompHandler(Graph graph) {
-        Configuration config = Configuration.getInstance(Configuration.ConfigFilename);
+        Configuration config = Configuration.getInstance();
         final int comparisonCount = Integer.parseInt(config.getValueFor("comparison.count"));
         String stanceFile = "";
         List<Graph> listOfGraphs = new ArrayList<>();

@@ -14,8 +14,9 @@ import java.lang.String;
 import java.util.concurrent.locks.*;
 
 public class HashtagMain{
+    private Configuration config = Configuration.getInstance();
     private LockedObject<List<String>> hashtags = new LockedObject(new ArrayList<>(), new ReentrantLock());
-    private Graph lexicon = new HashtagLexicon(Configuration.getValueFor("hashtags.lexiconFile"));
+    private Graph lexicon = new HashtagLexicon(config.getValueFor("hashtags.lexiconFile"));
 
     public Graph run(String tweetsFilename){
         List<String> hts = hashtags.get();
@@ -71,7 +72,7 @@ public class HashtagMain{
         hashtags.getLock().lock();
 
         FileEntryIO.streamLineByLine(filename, new collectHashtags()); //Note: after this point "hashtags" is filled
-        HashtagLexicon lexicon = new HashtagLexicon(Configuration.getValueFor("hashtags.lexiconFile"));
+        HashtagLexicon lexicon = new HashtagLexicon(config.getValueFor("hashtags.lexiconFile"));
 
         HashtagSplitter splitter = new HashtagSplitter(hts);
         Graph splitTags = splitter.getSplitTags();

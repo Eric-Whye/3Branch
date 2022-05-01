@@ -14,7 +14,7 @@ public class HashtagHandler {
     graph.clear();
     System.out.println("Old graphs have been deleted");
 
-    Configuration config = Configuration.getInstance(Configuration.ConfigFilename);
+    Configuration config = Configuration.getInstance();
     graph = (new HashtagMain()).run(config.getValueFor("graph.tweetsInput"));
     
     System.out.println("Graph built");

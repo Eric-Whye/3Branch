@@ -14,6 +14,8 @@ import java.io.FileNotFoundException;
 public class Main {
 
     public static void main(String[] args) {
+        Configuration config = Configuration.getInstance(Configuration.ConfigFilename);
+
         if (args.length == 0) {
           defaultHandle();
         } else {
@@ -24,9 +26,8 @@ public class Main {
                     break;
                 case "-g":
                 case "-G":
-                    Configuration config = Configuration.getInstance(Configuration.ConfigFilename);
                     try {
-                        TweetData.initialise(Configuration.ConfigFilename);//Read TweetIDs and userhandles for duplication checking
+                        TweetData.initialise();//Read TweetIDs and userhandles for duplication checking
                         System.out.println(TweetData.count);
                     } catch (Exception e) {
                         e.printStackTrace();

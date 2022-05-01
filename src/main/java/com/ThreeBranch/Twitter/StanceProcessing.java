@@ -14,7 +14,7 @@ import java.io.FileNotFoundException;
 
 public class StanceProcessing {
     private final Graph graph;
-    private final Configuration config = Configuration.getInstance(Configuration.ConfigFilename);
+    private final Configuration config = Configuration.getInstance();
 
     private int LARGEST_WEIGHT_CALCULATED;
     private int SMALLEST_WEIGHT_CALCULATED;

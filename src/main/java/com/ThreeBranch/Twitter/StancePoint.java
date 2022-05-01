@@ -6,7 +6,7 @@ import com.ThreeBranch.Graph.Vertex;
 import java.util.Optional;
 
 public class StancePoint extends Vertex {
-    Configuration config = Configuration.getInstance(Configuration.ConfigFilename);
+    Configuration config = Configuration.getInstance();
     private final int MAX_STANCE = Integer.parseInt(config.getValueFor("stance.maxStance"));
     private final int MIN_STANCE = Integer.parseInt(config.getValueFor("stance.minStance"));
   
