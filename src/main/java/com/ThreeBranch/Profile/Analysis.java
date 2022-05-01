@@ -37,8 +37,6 @@ public class Analysis {
       }
     }
     
-    System.out.println(total + " " + matches + " " + data.size());
-    
     return ((double) matches) / total;
   }
   

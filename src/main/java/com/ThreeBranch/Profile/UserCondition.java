@@ -37,8 +37,6 @@ public class UserCondition implements Condition {
       while(st.hasMoreTokens())
         hp.add(st.nextToken());
       
-      System.out.println(hp.debugString());
-      
       //And now that the HashPosition is set up we add it to the UserPosition, giving us our final target for matches
       target.add(hp);
     }
