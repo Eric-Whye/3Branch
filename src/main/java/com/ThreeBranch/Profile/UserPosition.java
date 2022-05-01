@@ -3,21 +3,41 @@ package com.ThreeBranch.Profile;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Iterator;
+import java.util.Optional;
 
 import com.ThreeBranch.Graph.*;
+import com.ThreeBranch.Twitter.StancePoint;
 
 public class UserPosition implements Position, Point{
   private HashSet<HashPosition> hashtags = new HashSet();
   private String username;
+  private StancePoint stance; //We make use of a StancePoint to do the stance management stuff, the string it holds is a waste of space, ideally we'd refactor this so that a stance is a separate object which we can both hold an instance of
   
   public UserPosition(String username) {
-    this.username = username;  
+    this(username, new StancePoint(username));
+  }
+  
+  public UserPosition(String username, StancePoint stance) {
+    this.username = username;
+    this.stance = stance;
   }
   
   public Point create(String s) { return new UserPosition(s); }
   
   public String getName() {
     return username;
+  }
+  
+  public Optional<Integer> getStance() {
+    return stance.getStance();
+  }
+  
+  public void setStance(int stance) {
+    this.stance.setStance(stance);
+  }
+  
+  public void setStance(Optional<Integer> stance) {
+    this.stance.setStance(stance);
   }
   
   public void add(Point p) {

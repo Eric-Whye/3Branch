@@ -6,6 +6,7 @@ import java.util.Optional;
 
 //WE NEED TO GET RID OF THIS ASAP
 import java.lang.reflect.Constructor;
+import com.ThreeBranch.Twitter.StancePoint;
 
 public class ProfileMain {
   private Graph hashtagPositions = new Graph();
@@ -21,6 +22,12 @@ public class ProfileMain {
     
     for(Point p : usersToHashtags) {
       UserPosition up = new UserPosition(p.getName());
+      
+      if(p instanceof StancePoint) {
+        StancePoint sp = (StancePoint) p;
+        up.setStance(sp.getStance());
+      }
+      
       for(Edge e : usersToHashtags.getAdj(p)) {
         //This weird constructor nonsense is because its would be too much of a pain to make Graph generic, this should be removed ASAP
         Constructor c = null;
