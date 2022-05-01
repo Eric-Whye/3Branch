@@ -1,4 +1,6 @@
-package com.ThreeBranch.Profile;
+package com.ThreeBranch.Analysis;
+
+import com.ThreeBranch.Tri;
 
 public class ConditionFactory {
   public static Condition get(String cond) {

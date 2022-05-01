@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.Scanner; //This is ONLY used for the debug toString function
 
+import com.ThreeBranch.Tri;
 import com.ThreeBranch.Graph.*;
 import com.ThreeBranch.Twitter.StancePoint;
 

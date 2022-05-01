@@ -8,6 +8,7 @@ import com.ThreeBranch.Hashtags.HashtagHandler;
 import com.ThreeBranch.Twitter.GraphRTFileProcessor;
 import com.ThreeBranch.Twitter.Configuration;
 import com.ThreeBranch.Twitter.StanceProcessing;
+import com.ThreeBranch.Analysis.Analysis;
 
 public class ProfileHandler{
   public static Graph handleBuild() {

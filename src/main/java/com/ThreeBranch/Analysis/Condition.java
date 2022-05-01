@@ -1,5 +1,6 @@
-package com.ThreeBranch.Profile;
+package com.ThreeBranch.Analysis;
 
+import com.ThreeBranch.Tri;
 import com.ThreeBranch.Graph.Point;
 
 public interface Condition { 

@@ -1,7 +1,9 @@
-package com.ThreeBranch.Profile;
+package com.ThreeBranch.Analysis;
 
+import com.ThreeBranch.Profile.*;
 import com.ThreeBranch.Graph.*;
 import com.ThreeBranch.Id;
+import com.ThreeBranch.Tri;
 
 import java.util.StringTokenizer;
 import java.util.Scanner; //This is JUST used for debugging

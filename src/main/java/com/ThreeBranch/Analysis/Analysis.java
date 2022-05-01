@@ -1,7 +1,8 @@
-package com.ThreeBranch.Profile;
+package com.ThreeBranch.Analysis;
 
 import java.util.StringTokenizer;
 
+import com.ThreeBranch.Tri;
 import com.ThreeBranch.Graph.*;
 
 public class Analysis {

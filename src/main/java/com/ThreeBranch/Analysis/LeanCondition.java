@@ -1,8 +1,10 @@
-package com.ThreeBranch.Profile;
+package com.ThreeBranch.Analysis;
 
 import java.util.Optional;
 
+import com.ThreeBranch.Tri;
 import com.ThreeBranch.Graph.*;
+import com.ThreeBranch.Profile.UserPosition;
 
 public class LeanCondition implements Condition {
   private Tri positiveLean = Tri.NONE;

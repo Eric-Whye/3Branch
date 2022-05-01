@@ -3,6 +3,7 @@ package com.ThreeBranch.Profile;
 import java.util.HashSet;
 import java.util.Objects;
 
+import com.ThreeBranch.Tri;
 import com.ThreeBranch.Graph.*;
 
 public class HashPosition implements Position, Point {
