@@ -2,13 +2,13 @@ package com.ThreeBranch.Profile;
 
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.concurrent.locks.*;
 
 import com.ThreeBranch.Graph.*;
 import com.ThreeBranch.Hashtags.HashtagMain;
-import com.ThreeBranch.Twitter.GraphRTFileProcessor;
-import com.ThreeBranch.Twitter.Configuration;
-import com.ThreeBranch.Twitter.StanceProcessing;
+import com.ThreeBranch.Twitter.*;
 import com.ThreeBranch.Analysis.Analysis;
+import com.ThreeBranch.LockedObject;
 
 public class ProfileHandler{
   public static Graph handleBuild() {
@@ -21,21 +21,26 @@ public class ProfileHandler{
     System.out.println("Old Graphs Dropped");
     
     //Build the usersToHashtags graph and assign it stances
-    GraphRTFileProcessor fp = new GraphRTFileProcessor(usersToHashtags);
-    fp.populateUserToHashtagGraph(Configuration.getValueFor("graph.tweetsInput"));
+    RTProcessorConcurrent fp = new RTProcessorConcurrent(usersToHashtags);
+    Lock uthgLock = fp.populateUserToHashtagGraphConcerent(Configuration.getValueFor("graph.tweetsInput"));
+    
+    //Build the hashtag to label graph
+    LockedObject<Graph> hastagsToLabelsLocked = (new HashtagMain()).runConcurrent(Configuration.getValueFor("graph.tweetsInput"));
+    System.out.println("Hashtag to labels graph built");
+    
+    //Assign stances to the usersToHashtags graph
+    uthgLock.lock();
     sp.initialiseStances(stanceFile);
     for(int i = 0; i < Integer.parseInt(Configuration.getValueFor("stance.iterations")); i++)
       if(!sp.calcStances())
         break;
     System.out.println("User to hashtags graph built");
     
-    //Build the hashtag to label graph
-    hastagsToLabels = (new HashtagMain()).run(Configuration.getValueFor("graph.tweetsInput"));
-    System.out.println("Hashtag to labels graph built");
-    
     //Combine them and convert everything to positions
+    hastagsToLabels = hastagsToLabelsLocked.get();
     ProfileMain pm = new ProfileMain(hastagsToLabels, usersToHashtags);
     System.out.println("Final graph built");
+    
     return pm.getUserPositions();
   }
   
