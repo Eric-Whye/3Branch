@@ -73,7 +73,8 @@ public class UserPosition implements Position, Point{
   public Iterator<HashPosition> getHashtags() {
     return hashtags.iterator();
   }
-  
+
+  @Override
   public boolean equals(Object o) {
     if(!(o instanceof UserPosition))
       return false;
@@ -82,7 +83,8 @@ public class UserPosition implements Position, Point{
     
     return up.username.equals(this.username);
   }
-  
+
+  @Override
   public int hashCode() {
     return Objects.hash(username);
   }

@@ -18,10 +18,6 @@ public class Configuration {
     public String getValueFor(String configName) throws NullPointerException{
         return properties.getProperty(configName);
     }
-    //How many tweets to hold in memory before writing
-
-    //Formatting Config
-
 
     /**
      * Returns String information on Config values for human reading
@@ -46,22 +42,18 @@ public class Configuration {
 
         return configuration;
     }
-    private Configuration(String filename){
-        readConfig(filename);
+
+    public synchronized static Configuration getInstance(){
+        if (configuration != null) return configuration;
+        else return null;
     }
 
+
+    private Configuration(String filename){readConfig(filename);}
     /**
      * Reads from Configuration file and changes fields based on its values
      * @param filename Name of configuration File
      */
-    /*public static void initialise(String filename) throws FileNotFoundException {
-        readConfig(filename);
-
-        new File(getValueFor("tweet.vaxDir")).mkdirs();
-        new File(getValueFor("graph.inputDir")).mkdirs();
-    }
-*/
-    //Read from Configuration file
     private static void readConfig(String filename){
         try {
             properties.load(new FileReader(filename));
