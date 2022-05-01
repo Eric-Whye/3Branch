@@ -12,26 +12,27 @@ import com.ThreeBranch.LockedObject;
 
 public class ProfileHandler{
   public static Graph handleBuild() {
+    Configuration config = Configuration.getInstance();
     Graph usersToHashtags = new Graph();
     Graph hastagsToLabels = new Graph();
     
-    String stanceFile = Configuration.getValueFor("stance.hashtags");
+    String stanceFile = config.getValueFor("stance.hashtags");
     StanceProcessing sp = new StanceProcessing(usersToHashtags);
     
     System.out.println("Old Graphs Dropped");
     
     //Build the usersToHashtags graph and assign it stances
     RTProcessorConcurrent fp = new RTProcessorConcurrent(usersToHashtags);
-    Lock uthgLock = fp.populateUserToHashtagGraphConcerent(Configuration.getValueFor("graph.tweetsInput"));
+    Lock uthgLock = fp.populateUserToHashtagGraphConcurrent(config.getValueFor("graph.tweetsInput"));
     
     //Build the hashtag to label graph
-    LockedObject<Graph> hastagsToLabelsLocked = (new HashtagMain()).runConcurrent(Configuration.getValueFor("graph.tweetsInput"));
+    LockedObject<Graph> hastagsToLabelsLocked = (new HashtagMain()).runConcurrent(config.getValueFor("graph.tweetsInput"));
     System.out.println("Hashtag to labels graph built");
     
     //Assign stances to the usersToHashtags graph
     uthgLock.lock();
     sp.initialiseStances(stanceFile);
-    for(int i = 0; i < Integer.parseInt(Configuration.getValueFor("stance.iterations")); i++)
+    for(int i = 0; i < Integer.parseInt(config.getValueFor("stance.iterations")); i++)
       if(!sp.calcStances())
         break;
     System.out.println("User to hashtags graph built");

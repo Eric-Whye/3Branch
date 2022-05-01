@@ -27,15 +27,13 @@ public class GraphShell {
         Scanner in = new Scanner(System.in);
         List<Graph> listOfGraphs = new ArrayList<>();
         String stanceFile = "";
+        Configuration config = Configuration.getInstance();
 
 
         while (run) {
             GraphRTFileProcessor fp = new GraphRTFileProcessor(graph);
             StanceProcessing sp = new StanceProcessing(graph);
 
-            try {
-                Configuration.initialise(Configuration.ConfigFilename);
-            } catch (FileNotFoundException e) {e.printStackTrace();}
 
             System.out.print("\nGraphShell> ");
             String input = in.nextLine();
@@ -46,8 +44,8 @@ public class GraphShell {
                       System.out.println("Old Graph Dropped");
                     System.out.println("Building Retweet Graph");
                     graph.clear();
-                    fp.populateRetweetGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
-                    stanceFile = Configuration.getValueFor("stance.influentials");
+                    fp.populateRetweetGraphFromFile(config.getValueFor("graph.tweetsInput"));
+                    stanceFile = config.getValueFor("stance.influentials");
                     System.out.println("Retweet Graph Built");
                     break;
                     
@@ -56,8 +54,8 @@ public class GraphShell {
                       System.out.println("Old Graph Dropped");
                     System.out.println("Building Retweeted Graph");
                     graph.clear();
-                    fp.populateRetweetedGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
-                    stanceFile = Configuration.getValueFor("stance.influentials");
+                    fp.populateRetweetedGraphFromFile(config.getValueFor("graph.tweetsInput"));
+                    stanceFile = config.getValueFor("stance.influentials");
                     System.out.println("Retweeted Graph Built");
                     break;
 
@@ -67,8 +65,8 @@ public class GraphShell {
                         System.out.println("Old Graph Dropped");
                     System.out.println("Building user to hashtag Graph");
                     graph.clear();
-                    fp.populateUserToHashtagGraph(Configuration.getValueFor("graph.tweetsInput"));
-                    stanceFile = Configuration.getValueFor("stance.hashtags");
+                    fp.populateUserToHashtagGraph(config.getValueFor("graph.tweetsInput"));
+                    stanceFile = config.getValueFor("stance.hashtags");
                     System.out.println("User to hashtag graph built");
                     break;
 
@@ -77,8 +75,8 @@ public class GraphShell {
                         System.out.println("Old Graph Dropped");
                     System.out.println("Building hashtag to user Graph");
                     graph.clear();
-                    fp.populateHashtagToUserGraph(Configuration.getValueFor("graph.tweetsInput"));
-                    stanceFile = Configuration.getValueFor("stance.hashtags");
+                    fp.populateHashtagToUserGraph(config.getValueFor("graph.tweetsInput"));
+                    stanceFile = config.getValueFor("stance.hashtags");
                     System.out.println("hashtag to user graph built");
                     break;
 
@@ -129,7 +127,7 @@ public class GraphShell {
                         System.out.println("No Graph built");
                     } else {
                         sp.initialiseStances(stanceFile);
-                        for (int i = 0; i < Integer.parseInt(Configuration.getValueFor("stance.iterations")); i++){
+                        for (int i = 0; i < Integer.parseInt(config.getValueFor("stance.iterations")); i++){
                             if (!sp.calcStances())
                                 break;
                         }

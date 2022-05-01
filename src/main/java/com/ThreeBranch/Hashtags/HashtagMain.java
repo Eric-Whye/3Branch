@@ -14,15 +14,16 @@ import java.lang.String;
 import java.util.concurrent.locks.*;
 
 public class HashtagMain{
+    private Configuration config = Configuration.getInstance();
     private LockedObject<List<String>> hashtags = new LockedObject(new ArrayList<>(), new ReentrantLock());
-    private Graph lexicon = new HashtagLexicon(Configuration.getValueFor("hashtags.lexiconFile"));
+    private Graph lexicon = new HashtagLexicon(config.getValueFor("hashtags.lexiconFile"));
 
     public Graph run(String tweetsFilename){
         List<String> hts = hashtags.get();
         hashtags.getLock().lock();
-        
+
         FileEntryIO.streamLineByLine(tweetsFilename, new collectHashtags()); //Note: after this point "hashtags" is filled
-        HashtagLexicon lexicon = new HashtagLexicon(Configuration.getValueFor("hashtags.lexiconFile"));
+        HashtagLexicon lexicon = new HashtagLexicon(config.getValueFor("hashtags.lexiconFile"));
         
         HashtagSplitter splitter = new HashtagSplitter(hts);
         Graph splitTags = splitter.getSplitTags();
@@ -40,7 +41,7 @@ public class HashtagMain{
         }
         
         hashtags.getLock().lock();
-        
+
         return output;
     }
 
@@ -48,7 +49,7 @@ public class HashtagMain{
       Lock lock = new ReentrantLock();
       Graph output = new Graph();
       LockedObject<Graph> lo = new LockedObject(output, lock);
-      
+
       Thread htw = new hashtagWorker(tweetsFilename, lo);
       htw.run();
       return lo;
@@ -58,24 +59,24 @@ public class HashtagMain{
       private Lock lock;
       private Graph output;
       private String filename;
-      
+
       public hashtagWorker(String filename, LockedObject<Graph> lo) {
         this.filename = filename;
         this.lock = lo.getLock();
         this.output = lo.get();
       }
-      
+
       public void run() {
         lock.lock();
         List<String> hts = hashtags.get();
         hashtags.getLock().lock();
-        
+
         FileEntryIO.streamLineByLine(filename, new collectHashtags()); //Note: after this point "hashtags" is filled
-        HashtagLexicon lexicon = new HashtagLexicon(Configuration.getValueFor("hashtags.lexiconFile"));
-        
+        HashtagLexicon lexicon = new HashtagLexicon(config.getValueFor("hashtags.lexiconFile"));
+
         HashtagSplitter splitter = new HashtagSplitter(hts);
         Graph splitTags = splitter.getSplitTags();
-        
+
         //Output needs to be a graph of hashtags & their labels
         for(Point hashtag : splitTags) {
           for(Edge termE : splitTags.getAdj(hashtag)) {
@@ -86,7 +87,7 @@ public class HashtagMain{
             } catch(Exception e) {}
           }
         }
-        
+
         hashtags.getLock().unlock();
         lock.unlock();
       }
@@ -98,7 +99,7 @@ public class HashtagMain{
         public void call(Object o) {
             List<String> hts = hashtags.get();
             hashtags.getLock().lock();
-          
+
             StringTokenizer tokens = new StringTokenizer((String)o);
             if (tokens.countTokens() >= 3) {
                 tokens.nextToken();

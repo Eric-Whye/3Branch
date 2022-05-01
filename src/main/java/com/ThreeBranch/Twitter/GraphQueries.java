@@ -9,7 +9,8 @@ import java.util.stream.Stream;
 
 public abstract class GraphQueries {
     public static void algCompHandler(Graph graph) {
-        final int comparisonCount = Integer.parseInt(Configuration.getValueFor("comparison.count"));
+        Configuration config = Configuration.getInstance();
+        final int comparisonCount = Integer.parseInt(config.getValueFor("comparison.count"));
         String stanceFile = "";
         List<Graph> listOfGraphs = new ArrayList<>();
 
@@ -20,10 +21,10 @@ public abstract class GraphQueries {
         Graph unenhancedGraph = new Graph();
         GraphRTFileProcessor ufp = new GraphRTFileProcessor(unenhancedGraph);
         StanceProcessing usp = new StanceProcessing(unenhancedGraph);
-        ufp.populateRetweetGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
-        stanceFile = Configuration.getValueFor("stance.influentials");
+        ufp.populateRetweetGraphFromFile(config.getValueFor("graph.tweetsInput"));
+        stanceFile = config.getValueFor("stance.influentials");
         usp.initialiseStances(stanceFile);
-        for (int i = 0; i < Integer.parseInt(Configuration.getValueFor("stance.iterations")); i++){
+        for (int i = 0; i < Integer.parseInt(config.getValueFor("stance.iterations")); i++){
             if (!usp.calcStances())
                 break;
         }
@@ -33,10 +34,10 @@ public abstract class GraphQueries {
         Graph uthGraph = new Graph();
         GraphRTFileProcessor uthfp = new GraphRTFileProcessor(uthGraph);
         StanceProcessing uthsp = new StanceProcessing(uthGraph);
-        uthfp.populateUserToHashtagGraph(Configuration.getValueFor("graph.tweetsInput"));
-        stanceFile = Configuration.getValueFor("stance.hashtags");
+        uthfp.populateUserToHashtagGraph(config.getValueFor("graph.tweetsInput"));
+        stanceFile = config.getValueFor("stance.hashtags");
         uthsp.initialiseStances(stanceFile);
-        for (int i = 0; i < Integer.parseInt(Configuration.getValueFor("stance.iterations")); i++){
+        for (int i = 0; i < Integer.parseInt(config.getValueFor("stance.iterations")); i++){
             if (!uthsp.calcStances())
                 break;
         }
@@ -45,10 +46,10 @@ public abstract class GraphQueries {
         Graph htuGraph = new Graph();
         GraphRTFileProcessor htufp = new GraphRTFileProcessor(htuGraph);
         StanceProcessing htusp = new StanceProcessing(htuGraph);
-        htufp.populateHashtagToUserGraph(Configuration.getValueFor("graph.tweetsInput"));
-        stanceFile = Configuration.getValueFor("stance.hashtags");
+        htufp.populateHashtagToUserGraph(config.getValueFor("graph.tweetsInput"));
+        stanceFile = config.getValueFor("stance.hashtags");
         htusp.initialiseStances(stanceFile);
-        for (int i = 0; i < Integer.parseInt(Configuration.getValueFor("stance.iterations")); i++){
+        for (int i = 0; i < Integer.parseInt(config.getValueFor("stance.iterations")); i++){
             if (!htusp.calcStances())
                 break;
         }

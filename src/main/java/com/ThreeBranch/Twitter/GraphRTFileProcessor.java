@@ -9,7 +9,7 @@ import com.ThreeBranch.Graph.Point;
 import java.util.*;
 
 public class GraphRTFileProcessor {
-    protected final Graph graph;
+    private final Graph graph;
 
     public GraphRTFileProcessor(Graph graph) {
         this.graph = graph;
@@ -48,9 +48,10 @@ public class GraphRTFileProcessor {
     }
 
     public synchronized void writeGraphToFile(Graph graph) {
-        String outputFile = Configuration.getValueFor("graph.output");
-        String delim = Configuration.getValueFor("format.delim");
-        String newline = Configuration.getValueFor("format.newLineDelim");
+        Configuration config = Configuration.getInstance();
+        String outputFile = config.getValueFor("graph.output");
+        String delim = config.getValueFor("format.delim");
+        String newline = config.getValueFor("format.newLineDelim");
 
         List<List<String>> entries = new ArrayList<>();
         for (Point p : graph) {
@@ -93,7 +94,7 @@ public class GraphRTFileProcessor {
         }
     }
 
-    
+
     public synchronized void populateUserToHashtagGraph(String filename){
         graph.clear();
         try{
@@ -108,9 +109,12 @@ public class GraphRTFileProcessor {
         }catch(IncorrectGraphFileException e){e.printStackTrace();}
     }
 
-    protected class readHashtags implements Callable{
+
+    public readHashtags getReadHashtags(boolean reverse){ return new readHashtags(reverse); }
+
+    private class readHashtags implements Callable{
         boolean reverse = false;
-        protected readHashtags(boolean reverse){this.reverse = reverse;}
+        private readHashtags(boolean reverse){this.reverse = reverse;}
 
         @Override
         public void call(Object o) {
@@ -138,7 +142,9 @@ public class GraphRTFileProcessor {
     public synchronized void populateFromGraphFile(){
         graph.clear();
         try {
-            FileEntryIO.streamLineByLine(Configuration.getValueFor("graph.output"), new readRetweetsFromGraphFile());
+            Configuration config = Configuration.getInstance();
+            assert config != null;
+            FileEntryIO.streamLineByLine(config.getValueFor("graph.output"), new readRetweetsFromGraphFile());
         }catch(IncorrectGraphFileException e){
             e.printStackTrace();
         }

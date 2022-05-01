@@ -6,8 +6,9 @@ import com.ThreeBranch.Graph.Vertex;
 import java.util.Optional;
 
 public class StancePoint extends Vertex {
-    private final int MAX_STANCE = Integer.parseInt(Configuration.getValueFor("stance.maxStance"));
-    private final int MIN_STANCE = Integer.parseInt(Configuration.getValueFor("stance.minStance"));
+    Configuration config = Configuration.getInstance();
+    private final int MAX_STANCE = Integer.parseInt(config.getValueFor("stance.maxStance"));
+    private final int MIN_STANCE = Integer.parseInt(config.getValueFor("stance.minStance"));
   
     private int stance = MAX_STANCE + 1; //Anything outside of the MIN to MAX range will be considered null
 
