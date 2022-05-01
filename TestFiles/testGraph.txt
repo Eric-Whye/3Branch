@@ -1,9 +1,9 @@
 @Zinger
-@Testy: 1001(1)	@Oof: 1001(1)
+@Testy(1)	@Oof(1)
 
 @DGHisham
-@bernamadotcom: 1001(1)
+@bernamadotcom(1)
 
 @Testy
-@Testy: 1001(4)	@Zinger: 1001(1)
+@Testy(4)	@Zinger(1)
 
