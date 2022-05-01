@@ -162,6 +162,10 @@ public class GraphShell {
                   graph = ProfileHandler.handleBuild();
                   break;
 
+                case "print profile graph":
+                  ProfileHandler.handleRawPrint(graph);
+                  break;
+                  
                 default:
                     System.out.println("Unrecognised");
             }

@@ -14,6 +14,9 @@ public class StancePoint extends Vertex {
     public StancePoint(String name){
         super(name);
     }
+    
+    public Point create(String s) { return new StancePoint(s); }
+    
     protected StancePoint(String name, int stance) {
         super(name);
         this.stance = stance;

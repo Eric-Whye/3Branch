@@ -16,6 +16,8 @@ public class HashPosition implements Position, Point {
     this.hashtag = hashtag;
   }
   
+  public Point create(String s) { return new HashPosition(s); }
+  
   public String getName() {
     return hashtag;
   }
@@ -70,6 +72,23 @@ public class HashPosition implements Position, Point {
     }
     
     return Tri.NONE;
+  }
+ 
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    switch(this.rectify()) {
+      case TRUE:
+        sb.append("+");
+        break;
+      case FALSE:
+        sb.append("-");
+        break;
+    }
+    for(String s : labels) {
+      sb.append(s);
+      sb.append(", ");
+    }
+    return sb.toString();
   }
  
   public boolean equals(Object o) {

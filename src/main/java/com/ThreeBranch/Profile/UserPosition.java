@@ -2,6 +2,7 @@ package com.ThreeBranch.Profile;
 
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Iterator;
 
 import com.ThreeBranch.Graph.*;
 
@@ -12,6 +13,8 @@ public class UserPosition implements Position, Point{
   public UserPosition(String username) {
     this.username = username;  
   }
+  
+  public Point create(String s) { return new UserPosition(s); }
   
   public String getName() {
     return username;
@@ -35,6 +38,10 @@ public class UserPosition implements Position, Point{
         return false;
       
       return true;
+  }
+  
+  public Iterator<HashPosition> getHashtags() {
+    return hashtags.iterator();
   }
   
   public boolean equals(Object o) {
