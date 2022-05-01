@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 import com.ThreeBranch.Graph.*;
-import com.ThreeBranch.Hashtags.HashtagHandler;
+import com.ThreeBranch.Hashtags.HashtagMain;
 import com.ThreeBranch.Twitter.GraphRTFileProcessor;
 import com.ThreeBranch.Twitter.Configuration;
 import com.ThreeBranch.Twitter.StanceProcessing;
@@ -30,7 +30,7 @@ public class ProfileHandler{
     System.out.println("User to hashtags graph built");
     
     //Build the hashtag to label graph
-    hastagsToLabels = HashtagHandler.build(hastagsToLabels);
+    hastagsToLabels = (new HashtagMain()).run(Configuration.getValueFor("graph.tweetsInput"));
     System.out.println("Hashtag to labels graph built");
     
     //Combine them and convert everything to positions
