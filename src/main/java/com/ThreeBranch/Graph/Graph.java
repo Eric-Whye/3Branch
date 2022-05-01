@@ -5,6 +5,9 @@ import com.ThreeBranch.Twitter.StancePoint;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+//WE NEED TO GET RID OF THIS ASAP
+import java.lang.reflect.Constructor;
+
 public class Graph implements Iterable<Point>{
   private final Hashtable<Point, List<Edge>> adjacencyList = new Hashtable<>();
 
@@ -21,7 +24,25 @@ public class Graph implements Iterable<Point>{
     }
     return Optional.empty();
   }
-  
+
+  //This is BAD, we need to make graph generic ASAP
+  public Optional<Point> getPointIfExists(String s, Constructor c) {
+    Object o = null;
+    try {
+      o = c.newInstance(s);
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Improper Constructor");
+    }
+    if(!(o instanceof Point))
+      throw new IllegalArgumentException("Improper Constructor");
+
+    Point target = (Point) o;
+    List<Edge> adj = adjacencyList.get(target);
+    if(adj != null)
+      return Optional.of(adj.get(0).getSource());
+    return Optional.empty();
+  }
+
   public boolean hasVertex(String name) {
     return hasVertex(new Vertex(name));
   }
@@ -29,7 +50,7 @@ public class Graph implements Iterable<Point>{
   public boolean hasVertex(Point p) {
     return adjacencyList.containsKey(p);
   }
-  
+
   public List<Edge> getAdj(Point p) throws IllegalArgumentException{
     List<Edge> adj = adjacencyList.get(p);
     if(adj == null)
@@ -165,4 +186,25 @@ public class Graph implements Iterable<Point>{
 
   public int size(){return adjacencyList.size();}
   public boolean isEmpty(){return adjacencyList.isEmpty();}
+
+  public String toString() {
+    System.err.println("WARNING: THE toString METHOD IN Graph IS FOR DEBUG PURPOSES ONLY");
+
+    StringBuilder sb = new StringBuilder();
+    for(Point p : adjacencyList.keySet()) {
+      sb.append(p.getName());
+      sb.append("\n");
+      for(Edge e : adjacencyList.get(p)) {
+        sb.append("\t");
+        sb.append(e.getSource());
+        sb.append(" -> ");
+        sb.append(e.getWeight());
+        sb.append(" -> ");
+        sb.append(e.getDestination());
+        sb.append("\n");
+      }
+    }
+
+    return sb.toString();
+  }
 }

@@ -1,6 +1,8 @@
 package com.ThreeBranch;
 
 import com.ThreeBranch.Graph.Graph;
+import com.ThreeBranch.Hashtags.HashtagLexicon;
+import com.ThreeBranch.Hashtags.HashtagMain;
 import com.ThreeBranch.Twitter.Configuration;
 import com.ThreeBranch.Twitter.GraphRTFileProcessor;
 import com.ThreeBranch.Twitter.TweetData;
@@ -12,6 +14,8 @@ import java.io.FileNotFoundException;
 public class Main {
 
     public static void main(String[] args) {
+        Configuration config = Configuration.getInstance(Configuration.ConfigFilename);
+
         if (args.length == 0) {
           defaultHandle();
         } else {
@@ -23,17 +27,17 @@ public class Main {
                 case "-g":
                 case "-G":
                     try {
-                        Configuration.initialise(Configuration.ConfigFilename);//read from config file
                         TweetData.initialise();//Read TweetIDs and userhandles for duplication checking
                         System.out.println(TweetData.count);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    System.out.println(Configuration.getConfigInfo());
+                    System.out.println(config.getConfigInfo());
 
                     Twitterer twitterer = new Twitterer();
                     twitterer.streamStart();
                     break;
+
                 default:
                     defaultHandle();
             }

@@ -4,6 +4,8 @@ import com.ThreeBranch.Graph.Edge;
 import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
 import com.ThreeBranch.Twitter.*;
+import com.ThreeBranch.Hashtags.*;
+import com.ThreeBranch.Profile.*;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -17,23 +19,23 @@ public class GraphShell {
     }
 
     public void run() {
+        //Clear Screen
+        System.out.print("\033[H\033[2J"); 
+        System.out.flush(); 
+      
         boolean run = true;
         Scanner in = new Scanner(System.in);
         List<Graph> listOfGraphs = new ArrayList<>();
         String stanceFile = "";
+        Configuration config = Configuration.getInstance();
 
 
         while (run) {
             GraphRTFileProcessor fp = new GraphRTFileProcessor(graph);
             StanceProcessing sp = new StanceProcessing(graph);
 
-            try {
-                Configuration.initialise(Configuration.ConfigFilename);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
 
-            System.out.print("GraphShell> ");
+            System.out.print("\nGraphShell> ");
             String input = in.nextLine();
 
             switch (input.toLowerCase().trim()) {
@@ -42,8 +44,8 @@ public class GraphShell {
                       System.out.println("Old Graph Dropped");
                     System.out.println("Building Retweet Graph");
                     graph.clear();
-                    fp.populateRetweetGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
-                    stanceFile = Configuration.getValueFor("stance.influentials");
+                    fp.populateRetweetGraphFromFile(config.getValueFor("graph.tweetsInput"));
+                    stanceFile = config.getValueFor("stance.influentials");
                     System.out.println("Retweet Graph Built");
                     break;
                     
@@ -52,8 +54,8 @@ public class GraphShell {
                       System.out.println("Old Graph Dropped");
                     System.out.println("Building Retweeted Graph");
                     graph.clear();
-                    fp.populateRetweetedGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
-                    stanceFile = Configuration.getValueFor("stance.influentials");
+                    fp.populateRetweetedGraphFromFile(config.getValueFor("graph.tweetsInput"));
+                    stanceFile = config.getValueFor("stance.influentials");
                     System.out.println("Retweeted Graph Built");
                     break;
 
@@ -63,8 +65,8 @@ public class GraphShell {
                         System.out.println("Old Graph Dropped");
                     System.out.println("Building user to hashtag Graph");
                     graph.clear();
-                    fp.populateUserToHashtagGraph(Configuration.getValueFor("graph.tweetsInput"));
-                    stanceFile = Configuration.getValueFor("stance.hashtags");
+                    fp.populateUserToHashtagGraph(config.getValueFor("graph.tweetsInput"));
+                    stanceFile = config.getValueFor("stance.hashtags");
                     System.out.println("User to hashtag graph built");
                     break;
 
@@ -73,9 +75,8 @@ public class GraphShell {
                         System.out.println("Old Graph Dropped");
                     System.out.println("Building hashtag to user Graph");
                     graph.clear();
-                    fp.populateHashtagToUserGraph(Configuration.getValueFor("graph.tweetsInput"));
-                    stanceFile = Configuration.getValueFor("stance.hashtags");
-                    System.out.println(graph.size());
+                    fp.populateHashtagToUserGraph(config.getValueFor("graph.tweetsInput"));
+                    stanceFile = config.getValueFor("stance.hashtags");
                     System.out.println("hashtag to user graph built");
                     break;
 
@@ -126,7 +127,7 @@ public class GraphShell {
                         System.out.println("No Graph built");
                     } else {
                         sp.initialiseStances(stanceFile);
-                        for (int i = 0; i < Integer.parseInt(Configuration.getValueFor("stance.iterations")); i++){
+                        for (int i = 0; i < Integer.parseInt(config.getValueFor("stance.iterations")); i++){
                             if (!sp.calcStances())
                                 break;
                         }
@@ -147,6 +148,36 @@ public class GraphShell {
                   GraphQueries.algCompHandler(graph);
                   break;
 
+                case "build hashtag graph":
+                  graph = HashtagHandler.build(graph);
+                  break;
+
+                case "print hashtag graph":
+                  HashtagHandler.rawPrint(graph);
+                  break;
+
+                case "count labels":
+                  HashtagHandler.labelCount(graph);
+                  break;
+
+                case "build profile":
+                  graph = ProfileHandler.handleBuild();
+                  break;
+
+                case "print profile graph":
+                  ProfileHandler.handleRawPrint(graph);
+                  break;
+                  
+                case "analyse profile graph":
+                case "analyze profile graph":
+                  ProfileHandler.handleAnalysis(in, graph);
+                  break;
+                  
+                case "clear":
+                  System.out.print("\033[H\033[2J");  
+                  System.out.flush();
+                  break;
+                  
                 default:
                     System.out.println("Unrecognised");
             }

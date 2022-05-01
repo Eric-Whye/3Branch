@@ -11,6 +11,8 @@ public class Vertex implements Point{
         this.name = name;
     }
 
+    public Point create(String s) { return new Vertex(s); }
+
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;

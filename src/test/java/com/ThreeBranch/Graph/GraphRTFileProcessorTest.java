@@ -11,20 +11,17 @@ import java.io.*;
 class GraphRTFileProcessorTest {
     @Test
     void testRetweetGraph(){
-        try {
-            Configuration.initialise("testConfiguration.properties");
-        } catch (FileNotFoundException e) {e.printStackTrace();}
-
+        Configuration config = Configuration.getInstance("testConfiguration.properties");
         Graph graph = new Graph();
         GraphRTFileProcessor fp  = new GraphRTFileProcessor(graph);
-        fp.populateRetweetGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
 
+        fp.populateRetweetGraphFromFile(config.getValueFor("graph.tweetsInput"));
         fp.writeGraphToFile(graph);
 
         BufferedReader reader = null;
         StringBuilder testOutput = new StringBuilder();
         try{
-            reader = new BufferedReader(new FileReader(Configuration.getValueFor("graph.output")));
+            reader = new BufferedReader(new FileReader(config.getValueFor("graph.output")));
             while (reader.ready()){
                 testOutput.append(reader.readLine()).append("\n");
             }
@@ -46,19 +43,17 @@ class GraphRTFileProcessorTest {
 
     @Test
     void testRetweetedGraph(){
-        try {
-            Configuration.initialise("testConfiguration.properties");
-        } catch (FileNotFoundException e) {e.printStackTrace();}
+        Configuration config = Configuration.getInstance("testConfiguration.properties");
         Graph graph = new Graph();
         GraphRTFileProcessor fp  = new GraphRTFileProcessor(graph);
-        fp.populateRetweetedGraphFromFile(Configuration.getValueFor("graph.tweetsInput"));
 
+        fp.populateRetweetedGraphFromFile(config.getValueFor("graph.tweetsInput"));
         fp.writeGraphToFile(graph);
 
         BufferedReader reader = null;
         StringBuilder testOutput = new StringBuilder();
         try{
-            reader = new BufferedReader(new FileReader(Configuration.getValueFor("graph.output")));
+            reader = new BufferedReader(new FileReader(config.getValueFor("graph.output")));
             while (reader.ready()){
                 testOutput.append(reader.readLine()).append("\n");
             }

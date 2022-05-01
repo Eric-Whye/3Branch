@@ -6,14 +6,18 @@ import com.ThreeBranch.Graph.Vertex;
 import java.util.Optional;
 
 public class StancePoint extends Vertex {
-    private final int MAX_STANCE = Integer.parseInt(Configuration.getValueFor("stance.maxStance"));
-    private final int MIN_STANCE = Integer.parseInt(Configuration.getValueFor("stance.minStance"));
+    Configuration config = Configuration.getInstance();
+    private final int MAX_STANCE = Integer.parseInt(config.getValueFor("stance.maxStance"));
+    private final int MIN_STANCE = Integer.parseInt(config.getValueFor("stance.minStance"));
   
     private int stance = MAX_STANCE + 1; //Anything outside of the MIN to MAX range will be considered null
 
     public StancePoint(String name){
         super(name);
     }
+    
+    public Point create(String s) { return new StancePoint(s); }
+    
     protected StancePoint(String name, int stance) {
         super(name);
         this.stance = stance;
@@ -29,4 +33,16 @@ public class StancePoint extends Vertex {
         this.stance = stance;
     }
 
+    public void setStance(Optional<Integer> stance) {
+      if(stance.isPresent()) {
+        this.stance = stance.get();
+      } else {
+        this.stance = MAX_STANCE + 1;
+      }
+    }
+    
+    //This is ONLY for debugging
+    public String toString() {
+      return this.getName();
+    }
 }

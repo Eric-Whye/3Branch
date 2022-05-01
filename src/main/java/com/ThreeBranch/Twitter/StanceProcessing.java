@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 
 public class StanceProcessing {
     private final Graph graph;
+    private final Configuration config = Configuration.getInstance();
 
     private int LARGEST_WEIGHT_CALCULATED;
     private int SMALLEST_WEIGHT_CALCULATED;
@@ -21,14 +22,8 @@ public class StanceProcessing {
     private final int MIN_STANCE;
     
     public StanceProcessing(Graph graph){
-        try {
-            Configuration.initialise(Configuration.ConfigFilename);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-      
-        MAX_STANCE = Integer.parseInt(Configuration.getValueFor("stance.maxStance"));
-        MIN_STANCE = Integer.parseInt(Configuration.getValueFor("stance.minStance"));
+        MAX_STANCE = Integer.parseInt(config.getValueFor("stance.maxStance"));
+        MIN_STANCE = Integer.parseInt(config.getValueFor("stance.minStance"));
          
         LARGEST_WEIGHT_CALCULATED = MAX_STANCE;
         SMALLEST_WEIGHT_CALCULATED = MIN_STANCE;
@@ -55,13 +50,13 @@ public class StanceProcessing {
                         StancePoint stancePoint = (StancePoint) p;
                         switch(tokens.nextToken()){
                             case "mid":
-                                stancePoint.setStance(Integer.parseInt(Configuration.getValueFor("stance.midStance")));
+                                stancePoint.setStance(Integer.parseInt(config.getValueFor("stance.midStance")));
                                 break;
                             case "pro":
-                                stancePoint.setStance(Integer.parseInt(Configuration.getValueFor("stance.maxStance")));
+                                stancePoint.setStance(Integer.parseInt(config.getValueFor("stance.maxStance")));
                                 break;
                             case "anti":
-                                stancePoint.setStance(Integer.parseInt(Configuration.getValueFor("stance.minStance")));
+                                stancePoint.setStance(Integer.parseInt(config.getValueFor("stance.minStance")));
                                 break;
                         }
                       } else {
@@ -150,9 +145,9 @@ public class StanceProcessing {
             }catch(ClassCastException e){e.printStackTrace();}
         }
         FileEntryIO.writeLineByLine(list,
-                Configuration.getValueFor("format.delim").charAt(0),
-                Configuration.getValueFor("format.newLineDelim").charAt(0),
-                Configuration.getValueFor("stance.output"));
+                config.getValueFor("format.delim").charAt(0),
+                config.getValueFor("format.newLineDelim").charAt(0),
+                config.getValueFor("stance.output"));
     }
 
 
@@ -177,7 +172,7 @@ public class StanceProcessing {
                 if (stanceNum < 0) {
                     sumNeg++;
                     //For the number -1000
-                    if (stanceNum == Integer.parseInt(Configuration.getValueFor("stance.minStance"))){
+                    if (stanceNum == Integer.parseInt(config.getValueFor("stance.minStance"))){
                         list[9]++;
                         continue;
                     }
@@ -191,7 +186,7 @@ public class StanceProcessing {
                 else if (stanceNum > 0){//Numbers Greater than zero
                     sumPos++;
                     //For the number 1000
-                    if (stanceNum == Integer.parseInt(Configuration.getValueFor("stance.maxStance"))){
+                    if (stanceNum == Integer.parseInt(config.getValueFor("stance.maxStance"))){
                         list[20]++;
                         continue;
                     }

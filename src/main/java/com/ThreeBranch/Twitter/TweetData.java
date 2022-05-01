@@ -21,8 +21,9 @@ public abstract class TweetData {
      * @throws NumberFormatException upon unexpected type parsing
      */
     public static void initialise() throws NumberFormatException {
-        FileEntryIO.streamLineByLine(Configuration.getValueFor("tweet.vaxFile"), new readTweetIDs());
-        FileEntryIO.streamLineByLine(Configuration.getValueFor("tweet.accountsFile"), new readUserhandles());
+        Configuration config = Configuration.getInstance();
+        FileEntryIO.streamLineByLine(config.getValueFor("tweet.vaxFile"), new readTweetIDs());
+        FileEntryIO.streamLineByLine(config.getValueFor("tweet.accountsFile"), new readUserhandles());
     }
 
     /**

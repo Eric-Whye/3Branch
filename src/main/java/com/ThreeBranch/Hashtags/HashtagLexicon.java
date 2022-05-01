@@ -1,31 +1,36 @@
 package com.ThreeBranch.Hashtags;
 
 import com.ThreeBranch.Callable;
+import com.ThreeBranch.FileEntryIO;
+import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Twitter.Configuration;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public abstract class HashtagLexicon {
-    private final String lexiconFile = Configuration.getValueFor("hashtags.lexiconFile");
-    private HashMap<String, List<String>> lexicon = new HashMap<>();
+public class HashtagLexicon extends Graph{
 
+    protected HashtagLexicon(String lexiconFilename){
+        FileEntryIO.streamLineByLine(lexiconFilename, new readLexicon());
+    }
 
-/*
     private class readLexicon implements Callable {
-
         @Override
         public void call(Object o) {
             String word;
-            StringTokenizer tokens = new StringTokenizer((String)o);
-            if (tokens.hasMoreTokens())
+            StringTokenizer tokens = new StringTokenizer(((String)o).replace(", ", ","));
+            if (tokens.hasMoreTokens()) {
+                tokens.nextToken();//Skipping numbered column
                 word = tokens.nextToken();
-            else return;
-
-            String label = ((String)o).substring(word.length()+1);
-            lexicon.put(word, hLabel);
+                String label = tokens.nextToken().replace("[", "").replace("]", "");
+                //System.out.println(label);
+                StringTokenizer labels = new StringTokenizer(label, ",");
+                while(labels.hasMoreTokens())
+                  addArc(new HashtagLabel(word), new HashtagLabel(labels.nextToken()));
+            }
         }
-    }*/
+    }
 }

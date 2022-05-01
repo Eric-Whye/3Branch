@@ -9,7 +9,8 @@ class ConfigurationTest {
 
     @Test
     void testReadAndSetConfig() throws Exception {
-        Configuration.initialise("testConfiguration.properties");
+        Configuration config = Configuration.getInstance("testConfiguration.properties");
+
 
         assertEquals("\nSearch Terms:\n" +
                         "Swirly Wirly 123.4356 ;567d[]" + "\n" +
@@ -20,7 +21,7 @@ class ConfigurationTest {
                         "\nOutput Directory: " + "TestFiles" +
                         "\nTweet Output File: " + "TestFiles/testTweets.txt" +
                         "\nAccount Output File: " + "TestFiles/testAccounts.txt" + "\n",
-                Configuration.getConfigInfo()
+                config.getConfigInfo()
                 );
     }
 }
