@@ -5,6 +5,7 @@ import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
 import com.ThreeBranch.Twitter.*;
 import com.ThreeBranch.Hashtags.*;
+import com.ThreeBranch.Profile.*;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -155,6 +156,10 @@ public class GraphShell {
 
                 case "count labels":
                   HashtagHandler.labelCount(graph);
+                  break;
+
+                case "build profile":
+                  graph = ProfileHandler.handleBuild();
                   break;
 
                 default:

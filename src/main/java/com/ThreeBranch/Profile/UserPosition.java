@@ -1,13 +1,20 @@
 package com.ThreeBranch.Profile;
 
 import java.util.HashSet;
+import java.util.Objects;
 
-public UserPosition implements Position {
+import com.ThreeBranch.Graph.*;
+
+public class UserPosition implements Position, Point{
   private HashSet<HashPosition> hashtags = new HashSet();
   private String username;
   
   public UserPosition(String username) {
-    this.username = username;
+    this.username = username;  
+  }
+  
+  public String getName() {
+    return username;
   }
   
   public void add(Point p) {
@@ -28,5 +35,18 @@ public UserPosition implements Position {
         return false;
       
       return true;
+  }
+  
+  public boolean equals(Object o) {
+    if(!(o instanceof UserPosition))
+      return false;
+    
+    UserPosition up = (UserPosition) o;
+    
+    return up.username.equals(this.username);
+  }
+  
+  public int hashCode() {
+    return Objects.hash(username);
   }
 }

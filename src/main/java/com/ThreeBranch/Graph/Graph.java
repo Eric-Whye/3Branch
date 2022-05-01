@@ -21,7 +21,6 @@ public class Graph implements Iterable<Point>{
       return Optional.of(adj.get(0).getSource());
     return Optional.empty();
   }
-
   
   public Point addOrGet(Point p) {
     Optional<Point> op = getPointIfExists(p.getName());

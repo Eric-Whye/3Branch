@@ -11,13 +11,4 @@ public class Util {
   private Util() {
     throw new IllegalStateException("Cannot be instantiated");
   }
-  
-  public static <T extends Position> T genPosition(Graph adjGraph, Point source) {
-    Position output = new T();
-    
-    for(Edge e : adjGraph.getAdj(source))
-      output.add(e.getDestination());
-    
-    return output;
-  }
 }

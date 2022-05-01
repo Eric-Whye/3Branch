@@ -3,7 +3,9 @@ package com.ThreeBranch.Profile;
 import java.util.HashSet;
 import java.util.Objects;
 
-public HashPosition implements Position, Point {
+import com.ThreeBranch.Graph.*;
+
+public class HashPosition implements Position, Point {
   //We could store this position as a single string, but for the comparisons I think a hashset will be more efficient
   private String hashtag;
   private HashSet<String> labels = new HashSet();
@@ -43,8 +45,8 @@ public HashPosition implements Position, Point {
     
     HashPosition hp = (HashPosition) p;
     
-    hpLean = hp.rectify();
-    thisLean = this.rectify();
+    Tri hpLean = hp.rectify();
+    Tri thisLean = this.rectify();
     
     if(hpLean != thisLean)
       return false;
@@ -62,9 +64,9 @@ public HashPosition implements Position, Point {
     
     switch(positiveLean) {
       case TRUE:
-        return FALSE;
+        return Tri.FALSE;
       case FALSE:
-        return TRUE;
+        return Tri.TRUE;
     }
     
     return Tri.NONE;
