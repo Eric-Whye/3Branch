@@ -15,6 +15,9 @@ public class StancePoint extends Vertex {
     public StancePoint(String name){
         super(name);
     }
+    
+    public Point create(String s) { return new StancePoint(s); }
+    
     protected StancePoint(String name, int stance) {
         super(name);
         this.stance = stance;
@@ -30,4 +33,16 @@ public class StancePoint extends Vertex {
         this.stance = stance;
     }
 
+    public void setStance(Optional<Integer> stance) {
+      if(stance.isPresent()) {
+        this.stance = stance.get();
+      } else {
+        this.stance = MAX_STANCE + 1;
+      }
+    }
+    
+    //This is ONLY for debugging
+    public String toString() {
+      return this.getName() + ": " + stance;
+    }
 }

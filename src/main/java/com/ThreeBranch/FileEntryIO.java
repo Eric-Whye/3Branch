@@ -1,11 +1,13 @@
 package com.ThreeBranch;
 
 import java.io.*;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.concurrent.locks.*;
 
-public abstract class FileEntryIO {
-
+public class FileEntryIO {
+    private static List<Lock> locks = new ArrayList();
+    private static List<Thread> threads = new ArrayList();
+    
     /**
      * Appends line entries to filename where each entry is a tokenized string in the form of a List.
      * @param list of lists where each inner list is a tokenized string
@@ -129,5 +131,51 @@ public abstract class FileEntryIO {
                 sc.close();
             }catch(IOException e){e.printStackTrace();}
         }
+    }
+    
+    public synchronized Lock streamLineByLineConcurrent (String filename, Callable callable) {
+      Lock lock = new ReentrantLock();
+      locks.add(lock);
+      ReaderWorker rw = new ReaderWorker(lock, filename, callable);
+      threads.add(rw);
+      rw.start();
+      return lock;
+    }
+    
+    private class ReaderWorker extends Thread {
+      private Lock lock;
+      private String filename;
+      private Callable callable;
+      
+      public ReaderWorker(Lock lock, String filename, Callable callable) {
+        this.lock = lock;
+        this.filename = filename;
+        this.callable = callable;
+      }
+      
+      public void run() {
+        lock.lock();
+        FileInputStream inputStream = null;
+        Scanner sc = null;
+        try{
+            inputStream = new FileInputStream(filename);
+            sc = new Scanner(inputStream);
+            while (sc.hasNextLine())
+                callable.call(sc.nextLine());
+
+        }catch(IOException e){
+          e.printStackTrace();
+        } finally{
+            try{
+                assert inputStream != null;
+                inputStream.close();
+                assert sc != null;
+                sc.close();
+            }catch(IOException e){
+              e.printStackTrace();
+            }
+            lock.unlock();
+        }
+      }
     }
 }

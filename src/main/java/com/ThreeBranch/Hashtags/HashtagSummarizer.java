@@ -1,6 +1,7 @@
 package com.ThreeBranch.Hashtags;
 
 import com.ThreeBranch.Graph.*;
+import com.ThreeBranch.Tri;
 
 import java.util.Hashtable;
 
@@ -79,8 +80,4 @@ public class HashtagSummarizer {
         System.out.println("No Case * " + labels.get(desc));
       }
   }
-  
-  private enum Tri {
-    TRUE, FALSE, NONE
-  };
 }

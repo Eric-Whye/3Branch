@@ -5,6 +5,7 @@ import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
 import com.ThreeBranch.Twitter.*;
 import com.ThreeBranch.Hashtags.*;
+import com.ThreeBranch.Profile.*;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -18,6 +19,10 @@ public class GraphShell {
     }
 
     public void run() {
+        //Clear Screen
+        System.out.print("\033[H\033[2J"); 
+        System.out.flush(); 
+      
         boolean run = true;
         Scanner in = new Scanner(System.in);
         List<Graph> listOfGraphs = new ArrayList<>();
@@ -30,7 +35,7 @@ public class GraphShell {
             StanceProcessing sp = new StanceProcessing(graph);
 
 
-            System.out.print("GraphShell> ");
+            System.out.print("\nGraphShell> ");
             String input = in.nextLine();
 
             switch (input.toLowerCase().trim()) {
@@ -155,6 +160,24 @@ public class GraphShell {
                   HashtagHandler.labelCount(graph);
                   break;
 
+                case "build profile":
+                  graph = ProfileHandler.handleBuild();
+                  break;
+
+                case "print profile graph":
+                  ProfileHandler.handleRawPrint(graph);
+                  break;
+                  
+                case "analyse profile graph":
+                case "analyze profile graph":
+                  ProfileHandler.handleAnalysis(in, graph);
+                  break;
+                  
+                case "clear":
+                  System.out.print("\033[H\033[2J");  
+                  System.out.flush();
+                  break;
+                  
                 default:
                     System.out.println("Unrecognised");
             }

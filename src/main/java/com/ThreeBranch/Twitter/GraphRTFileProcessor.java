@@ -9,7 +9,7 @@ import com.ThreeBranch.Graph.Point;
 import java.util.*;
 
 public class GraphRTFileProcessor {
-    private final Graph graph;
+    protected final Graph graph;
 
     public GraphRTFileProcessor(Graph graph) {
         this.graph = graph;
@@ -109,9 +109,9 @@ public class GraphRTFileProcessor {
         }catch(IncorrectGraphFileException e){e.printStackTrace();}
     }
 
-    private class readHashtags implements Callable{
+    protected class readHashtags implements Callable{
         boolean reverse = false;
-        private readHashtags(boolean reverse){this.reverse = reverse;}
+        protected readHashtags(boolean reverse){this.reverse = reverse;}
 
         @Override
         public void call(Object o) {
