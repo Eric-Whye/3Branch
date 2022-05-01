@@ -43,6 +43,6 @@ public class StancePoint extends Vertex {
     
     //This is ONLY for debugging
     public String toString() {
-      return this.getName() + ": " + stance;
+      return this.getName();
     }
 }
