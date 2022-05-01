@@ -108,6 +108,8 @@ public class ProfileHandler{
       return true;
     if(input.equals("quit"))
       return true;
+    if(input.equals("clear"))
+      return true;
     
     /*//Check the pretty stuff is there
     if(input.charAt(0) != 'p')
