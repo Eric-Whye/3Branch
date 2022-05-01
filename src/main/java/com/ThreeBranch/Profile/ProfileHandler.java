@@ -67,6 +67,8 @@ public class ProfileHandler{
   
   //This is basically a subshell, sorry
   public static void handleAnalysis(Scanner in, Graph data) {
+    Analysis.init("P(anti)", data);
+    
     boolean endFlag = false;
     
     while(!endFlag) {
@@ -94,7 +96,10 @@ public class ProfileHandler{
             System.out.flush();
             break;
           default:
-            System.out.println(Analysis.analyze(input, data));
+            double score = Analysis.analyze(input, data);
+            double zScore = Analysis.zScore(score);
+            System.out.println("P: " + score);
+            System.out.println("Z: " + zScore);
             //endFlag = true;
             break;
         }
