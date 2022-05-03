@@ -3,6 +3,7 @@ package com.ThreeBranch;
 import com.ThreeBranch.Graph.Edge;
 import com.ThreeBranch.Graph.Graph;
 import com.ThreeBranch.Graph.Point;
+import com.ThreeBranch.Graph.Vertex;
 import com.ThreeBranch.Twitter.*;
 import com.ThreeBranch.Hashtags.*;
 import com.ThreeBranch.Profile.*;
@@ -128,8 +129,7 @@ public class GraphShell {
                     } else {
                         sp.initialiseStances(stanceFile);
                         for (int i = 0; i < Integer.parseInt(config.getValueFor("stance.iterations")); i++){
-                            if (!sp.calcStances())
-                                break;
+                            System.out.println(sp.calcStances());
                         }
                         sp.writeStances(graph);
                         System.out.println("Stances Assigned");

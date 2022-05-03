@@ -1,5 +1,6 @@
 package com.ThreeBranch.Twitter;
 
+import com.ThreeBranch.Callable;
 import com.ThreeBranch.FileEntryIO;
 import com.ThreeBranch.Graph.Edge;
 import com.ThreeBranch.Graph.Graph;
@@ -15,9 +16,10 @@ import java.io.FileNotFoundException;
 public class StanceProcessing {
     private final Graph graph;
     private final Configuration config = Configuration.getInstance();
+    private final List<String> initialData = new ArrayList<>();
 
-    private int LARGEST_WEIGHT_CALCULATED;
-    private int SMALLEST_WEIGHT_CALCULATED;
+    private int largestWeightCalculated;
+    private int smallestWeightCalculated;
     private final int MAX_STANCE;
     private final int MIN_STANCE;
     
@@ -25,28 +27,60 @@ public class StanceProcessing {
         MAX_STANCE = Integer.parseInt(config.getValueFor("stance.maxStance"));
         MIN_STANCE = Integer.parseInt(config.getValueFor("stance.minStance"));
          
-        LARGEST_WEIGHT_CALCULATED = MAX_STANCE;
-        SMALLEST_WEIGHT_CALCULATED = MIN_STANCE;
+        largestWeightCalculated = MAX_STANCE;
+        smallestWeightCalculated = MIN_STANCE;
       
         this.graph = graph;
     }
 
+
+    private class readInitialData implements Callable {
+        @Override
+        public void call(Object o) {
+            initialData.add((String)o);
+        }
+    }
     /**
      *Assign Stances to the recorded influential users
      */
     public void initialiseStances(String filename){
-        BufferedReader reader = null;
-        try{
-            reader = new BufferedReader(new FileReader(filename));
-            while (reader.ready()){
-                StringTokenizer tokens = new StringTokenizer(reader.readLine());
-                if (tokens.countTokens() >= 2){
-                    String name = tokens.nextToken();
-                    Optional<Point> userOption = graph.getPointIfExists(name);
+        FileEntryIO.streamLineByLine(filename, new readInitialData());
 
-                    if(userOption.isPresent()) {
-                      Point p = userOption.get();
-                      if(p instanceof StancePoint) {
+        int count = 0;
+        for (String str : initialData){
+            StringTokenizer tokens = new StringTokenizer(str);
+            if (tokens.countTokens() < 2) continue;
+            String name = tokens.nextToken();
+            int stanceNumber = 0;
+            switch(tokens.nextToken()){
+                case "mid":
+                    stanceNumber = Integer.parseInt(config.getValueFor("stance.midStance"));
+                    break;
+                case "pro":
+                    stanceNumber = Integer.parseInt(config.getValueFor("stance.maxStance"));
+                    break;
+                case "anti":
+                   stanceNumber = Integer.parseInt(config.getValueFor("stance.minStance"));
+                    break;
+            }
+            for (Point p : graph){
+                List<Edge> edges = graph.getAdj(p);
+                for (Edge e : edges){
+                    if (e.getDestination().getName().equals(name)){
+                        ((StancePoint)e.getDestination()).setStance(stanceNumber);
+                    }
+                }
+            }
+        }
+        /*
+            StringTokenizer tokens = new StringTokenizer(str);
+            if (tokens.countTokens() >= 2){
+                String name = tokens.nextToken();
+                Optional<Point> userOption = graph.getPointIfExists(new StancePoint(name));
+
+                if(userOption.isPresent()) {
+                    Point p = userOption.get();
+                    if(p instanceof StancePoint) {
                         StancePoint stancePoint = (StancePoint) p;
                         switch(tokens.nextToken()){
                             case "mid":
@@ -59,69 +93,78 @@ public class StanceProcessing {
                                 stancePoint.setStance(Integer.parseInt(config.getValueFor("stance.minStance")));
                                 break;
                         }
-                      } else {
+                    } else
                         System.err.println(name + " is not a user object");
-                      }
-                    } else {
-                      System.err.println(name + " is not present in graph");
-                    }
-                }
+                } else
+                    System.err.println(name + " is not present in graph");
+
             }
-        } catch(IOException e){ e.printStackTrace(); }
-        finally {
-            try {
-                assert reader != null;
-                reader.close();
-            } catch (IOException e) {e.printStackTrace();}
-        }
+        }*/
     }
 
     public boolean calcStances() throws ClassCastException{
       boolean change = false;
-      
       for(Point p : graph) {
-        if(!(p instanceof StancePoint))
-          throw new ClassCastException("This function only works on User objects");
-        
         StancePoint u = (StancePoint) p;
-        
+
         int neighbors = 0;
         int stanceSum = 0;
         int weights = 0;
-        
+
         for(Edge e : graph.getAdj(u)) {
+
+            //Since Graph is a Point -> Edge structure, p1 are the points in destination edges that have stances
+          Point p1 = e.getDestination();
+
+          Optional<Integer> stanceNum = ((StancePoint) p1).getStance();
+          if (stanceNum.isPresent()){
+              neighbors++;
+              stanceSum += stanceNum.get() * e.getWeight();
+              weights += e.getWeight();
+          }else{
+              //p2 is p1 except it is a Point in the graph rather than a destination edge.
+              Optional<Point> p2 = graph.getPointIfExists(p1);
+              if (p2.isPresent()){
+                  Optional<Integer> stanceNum2 = ((StancePoint) p2.get()).getStance();
+                  if (stanceNum2.isPresent()){
+                      neighbors++;
+                      stanceSum += stanceNum2.get() * e.getWeight();
+                      weights += e.getWeight();
+                  }
+              }
+          }/*
           Point p2 = e.getDestination();
-          if(!(p2 instanceof StancePoint))
-              throw new ClassCastException("This function only works on User objects");
+          if(!(p2 instanceof StancePoint)) throw new ClassCastException("This function only works on StancePoint objects");
           StancePoint u2 = (StancePoint) p2;
-          
+
           Optional<Integer> stance = u2.getStance();
           if (stance.isPresent()) {
             neighbors++;
             stanceSum += stance.get() * e.getWeight();
             weights += e.getWeight();
-          }
+          }*/
         }
-        
+
+
         if(neighbors != 0) {
           int newStance = stanceSum / weights;
           newStance = newStance / neighbors;
-          
+
           //Update the range of calculated values
-          if(newStance > LARGEST_WEIGHT_CALCULATED)
-            LARGEST_WEIGHT_CALCULATED = newStance;
-          
-          if(newStance < SMALLEST_WEIGHT_CALCULATED)
-            SMALLEST_WEIGHT_CALCULATED = newStance;
-          
+          if(newStance > largestWeightCalculated)
+            largestWeightCalculated = newStance;
+
+          if(newStance < smallestWeightCalculated)
+            smallestWeightCalculated = newStance;
+
           //Scale the calculated weight to the new range
           int newRange = (MAX_STANCE - MIN_STANCE);
-          int oldRange = (LARGEST_WEIGHT_CALCULATED - SMALLEST_WEIGHT_CALCULATED);
-          
-          newStance = (((newStance - SMALLEST_WEIGHT_CALCULATED) * newRange) / oldRange) + MIN_STANCE;
-          
+          int oldRange = (largestWeightCalculated - smallestWeightCalculated);
+
+          newStance = (((newStance - smallestWeightCalculated) * newRange) / oldRange) + MIN_STANCE;
+
           Optional<Integer> stance = u.getStance();
-          if((stance.isPresent() && stance.get() != newStance) || !stance.isPresent()) {
+          if(!stance.isPresent() || stance.get() != newStance) {
             change = true;
             u.setStance(newStance);
           }
@@ -130,7 +173,7 @@ public class StanceProcessing {
         //if(neighbors != 0)
         //System.out.println("Worked on " + p.getName() + " neighbours = " + neighbors + " weight = " + u.getStance());
       }
-      
+
       return change;
     }
 

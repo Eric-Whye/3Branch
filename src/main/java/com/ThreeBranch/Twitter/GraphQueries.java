@@ -94,7 +94,7 @@ public abstract class GraphQueries {
                 }
                 u1 = (StancePoint)p1;
 
-                Optional<Point> op = enhancedGraph.getPointIfExists(u1.getName());
+                Optional<Point> op = enhancedGraph.getPointIfExists(u1);
                 if(op.isPresent()) {
                     p2 = op.get();
                     if(!(p2 instanceof StancePoint)) {

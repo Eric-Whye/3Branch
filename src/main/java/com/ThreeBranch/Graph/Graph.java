@@ -10,19 +10,28 @@ import java.lang.reflect.Constructor;
 
 public class Graph implements Iterable<Point>{
   private final Hashtable<Point, List<Edge>> adjacencyList = new Hashtable<>();
+  private final Hashtable<Point, Point> keysTable = new Hashtable<>();
 
 
   public Optional<Point> getPointIfExists(String s) {
-    getPointIfExists(new Vertex(s));
-    return Optional.empty();
+    return getPointIfExists(new Vertex(s));
   }
 
   public Optional<Point> getPointIfExists(Point p){
-    for (Map.Entry<Point, List<Edge>> entry: adjacencyList.entrySet()){
-      if (p.equals(entry))
-        return Optional.of(p);
+    /*for (Point q: adjacencyList.keySet()){
+      if (p.getName().trim().equals(q.getName().trim())){
+        System.out.println(q.getName());
+      }
+    }*/
+    if (adjacencyList.containsKey(p)){
+      return Optional.of(keysTable.get(p));
     }
-    return Optional.empty();
+    else return Optional.empty();
+    /*for (Map.Entry<Point, List<Edge>> entry: adjacencyList.entrySet()){
+      if (p.equals(entry.getKey()))
+        return Optional.of(entry.getKey());
+    }
+    return Optional.empty();*/
   }
 
   //This is BAD, we need to make graph generic ASAP
@@ -43,6 +52,15 @@ public class Graph implements Iterable<Point>{
     return Optional.empty();
   }
 
+  public void addPoint(Point p) {
+    if(!hasVertex(p)) {
+      ArrayList<Edge> adjacencies = new ArrayList<Edge>();
+      adjacencies.add(new Arc(p, p));
+      keysTable.put(p, p);
+      adjacencyList.put(p, adjacencies);
+    }
+  }
+
   public boolean hasVertex(String name) {
     return hasVertex(new Vertex(name));
   }
@@ -51,6 +69,9 @@ public class Graph implements Iterable<Point>{
     return adjacencyList.containsKey(p);
   }
 
+  public List<Edge> getAdj(String s){
+    return null;
+  }
   public List<Edge> getAdj(Point p) throws IllegalArgumentException{
     List<Edge> adj = adjacencyList.get(p);
     if(adj == null)
@@ -129,6 +150,7 @@ public class Graph implements Iterable<Point>{
         List<Edge> edges = new ArrayList<>();
         edges.add(new Arc(from, to));
         adjacencyList.put(from, edges);
+        keysTable.put(from, from);
       }
     }
   }
@@ -151,6 +173,7 @@ public class Graph implements Iterable<Point>{
         List<Edge> edges = new ArrayList<>();
         edges.add(new Arc(from, to));
         adjacencyList.put(from, edges);
+        keysTable.put(from, from);
       }
     }
   }
