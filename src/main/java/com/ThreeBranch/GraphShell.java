@@ -112,6 +112,14 @@ public class GraphShell {
                         fp.writeGraphToFile(graph);
                     }
                     break;
+
+                case "write to gdf":
+                    if (graph.isEmpty()) {
+                        System.out.println("No graph built");
+                        break;
+                    }
+                    fp.writeGraphToGDFFile(graph);
+                    break;
                     
                 case "print most retweeted":
                     GraphQueries.findInfluentials(graph);

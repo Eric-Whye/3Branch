@@ -44,7 +44,7 @@ public class GraphRTFileProcessor {
 
     //Removes ':'
     private String removeSpecialCharacters(String str){
-        return str.replace(":", "");
+        return str.replace(":", "").replace(",", "");
     }
 
     public synchronized void writeGraphToFile(Graph graph) {
@@ -72,6 +72,32 @@ public class GraphRTFileProcessor {
                 delim.charAt(0),
                 newline.charAt(0),
                 outputFile
+        );
+    }
+
+    public void writeGraphToGDFFile(Graph graph){
+        Configuration config = Configuration.getInstance();
+        String outputFile = config.getValueFor("graph/GDFOutput");
+
+        List<String> lines = new ArrayList<>();
+        lines.add("nodedef>name VARCHAR");
+        for (Point p : graph){
+            lines.add(p.getName());
+        }
+        lines.add("edgedef>node1 VARCHAR,node2 VARCHAR, att1 INTEGER");
+        for (Point p : graph){
+            for (Edge e : graph.getAdj(p)){
+                String stanceNum;
+                StancePoint source = (StancePoint) e.getSource();
+                if (source.getStance().isPresent())
+                    stanceNum = String.valueOf(source.getStance().get());
+                else stanceNum = " ";
+                lines.add(e.getSource() + "," + e.getDestination() + "," + stanceNum);
+            }
+        }
+        FileEntryIO.writeLineByLine(lines,
+                config.getValueFor("format.newLineDelim").charAt(0),
+                config.getValueFor("graph.GDFOutput")
         );
     }
 

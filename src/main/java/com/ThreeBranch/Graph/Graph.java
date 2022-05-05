@@ -145,7 +145,8 @@ public class Graph implements Iterable<Point>{
     else {//Arc doesn't already exist
       //Check if source Point exists
       if (adjacencyList.containsKey(from))
-        getAdj(from).add(new Arc(from, to));
+        getAdj(from).add(new Arc(getPointIfExists(from).get(), to));
+
       else {//Totally new entry added
         List<Edge> edges = new ArrayList<>();
         edges.add(new Arc(from, to));
@@ -167,7 +168,7 @@ public class Graph implements Iterable<Point>{
     else {//Arc doesn't exist
       //Check if source Point exists
       if (adjacencyList.containsKey(from))
-        getAdj(from).add(new Arc(from, to, weight));
+        getAdj(from).add(new Arc(getPointIfExists(from).get(), to, weight));
 
       else {//Totally new entry added
         List<Edge> edges = new ArrayList<>();

@@ -72,6 +72,24 @@ public class FileEntryIO {
         }
     }
 
+    public static void writeLineByLine(List<String> list, char newLineDelim, String filename){
+        Writer writer = null;
+        try{
+            writer = new BufferedWriter(new FileWriter(filename));
+
+            for (String line : list) {
+                writer.write(line + newLineDelim);
+            }
+
+        }catch(IOException e){e.printStackTrace();}
+        finally{
+            try{
+                assert writer != null;
+                writer.close();
+            }catch(IOException e){e.printStackTrace();}
+        }
+    }
+
     /**
      * Writes a whole list of titled blocks of data. The first String in each inner list is the title
      * @param list of lists where each inner list is a tokenized string
@@ -178,4 +196,5 @@ public class FileEntryIO {
         }
       }
     }
+
 }

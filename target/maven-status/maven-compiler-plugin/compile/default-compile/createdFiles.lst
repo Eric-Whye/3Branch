@@ -11,6 +11,7 @@ com\ThreeBranch\Profile\HashPosition.class
 com\ThreeBranch\Callable.class
 com\ThreeBranch\FileEntryIO.class
 com\ThreeBranch\Hashtags\HashtagLexicon$readLexicon.class
+com\ThreeBranch\Twitter\StanceProcessing$readInitialData.class
 com\ThreeBranch\Analysis\LeanCondition.class
 com\ThreeBranch\Graph\Vertex.class
 com\ThreeBranch\Hashtags\HashtagLabel.class
@@ -32,6 +33,7 @@ com\ThreeBranch\Twitter\RTProcessorConcurrent.class
 com\ThreeBranch\LockedObject.class
 com\ThreeBranch\Twitter\Twitterer.class
 com\ThreeBranch\Tri.class
+com\ThreeBranch\Twitter\StanceProcessing$1.class
 com\ThreeBranch\Hashtags\HashtagMain$collectHashtags.class
 com\ThreeBranch\Twitter\Configuration.class
 com\ThreeBranch\Analysis\Condition.class
