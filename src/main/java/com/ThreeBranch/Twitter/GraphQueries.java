@@ -29,6 +29,7 @@ public abstract class GraphQueries {
                 break;
         }
         //---------------------------------------
+        //BootStrapped Graph
         System.out.println("Building second graph");
 
         Graph uthGraph = new Graph();
@@ -54,23 +55,8 @@ public abstract class GraphQueries {
                 break;
         }
         listOfGraphs.add(htuGraph);
-
-        HashSet<Point> nonStances = new HashSet<>();
         Graph output = new Graph();
-
-        for (Point p : listOfGraphs.get(0)) {
-            //If the point has a stance assigned, add it without change to the output
-            //
-            if (((StancePoint) p).getStance().isPresent() && listOfGraphs.get(0).getAdj(p).size() != 0)
-                output.addArc(p, listOfGraphs.get(0).getAdj(p));
-            else
-                nonStances.add(p);
-        }
-
-        for (Point p : nonStances)
-            if (listOfGraphs.get(1).hasVertex(p.getName()) && listOfGraphs.get(1).getAdj(p).size() != 0)
-                output.addArc(p, listOfGraphs.get(1).getAdj(p));
-        Graph enhancedGraph = graph;
+        graphBootstrapping(listOfGraphs, output);
 
         System.out.println("All Graphs Built");
 
@@ -94,7 +80,7 @@ public abstract class GraphQueries {
                 }
                 u1 = (StancePoint)p1;
 
-                Optional<Point> op = enhancedGraph.getPointIfExists(u1);
+                Optional<Point> op = graph.getPointIfExists(u1);
                 if(op.isPresent()) {
                     p2 = op.get();
                     if(!(p2 instanceof StancePoint)) {
@@ -106,7 +92,7 @@ public abstract class GraphQueries {
 
                     Optional<Integer> os1 = u1.getStance();
                     Optional<Integer> os2 = u2.getStance();
-                    if(os1.isPresent() && os2.isPresent() && unenhancedGraph.getAdj(u1).size() >= 10 && enhancedGraph.getAdj(u2).size() >= 10) {
+                    if(os1.isPresent() && os2.isPresent() && unenhancedGraph.getAdj(u1).size() >= 10 && graph.getAdj(u2).size() >= 10) {
                         int s1 = os1.get();
                         int s2 = os2.get();
 
@@ -138,8 +124,7 @@ public abstract class GraphQueries {
         System.out.println("Total: " + count);
     }
 
-    public static void findInfluentials(Graph graph) {
-
+    public static String HighestWeight(Graph graph) {
         Hashtable<Point, Integer> table = new Hashtable<>();
         for (Point p : graph) {
             List<Edge> list = graph.getAdj(p);
@@ -159,7 +144,7 @@ public abstract class GraphQueries {
                 return 1;
             else return -1;
         });
-        System.out.println(Arrays.toString(thing.toArray()));
+        return Arrays.toString(thing.toArray());
     }
 
     public static void randomUserHandler(Graph graph) {
@@ -186,6 +171,32 @@ public abstract class GraphQueries {
             System.out.println(u.getName() + " Stance: " + stance.get() + " Retweets: " + retweets);
         } else {
             System.out.println(u.getName() + " No Stance Assigned " + " Retweets: " + retweets);
+        }
+    }
+
+    public static void graphBootstrapping(List<Graph> list, Graph output){
+        HashSet<Point> nonStances = new HashSet<>();
+        for (Point p : list.get(0)) {
+            //If the point has a stance assigned, add it without change to the output
+            if (((StancePoint) p).getStance().isPresent()) {
+                for (Edge edge : list.get(0).getAdj(p)){
+                    output.addArc(p, edge.getDestination());
+                }
+            } else {
+                nonStances.add(p);
+            }
+        }
+        for (int i = 1; i < list.size(); i++){
+            for (Point p : nonStances){
+                if (list.get(i).getPointIfExists(p).isPresent()) {
+                    Point p2 = list.get(i).getPointIfExists(p).get();
+                    if (((StancePoint) p2).getStance().isPresent()){
+                        for (Edge edge : list.get(i).getAdj(p)){
+                            output.addArc(p, edge.getDestination());
+                        }
+                    }
+                }
+            }
         }
     }
 }

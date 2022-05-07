@@ -113,24 +113,6 @@ public class Graph implements Iterable<Point>{
       return null;
     }
   }
-  public void addArc(Point from, List<Edge> edges){
-    if (adjacencyList.containsKey(from)) {
-      Edge uniqEdge = null;
-      //Finds the unique edges in edges and adds them if they are unique
-      for (Edge e : getAdj(from)) {
-        for (Edge e2 : edges) {
-          uniqEdge = e2;
-          if (e.equals(e2)) {
-            uniqEdge = null;
-            break;
-          }
-        }
-
-        if (uniqEdge != null)
-          getAdj(from).add(uniqEdge);
-      }
-    }
-  }
 
 
   public void addArc(String from, String to) {
@@ -162,7 +144,7 @@ public class Graph implements Iterable<Point>{
   
   public void addArc(Point from, Point to, int weight) {
     Arc arc = (Arc) getArcIfExists(from, to);
-    if (arc != null) {//increase weight as arc exists
+    if (arc != null) {//increase weight because arc exists
       arc.setWeight(weight);
     }
     else {//Arc doesn't exist
@@ -208,6 +190,14 @@ public class Graph implements Iterable<Point>{
     return keys.get(new Random().nextInt(keys.size()));
   }
 
+  public Graph clone(){
+    Graph clone = new Graph();
+    for (Point p : this){
+      for (Edge e : getAdj(p))
+        clone.addArc(p , e.getDestination());
+    }
+    return clone;
+  }
   public int size(){return adjacencyList.size();}
   public boolean isEmpty(){return adjacencyList.isEmpty();}
 

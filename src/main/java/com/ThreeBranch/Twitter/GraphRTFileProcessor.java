@@ -15,7 +15,6 @@ public class GraphRTFileProcessor {
         this.graph = graph;
     }
 
-
     private class readRetweets implements Callable {
         boolean reverse;
         /**
@@ -84,15 +83,16 @@ public class GraphRTFileProcessor {
         for (Point p : graph){
             lines.add(p.getName());
         }
-        lines.add("edgedef>node1 VARCHAR,node2 VARCHAR, att1 INTEGER");
+        lines.add("edgedef>node1 VARCHAR,node2 VARCHAR, weight INTEGER, att1 VARCHAR, att2 VARCHAR");
         for (Point p : graph){
             for (Edge e : graph.getAdj(p)){
                 String stanceNum;
                 StancePoint source = (StancePoint) e.getSource();
-                if (source.getStance().isPresent())
+                if (source.getStance().isPresent()) {
                     stanceNum = String.valueOf(source.getStance().get());
+                }
                 else stanceNum = " ";
-                lines.add(e.getSource() + "," + e.getDestination() + "," + stanceNum);
+                lines.add(e.getSource() + "," + e.getDestination() + "," + e.getWeight() + "," + stanceNum);
             }
         }
         FileEntryIO.writeLineByLine(lines,

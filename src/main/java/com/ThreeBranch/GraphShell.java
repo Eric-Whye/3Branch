@@ -14,7 +14,8 @@ import java.util.stream.Stream;
 import java.util.Optional;
 
 public class GraphShell {
-    Graph graph = new Graph();
+    private Graph graph = new Graph();
+    private final Configuration config = Configuration.getInstance();
 
     public GraphShell() {
     }
@@ -28,7 +29,6 @@ public class GraphShell {
         Scanner in = new Scanner(System.in);
         List<Graph> listOfGraphs = new ArrayList<>();
         String stanceFile = "";
-        Configuration config = Configuration.getInstance();
 
 
         while (run) {
@@ -60,7 +60,6 @@ public class GraphShell {
                     System.out.println("Retweeted Graph Built");
                     break;
 
-
                 case "build user to hashtag":
                     if (!graph.isEmpty())
                         System.out.println("Old Graph Dropped");
@@ -82,14 +81,15 @@ public class GraphShell {
                     break;
 
                 case "combine graphs":
-                    if (!graph.isEmpty())
-                        System.out.println("Old Graph Dropped");
                     if (listOfGraphs.size() <= 1) {
                         System.out.println("Graphs list doesn't not have enough graphs");
                         break;
                     }
+                    if (!graph.isEmpty())
+                        System.out.println("Old Graph Dropped");
+                    graph.clear();
                     System.out.println("Building Stance Graph");
-                    graphBootstrapping(listOfGraphs);
+                    GraphQueries.graphBootstrapping(listOfGraphs, graph);
                     System.out.println("Stance Graph built");
                     break;
 
@@ -98,7 +98,7 @@ public class GraphShell {
                         System.out.println("No graph built");
                         break;
                     }
-                    listOfGraphs.add(graph);
+                    listOfGraphs.add(graph.clone());
                     break;
 
                 case "clear list":
@@ -121,8 +121,8 @@ public class GraphShell {
                     fp.writeGraphToGDFFile(graph);
                     break;
                     
-                case "print most retweeted":
-                    GraphQueries.findInfluentials(graph);
+                case "print highest weight":
+                    System.out.println(GraphQueries.HighestWeight(graph));
                     break;
                     
                 case "quit":
@@ -190,29 +190,5 @@ public class GraphShell {
                     System.out.println("Unrecognised");
             }
         }
-    }
-
-
-    private void graphBootstrapping(List<Graph> list){
-        HashSet<Point> nonStances = new HashSet<>();
-        Graph output = new Graph();
-
-        for (Point p : list.get(0)) {
-            //If the point has a stance assigned, add it without change to the output
-            //
-            if (((StancePoint) p).getStance().isPresent() && list.get(0).getAdj(p).size() != 0) {
-                output.addArc(p, list.get(0).getAdj(p));
-            } else {
-                nonStances.add(p);
-            }
-        }
-
-        for (Point p : nonStances){
-            if (list.get(1).hasVertex(p.getName()) && list.get(1).getAdj(p).size() != 0){
-                output.addArc(p, list.get(1).getAdj(p));
-            }
-        }
-
-        graph = output;
     }
 }
