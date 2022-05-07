@@ -194,6 +194,7 @@ public abstract class GraphQueries {
                         for (Edge edge : list.get(i).getAdj(p)){
                             output.addArc(p, edge.getDestination());
                         }
+                        nonStances.remove(p);
                     }
                 }
             }

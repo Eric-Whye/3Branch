@@ -113,14 +113,6 @@ public class GraphShell {
                     }
                     break;
 
-                case "write to gdf":
-                    if (graph.isEmpty()) {
-                        System.out.println("No graph built");
-                        break;
-                    }
-                    fp.writeGraphToGDFFile(graph);
-                    break;
-                    
                 case "print highest weight":
                     System.out.println(GraphQueries.HighestWeight(graph));
                     break;
