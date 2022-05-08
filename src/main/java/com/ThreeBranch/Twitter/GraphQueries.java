@@ -127,14 +127,16 @@ public abstract class GraphQueries {
     public static String HighestWeight(Graph graph) {
         Hashtable<Point, Integer> table = new Hashtable<>();
         for (Point p : graph) {
-            List<Edge> list = graph.getAdj(p);
-            for (Edge e : list) {
-                if (table.containsKey(e.getDestination())) {
+            int sumWeight = 0;
+            for (Edge e : graph.getAdj(p)) {
+                sumWeight += e.getWeight();
+                /*if (table.containsKey(e.getDestination())) {
                     int rt = table.get(e.getDestination());
                     table.put(e.getDestination(), e.getWeight() + rt);
                 } else
-                    table.put(e.getDestination(), e.getWeight());
+                    table.put(e.getDestination(), e.getWeight());*/
             }
+            table.put(p, sumWeight);
         }
         Set<Map.Entry<Point, Integer>> numRetweetsByUser = table.entrySet();
         Stream<Map.Entry<Point, Integer>> thing = numRetweetsByUser.stream().sorted((o1, o2) -> {
@@ -187,6 +189,7 @@ public abstract class GraphQueries {
             }
         }
         for (int i = 1; i < list.size(); i++){
+            List<Point> removedStances = new ArrayList<>();
             for (Point p : nonStances){
                 if (list.get(i).getPointIfExists(p).isPresent()) {
                     Point p2 = list.get(i).getPointIfExists(p).get();
@@ -194,9 +197,12 @@ public abstract class GraphQueries {
                         for (Edge edge : list.get(i).getAdj(p)){
                             output.addArc(p, edge.getDestination());
                         }
-                        nonStances.remove(p);
+                        removedStances.add(p);
                     }
                 }
+            }
+            for (Point p : removedStances){
+                nonStances.remove(p);
             }
         }
     }

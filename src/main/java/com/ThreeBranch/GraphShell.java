@@ -172,6 +172,10 @@ public class GraphShell {
                 case "analyze profile graph":
                   ProfileHandler.handleAnalysis(in, graph);
                   break;
+
+                case "write all to gdf":
+                    GDFWriter.writeAllDataToGDF();
+                    break;
                   
                 case "clear":
                   System.out.print("\033[H\033[2J");  
