@@ -7,6 +7,7 @@ import java.util.concurrent.locks.*;
 public class FileEntryIO {
     private static List<Lock> locks = new ArrayList();
     private static List<Thread> threads = new ArrayList();
+    private static HashMap<String, Lock> fileLocks = new HashMap();
     
     /**
      * Appends line entries to filename where each entry is a tokenized string in the form of a List.
@@ -172,27 +173,41 @@ public class FileEntryIO {
       }
       
       public void run() {
-        lock.lock();
-        FileInputStream inputStream = null;
-        Scanner sc = null;
         try{
-            inputStream = new FileInputStream(filename);
-            sc = new Scanner(inputStream);
-            while (sc.hasNextLine())
-                callable.call(sc.nextLine());
+          //Check file availability
+          if(fileLocks.containsKey(filename)) {
+            fileLocks.get(filename).lock();
+          } else {
+            Lock l = new ReentrantLock();
+            l.lock();
+            fileLocks.put(filename, l);
+          }
+          
+          lock.lock();
+          FileInputStream inputStream = null;
+          Scanner sc = null;
+          try{
+              inputStream = new FileInputStream(filename);
+              sc = new Scanner(inputStream);
+              while (sc.hasNextLine())
+                  callable.call(sc.nextLine());
 
-        }catch(IOException e){
-          e.printStackTrace();
-        } finally{
-            try{
-                assert inputStream != null;
-                inputStream.close();
-                assert sc != null;
-                sc.close();
-            }catch(IOException e){
-              e.printStackTrace();
-            }
-            lock.unlock();
+          }catch(IOException e){
+            e.printStackTrace();
+          } finally{
+              try{
+                  assert inputStream != null;
+                  inputStream.close();
+                  assert sc != null;
+                  sc.close();
+              }catch(IOException e){
+                e.printStackTrace();
+              }
+              lock.unlock();
+          }
+        } finally {
+          //Unlock the file
+          fileLocks.get(filename).unlock();
         }
       }
     }

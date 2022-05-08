@@ -9,6 +9,7 @@ import com.ThreeBranch.Hashtags.HashtagMain;
 import com.ThreeBranch.Twitter.*;
 import com.ThreeBranch.Analysis.Analysis;
 import com.ThreeBranch.LockedObject;
+import com.ThreeBranch.Twitter.StancePoint;
 
 public class ProfileHandler{
   public static Graph handleBuild() {
@@ -46,6 +47,7 @@ public class ProfileHandler{
   }
   
   public static void handleRawPrint(Graph g) {
+    System.out.println("HERE " + g.size());
     for(Point p : g) {
       if(!(p instanceof UserPosition)) {
         System.err.println("---------- GRAPH CONTAINS NONE UserPosition ENTRIES");

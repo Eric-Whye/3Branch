@@ -18,10 +18,22 @@ public class RTProcessorConcurrent extends GraphRTFileProcessor {
     Lock lock = null;
     try{
       lock = (new FileEntryIO()).streamLineByLineConcurrent(filename, getReadHashtags(false));
-    }catch(IncorrectGraphFileException e){
+    }catch(Exception e){
       e.printStackTrace();
     }
 
     return lock;
   } 
+  
+  public synchronized Lock populateRetweetGraphFromFileConcurrent(String filename) {
+    graph.clear();
+    Lock lock = null;
+    try {
+      lock = (new FileEntryIO()).streamLineByLineConcurrent(filename, new readRetweets(false));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+    return lock;
+  }
 }
