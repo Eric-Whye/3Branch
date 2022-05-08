@@ -32,8 +32,6 @@ public abstract class GDFWriter {
 
         Graph profileGraph = new Graph();
 
-        List<String> lines = new ArrayList<>();
-        lines.add("nodedef>name VARCHAR, stance VARCHAR, class VARCHAR");
 
         //--------------------Retweet Graph, var retweet
         GraphRTFileProcessor fp1 = new GraphRTFileProcessor(retweet);
@@ -47,7 +45,7 @@ public abstract class GDFWriter {
 
         //Hashtag to labels graph
         hashtagsToLabels = (new HashtagMain()).run(config.getValueFor("graph.tweetsInput"));
-        System.out.println("Hashtags to labels built" + hashtagsToLabels.size());
+        System.out.println("Hashtags to labels built");
 
         //Do all of the stance processing, ideally this would be separate threads, but that's a lot of code to write
         StanceProcessing sp = new StanceProcessing(retweet);
@@ -80,9 +78,12 @@ public abstract class GDFWriter {
         int minStance = Integer.parseInt(config.getValueFor("stance.minStance"));
         int maxStance = Integer.parseInt(config.getValueFor("stance.maxStance"));
 
+        List<String> lines = new ArrayList<>();
+        lines.add("nodedef>name VARCHAR, stance VARCHAR, class VARCHAR");
+
         //Output all of the users
-        for (Point p : combined){
-            String stance = " ";
+        for (Point p : retweet){
+            String stance = "NA";
             if (((StancePoint) p).getStance().isPresent()){
                 int stanceNum = ((StancePoint) p).getStance().get();
 
@@ -108,13 +109,13 @@ public abstract class GDFWriter {
               HashPosition hp = hpIter.next();
               if(!hashtags.contains(hp.getName())) {
                 hashtags.add(hp.getName());
-                lines.add(hp.getName() + ", " + "NA" + ", " + "HASHTAG");
+                lines.add(hp.getName() + ", " + "NA" +  ", " + "HASHTAG");
                 Iterator<String> labelIter = hp.getLabels();
                 while(labelIter.hasNext()) {
                   String s = labelIter.next();
                   if(!labels.contains(s)) {
                     labels.add(s);
-                    lines.add(s + ", " + "NA" + ", " + "LABEL");
+                    lines.add(s + ", " + "NA" +  ", " + "LABEL");
                   }
                 }
               }
@@ -124,8 +125,8 @@ public abstract class GDFWriter {
         System.out.println("Hashtags and Labels Written");
 
         lines.add("edgedef>node1 VARCHAR,node2 VARCHAR, weight INTEGER");
-        for (Point p : combined){
-            for (Edge e : combined.getAdj(p)){
+        for (Point p : retweet){
+            for (Edge e : retweet.getAdj(p)){
                 lines.add(e.getSource() + "," + e.getDestination() + "," + e.getWeight());
             }
         }

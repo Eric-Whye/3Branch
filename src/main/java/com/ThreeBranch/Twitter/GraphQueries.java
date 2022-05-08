@@ -208,10 +208,10 @@ public abstract class GraphQueries {
                 nonStances.remove(p);
             }
         }
-        for (Point p : nonStances){
+        /*for (Point p : nonStances){
             for (Edge e : list.get(0).getAdj(p)){
                 output.addArc(p, e.getDestination(), e.getWeight());
             }
-        }
+        }*/
     }
 }
