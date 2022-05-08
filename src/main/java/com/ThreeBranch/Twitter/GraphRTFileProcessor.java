@@ -15,13 +15,13 @@ public class GraphRTFileProcessor {
         this.graph = graph;
     }
 
-    private class readRetweets implements Callable {
+    protected class readRetweets implements Callable {
         boolean reverse;
         /**
          * populates graph with retweets from file. The graph can be a retweet or retweeted graph depending on reverse
          * @param reverse true for retweeted graph, false for retweet graph.
          */
-        private readRetweets(boolean reverse){this.reverse = reverse;}
+        protected readRetweets(boolean reverse){this.reverse = reverse;}
 
         @Override
         public void call(Object o){

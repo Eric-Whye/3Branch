@@ -5,6 +5,7 @@ import com.ThreeBranch.FileEntryIO;
 import com.ThreeBranch.Graph.*;
 import com.ThreeBranch.Twitter.Configuration;
 import com.ThreeBranch.LockedObject;
+import com.ThreeBranch.Twitter.StancePoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class HashtagMain{
           for(Edge termE : splitTags.getAdj(hashtag)) {
             String term = termE.getDestination().getName().toLowerCase();
             try {
-            for(Edge label : lexicon.getAdj(term))
+            for(Edge label : lexicon.getAdj(new StancePoint(term)))
               output.addArc(hashtag, label.getDestination(), label.getWeight());
             } catch(Exception e) {}
           }

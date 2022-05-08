@@ -15,7 +15,7 @@ public class Configuration {
     //Holds the configuration file in memory
     private static final Properties properties = new Properties();
 
-    public String getValueFor(String configName) throws NullPointerException{
+    public synchronized String getValueFor(String configName) throws NullPointerException{
         return properties.getProperty(configName);
     }
 

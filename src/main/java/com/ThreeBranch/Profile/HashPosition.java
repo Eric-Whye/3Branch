@@ -2,6 +2,7 @@ package com.ThreeBranch.Profile;
 
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Iterator;
 
 import com.ThreeBranch.Tri;
 import com.ThreeBranch.Graph.*;
@@ -21,6 +22,10 @@ public class HashPosition implements Position, Point {
   
   public String getName() {
     return hashtag;
+  }
+  
+  public Iterator<String> getLabels() {
+    return labels.iterator();
   }
   
   public void add(Point p) {
