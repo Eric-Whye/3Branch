@@ -45,12 +45,12 @@ Sprint 6:
 
 Sprint 7: 
 1) "java -jar target/3Branch-1.0-SNAPSHOT.jar -graph"<br>
-2) Run the command "build hashtag graph", this will build a graph of hashtags and their labels, and then store this in memory
-3.1) From here you can either run "print hashtag graph" to print the raw graph as a list of nodes and their adjacent nodes (ie hashtags and their labels)
-3.2) Or you can run the command "count labels" to print out the number of every argument, where an argument is derived from the labels associated with a hashtag
+2) Run the command "build hashtag graph", this will build a graph of hashtags and their labels, and then store this in memory<br>
+3.1) From here you can either run "print hashtag graph" to print the raw graph as a list of nodes and their adjacent nodes (ie hashtags and their labels)<br>
+3.2) Or you can run the command "count labels" to print out the number of every argument, where an argument is derived from the labels associated with a hashtag<br>
 Sprint 8: java -jar target/3Branch-1.0-SNAPSHOT.jar -graph<br>
 To write the all the correct graph to GDF, do "write all to gdf".<br>
-This writes a curated graph in GDF format to a GDF directory.
+This writes a curated graph in GDF format to a GDF directory.<br>
 
 
 <br><br>
