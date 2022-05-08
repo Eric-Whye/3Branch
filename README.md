@@ -2,23 +2,59 @@
 
 Twitter Analytics Project
 
-Eric Whye, Amira Ayadi, Tessa Brewer
+Eric Whye, Tessa Brewer
 
 Eric.Whye@ucdconnect.ie<br>
 tjobs959@gmail.com
 
-Goal: Analysis of vaccine related tweets, primarily on identification of a pro or anti-vax stance.
+Goal: Analysis of vaccine related tweets.
 
 Using twitter4j libraries and developed using Maven.
 
-Currently able to gather tweets and process tweets into a graph structure(Sprint 3).
 
-<strong><br>Details from this Sprint:<br></strong>
-Tweet Data is processed into custom Graph data structure that is interfaced well.
 
-the Graph class has a sister class called GraphRTFileProcessor(bit of a bad name) 
-that uses the Graph data structure for the specific usage of processing tweet data.
-Usage of the tweet processor is decided in with argument parameters.
+<br><br>
+<strong>Commands for how to run the specification for each sprint.</strong><br>
+
+Sprint 1: 
+
+Sprint 2: java -jar target/3Branch-1.0-SNAPSHOT.jar -g
+
+Sprint 3: java -jar target/3Branch-1.0-SNAPSHOT.jar -graph<br>
+To Write to file specified under "graph.output" in config file do "build retweet" then "write".<br>
+To read retweet and retweeted Graph from File, do "read from file".
+
+Sprint 4: java -jar target/3Branch-1.0-SNAPSHOT.jar -graph<br>
+To find the most the retweeted people, do "build retweeted" then "print highest weight".<br>
+To assign stances to the graph, do "build retweet" then "assign stances".<br>
+To look at stance assignment result/coverage, do "print coverage".<br>
+Stances of each user are automatically written to file specified under "stance.output" in config file.<br>
+To look at a random user. do "get random user".
+
+Sprint 5: java -jar target/3Branch-1.0-SNAPSHOT.jar -graph<br>
+To build to combined retweet and hashtag graph do 
+"build retweet" then "assign stances" then "add graph". 
+"build user to hashtag" then "assign stances" then "add graph", 
+then finally do "combine graphs" and "print coverage" to see the result.
+
+Sprint 6: java -jar target/3Branch-1.0-SNAPSHOT.jar -graph<br>
+
+Sprint 7: java -jar target/3Branch-1.0-SNAPSHOT.jar -graph<br>
+
+Sprint 8: java -jar target/3Branch-1.0-SNAPSHOT.jar -graph<br>
+To write the all the correct graph to GDF, do "write all to gdf".<br>
+This writes a curated graph in GDF format to a GDF directory.
+
+
+<br><br>
+<strong>Source files associated with each Sprint</strong><br>
+Sprint 1 and 2: Callable, FileEntryIO and Twitter Package. Namely TweetData, Twitterer, Configuration.<br>
+Sprint 3: GraphShell and Graph package.<br>
+Sprint 4: GraphShell and Twitter Package. Namely StancePoint, StanceProcessing, GraphRtFileProcessor and GraphQueries.
+Sprint 5: GraphShell and Twitter Package. Namely StanceProcessing and GraphQueries.<br>
+Sprint 6: GraphShell and Hashtags Package.<br>
+Sprint 7: GraphShell, Profile and Analysis Packages<br>
+Sprint 8: GDFWriter in Twitter Package.<br>
 
 <br>
 Functionality (Subject to Change):
@@ -42,16 +78,3 @@ Functionality (Subject to Change):
  
 <br>
 Self Contained Jar with sources, class files and configuration file included.
-
-How to run:
-java -jar 3Branch-1.0-SNAPSHOT-shaded.jar -G (for tweet gathering)
-java -jar 3Branch-1.0-SNAPSHOT-shaded.jar -graph -w (for writing graph data to file from tweet data)
-java -jar 3Branch-1.0-SNAPSHOT-shaded.jar -graph -r (for reading graph data into memory)
-
-Currently, 5190 english tweets and 3923 accounts associated with those tweets have been gathered according to these search terms: <br>
-"#vaccinate,#immunization,#immunisation,#immunize,#vaccineswork,#keepsusafe,#omicron,#maskup,#vaccinerollout,#ventilation,#antivaccine,#vaccineskill,#vaxxed,#forcedinjections,#antivaccine,#medicalfreedom,#knowtherisk,#antivaxx,#vaccinsanity,#pharma,#bewaretheneedle,#vaccineinjury,#byebyebigpharma,#pharmthesheep,#vaccineeducation"
-
-From 5300 onwards, search terms are:
-"#vaccine #vaccination #vaccines #vaccinate #vaccinated #vaxxed #vaccineswork #VaccinesSaveLives #getvaccinated #GetVaxxed #vaccinerollout #vaccinatetheworld #PhizerGang #TeamModerna #immunization #immunisation #immunizeunder5s #immunize #keepsusafe #omicron #maskup #ventilation #covidisnotover #CancelCovid #vaccinechoice #noflushot #omicron #covid19 #pfizer #mask #antivaccine #antivaxxers #antivax #learntherisk #vaccineskill #vaxxed #vaccinescauseAIDS #researchdontregret #idonotconsent #stoppoisoningyourkids #forcedinjections #antivaccine #medicalfreedom #knowtherisk #antivaxx #vaccinsanity #pharma #bewaretheneedle #vaccineinjury #byebyebigpharma #pharmthesheep #vaccineeducation"
-
-"#stopthespread #vaccine #vaccination #vaccines #vaccinate #vaccinated #vaxxed #vaccineswork #VaccinesSaveLives #getvaccinated #GetVaxxed #vaccinerollout #vaccinatetheworld #PhizerGang #TeamModerna #immunization #immunisation #immunizeunder5s #immunize #keepsusafe #wearamask #maskup #ventilation #covidisnotover novaccinepassports #novaccinepassport #novaccinesmandate #novaccinemadates #covid19 #covax #covidvaccine #vaccinemandate #vaccineequity #lockdown #vaccine #CancelCovid #vaccinechoice #noflushot #pfizer #mask HHSlawsuit #b1less #HearThisWell #CDCwhistleblower #nolockdown #antivaccine #antivaxxers #antivax #learntherisk #vaccineskill #vaxxed #vaccinescauseAIDS #researchdontregret #idonotconsent #stoppoisoningyourkids #forcedinjections #antivaccine #medicalfreedom #knowtherisk #antivaxx #vaccinsanity #pharma #bewaretheneedle #vaccineinjury #byebyebigpharma #pharmthesheep #vaccineeducation"

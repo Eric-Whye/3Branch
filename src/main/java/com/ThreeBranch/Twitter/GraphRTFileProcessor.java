@@ -76,36 +76,23 @@ public class GraphRTFileProcessor {
 
     public synchronized void populateRetweetGraphFromFile(String filename){
         graph.clear();
-        try{
-            FileEntryIO.streamLineByLine(filename, new readRetweets(false));
-        }catch(IncorrectGraphFileException e){
-            System.err.println("Error: Retweet data file not found");
-            //populateFromGraphFile();
-        }
+        FileEntryIO.streamLineByLine(filename, new readRetweets(false));
     }
 
     public synchronized void populateRetweetedGraphFromFile(String filename){
         graph.clear();
-        try{
-            FileEntryIO.streamLineByLine(filename, new readRetweets(true));
-        }catch(IncorrectGraphFileException e){
-            populateFromGraphFile();
-        }
+        FileEntryIO.streamLineByLine(filename, new readRetweets(true));
     }
 
 
     public synchronized void populateUserToHashtagGraph(String filename){
         graph.clear();
-        try{
-            FileEntryIO.streamLineByLine(filename, new readHashtags(false));
-        }catch(IncorrectGraphFileException e){e.printStackTrace();}
+        FileEntryIO.streamLineByLine(filename, new readHashtags(false));
     }
 
     public synchronized void populateHashtagToUserGraph(String filename){
         graph.clear();
-        try{
-            FileEntryIO.streamLineByLine(filename, new readHashtags(true));
-        }catch(IncorrectGraphFileException e){e.printStackTrace();}
+        FileEntryIO.streamLineByLine(filename, new readHashtags(true));
     }
 
 

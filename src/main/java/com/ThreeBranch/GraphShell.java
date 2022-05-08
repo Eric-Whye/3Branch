@@ -113,6 +113,11 @@ public class GraphShell {
                     }
                     break;
 
+                case "read from file":
+                    graph.clear();
+                    fp.populateFromGraphFile();
+                    break;
+
                 case "print highest weight":
                     System.out.println(GraphQueries.HighestWeight(graph));
                     break;

@@ -47,7 +47,6 @@ public class Main {
     public static void defaultHandle() {
       System.out.println("Please enter an option");
       System.out.println("-g: Gather tweet data");
-      System.out.println("-graph -w: write to a text file as a retweet graph");
-      System.out.println("-graph -r: read from a graph txt file to a Graph object in memory");
+      System.out.println("-graph to enter GraphShell");
     }
 }
