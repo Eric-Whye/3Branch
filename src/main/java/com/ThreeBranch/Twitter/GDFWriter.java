@@ -23,9 +23,6 @@ public abstract class GDFWriter {
         Graph combined = new Graph();
 
 
-        List<String> lines = new ArrayList<>();
-        lines.add("nodedef>name VARCHAR, stance VARCHAR");
-
         //--------------------Retweet Graph, var retweet
         fp = new GraphRTFileProcessor(retweet);
         sp = new StanceProcessing(retweet);
@@ -53,27 +50,35 @@ public abstract class GDFWriter {
         GraphQueries.graphBootstrapping(graphsList, combined);
         System.out.println("Combined Graph Built");
         //--------------------
+        Graph current = combined;
         int minStance = Integer.parseInt(config.getValueFor("stance.minStance"));
         int maxStance = Integer.parseInt(config.getValueFor("stance.maxStance"));
 
-        for (Point p : combined){
-            String stance = " ";
+        final String red = "'255,0,0'";
+        final String green = "'0,255,0'";
+        final String blue = "'0,0,255'";
+
+        List<String> lines = new ArrayList<>();
+        lines.add("nodedef>name VARCHAR, stance VARCHAR, color VARCHAR");
+
+        for (Point p : current){
+            String stance = "nil";
             if (((StancePoint) p).getStance().isPresent()){
                 int stanceNum = ((StancePoint) p).getStance().get();
 
                 if (stanceNum >= minStance && stanceNum <= -1)
-                    stance = "anti";
+                    stance = "anti, " + red;
                 else if (stanceNum <= maxStance && stanceNum >= 1)
-                    stance = "pro";
+                    stance = "pro, " + blue;
                 else if (stanceNum == 0)
-                    stance = "neutral";
+                    stance = "neutral, " + green;
             }
             lines.add(p.getName() + ", " + stance);
         }
 
         lines.add("edgedef>node1 VARCHAR,node2 VARCHAR, weight INTEGER");
-        for (Point p : combined){
-            for (Edge e : combined.getAdj(p)){
+        for (Point p : current){
+            for (Edge e : current.getAdj(p)){
                 lines.add(e.getSource() + "," + e.getDestination() + "," + e.getWeight());
             }
         }

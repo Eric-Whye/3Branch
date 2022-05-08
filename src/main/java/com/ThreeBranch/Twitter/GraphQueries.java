@@ -178,24 +178,27 @@ public abstract class GraphQueries {
 
     public static void graphBootstrapping(List<Graph> list, Graph output){
         HashSet<Point> nonStances = new HashSet<>();
+
         for (Point p : list.get(0)) {
             //If the point has a stance assigned, add it without change to the output
             if (((StancePoint) p).getStance().isPresent()) {
                 for (Edge edge : list.get(0).getAdj(p)){
-                    output.addArc(p, edge.getDestination());
+                    output.addArc(p, edge.getDestination(), edge.getWeight());
                 }
             } else {
                 nonStances.add(p);
             }
         }
+
         for (int i = 1; i < list.size(); i++){
-            List<Point> removedStances = new ArrayList<>();
+
+            List<Point> removedStances = new ArrayList<>();//To remove the points in nonStances if found in the other graphs
             for (Point p : nonStances){
                 if (list.get(i).getPointIfExists(p).isPresent()) {
                     Point p2 = list.get(i).getPointIfExists(p).get();
                     if (((StancePoint) p2).getStance().isPresent()){
                         for (Edge edge : list.get(i).getAdj(p)){
-                            output.addArc(p, edge.getDestination());
+                            output.addArc(p, edge.getDestination(), edge.getWeight());
                         }
                         removedStances.add(p);
                     }
@@ -203,6 +206,11 @@ public abstract class GraphQueries {
             }
             for (Point p : removedStances){
                 nonStances.remove(p);
+            }
+        }
+        for (Point p : nonStances){
+            for (Edge e : list.get(0).getAdj(p)){
+                output.addArc(p, e.getDestination(), e.getWeight());
             }
         }
     }

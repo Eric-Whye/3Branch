@@ -142,6 +142,7 @@ public class GraphShell {
                     break;
 
                 case "print coverage":
+                    sp = new StanceProcessing(graph);
                     System.out.println(sp.stanceCoverage());
                     break;
 

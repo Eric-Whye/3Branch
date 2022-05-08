@@ -6,6 +6,7 @@ import twitter4j.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 public class Twitterer {
@@ -13,6 +14,31 @@ public class Twitterer {
     private final Configuration config = Configuration.getInstance();
 
     public Twitterer(){
+    }
+
+    public void searchByHashtags(){
+        String hashtags = config.getValueFor("tweet.searchTerms");
+        StringTokenizer tokens = new StringTokenizer(hashtags);
+
+        List<Status> tweets = new ArrayList<>();
+        List<String> hashtagsList = new ArrayList<>();
+        while (tokens.hasMoreTokens())
+            hashtagsList.add(tokens.nextToken());
+
+
+        Twitter twitter = new TwitterFactory().getInstance();
+        for (String hashtag : hashtagsList) {
+            try {
+                Query query = new Query(hashtag);
+                QueryResult result = null;
+                result = twitter.search(query);
+                tweets.addAll(result.getTweets());
+
+                tweets.clear();
+            } catch (TwitterException e) {e.printStackTrace();}
+        }
+
+
     }
 
 

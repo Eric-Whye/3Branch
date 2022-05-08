@@ -24,7 +24,7 @@ public class GraphRTFileProcessor {
         private readRetweets(boolean reverse){this.reverse = reverse;}
 
         @Override
-        public void call(Object o) throws IncorrectGraphFileException{
+        public void call(Object o){
             StringTokenizer tokens = new StringTokenizer((String)o);
             if(tokens.countTokens() >= 3) {//If the Tweet has at least a text field
                 tokens.nextToken();
@@ -127,20 +127,16 @@ public class GraphRTFileProcessor {
 
     public synchronized void populateFromGraphFile(){
         graph.clear();
-        try {
-            Configuration config = Configuration.getInstance();
-            assert config != null;
-            FileEntryIO.streamLineByLine(config.getValueFor("graph.output"), new readRetweetsFromGraphFile());
-        }catch(IncorrectGraphFileException e){
-            e.printStackTrace();
-        }
+        Configuration config = Configuration.getInstance();
+        assert config != null;
+        FileEntryIO.streamLineByLine(config.getValueFor("graph.output"), new readRetweetsFromGraphFile());
     }
 
     private class readRetweetsFromGraphFile implements Callable {
         private String currentTweeter = null;
 
         @Override
-        public void call(Object o) throws IncorrectGraphFileException{
+        public void call(Object o){
 
             //First line is the retweeter
             if(currentTweeter == null) {
